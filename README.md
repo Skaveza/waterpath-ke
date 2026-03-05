@@ -43,7 +43,8 @@ Built to help women and communities in Turkana, Mandera, Wajir, Garissa, Marsabi
 
 ## Data Source
 
-Borehole data sourced from **Rural Focus Ltd / Water Resources Authority Kenya** — 1,062 boreholes across Turkana County with GPS coordinates, water quality (EC/pH), depth, and yield data.
+Borehole data sourced from [**Rural Focus Ltd / Water Resources Authority Kenya**]( https://ihp-wins.unesco.org/dataset/boreholes-kenya-rural-focus)
+ — 1,062 boreholes across Turkana County with GPS coordinates, water quality (EC/pH), depth, and yield data.
 
 ---
 
