@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react"
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet"
+import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, useMap } from "react-leaflet"
 import { collection, onSnapshot } from "firebase/firestore"
 import { db } from "../../lib/firebase"
 
-// ── Colour scheme matching the UI design ─────────────────────────────────
 const QUALITY_COLOURS = {
-  excellent:  { fill: "#1D6F42", stroke: "#155233" },
-  drinkable:  { fill: "#2E86AB", stroke: "#1a6080" },
-  brackish:   { fill: "#E07A0F", stroke: "#b56200" },
-  saline:     { fill: "#C1440E", stroke: "#8C2F07" },
-  unknown:    { fill: "#6B7280", stroke: "#4B5563" },
+  excellent: { fill: "#1D6F42", stroke: "#155233" },
+  drinkable: { fill: "#2E86AB", stroke: "#1a6080" },
+  brackish:  { fill: "#E07A0F", stroke: "#b56200" },
+  saline:    { fill: "#C1440E", stroke: "#8C2F07" },
+  unknown:   { fill: "#6B7280", stroke: "#4B5563" },
 }
 
 const STATUS_LABELS = {
@@ -31,7 +30,6 @@ function getMarkerStyle(point) {
   }
 }
 
-// Fly to user location when it becomes available
 function LocationFlyTo({ userLocation }) {
   const map = useMap()
   useEffect(() => {
@@ -42,12 +40,21 @@ function LocationFlyTo({ userLocation }) {
   return null
 }
 
+function FlyToPoint({ point }) {
+  const map = useMap()
+  useEffect(() => {
+    if (point?.latitude && point?.longitude) {
+      map.flyTo([point.latitude, point.longitude], 14, { duration: 1.2 })
+    }
+  }, [point, map])
+  return null
+}
+
 export default function WaterMap({ onSelectPoint, selectedPoint }) {
   const [waterPoints, setWaterPoints] = useState([])
   const [userLocation, setUserLocation] = useState(null)
-  const [loading, setLoading]           = useState(true)
+  const [loading, setLoading] = useState(true)
 
-  // Real-time Firestore listener — updates map instantly when NGO resolves a report
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "water_points"), snapshot => {
       const points = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
@@ -57,12 +64,11 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
     return () => unsub()
   }, [])
 
-  // Get user's GPS location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         pos => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-        ()  => setUserLocation({ lat: 3.1191, lon: 35.5966 }) // Default: Lodwar town
+        ()  => setUserLocation({ lat: 3.1191, lon: 35.5966 })
       )
     } else {
       setUserLocation({ lat: 3.1191, lon: 35.5966 })
@@ -71,18 +77,18 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-stone-100">
-        <p className="text-stone-500 text-sm">Loading water points...</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", background: "#F0EBE3" }}>
+        <p style={{ color: "#7A6355", fontSize: 13 }}>Loading water points...</p>
       </div>
     )
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <MapContainer
         center={[3.1191, 35.5966]}
         zoom={9}
-        className="w-full h-full"
+        style={{ width: "100%", height: "100%" }}
         zoomControl={true}
       >
         <TileLayer
@@ -91,8 +97,8 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
         />
 
         <LocationFlyTo userLocation={userLocation} />
+        <FlyToPoint point={selectedPoint} />
 
-        {/* User location marker */}
         {userLocation && (
           <CircleMarker
             center={[userLocation.lat, userLocation.lon]}
@@ -102,16 +108,16 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
             fillOpacity={1}
             weight={3}
           >
-            <Popup>
-              <div className="text-sm font-semibold text-stone-800">Your Location</div>
-            </Popup>
+            <Tooltip direction="top" offset={[0, -8]} opacity={0.95}>
+              <span style={{ fontSize: 12, fontWeight: 700 }}>Your Location</span>
+            </Tooltip>
           </CircleMarker>
         )}
 
-        {/* Borehole markers */}
         {waterPoints.map(point => {
-          const style    = getMarkerStyle(point)
+          const style      = getMarkerStyle(point)
           const isSelected = selectedPoint?.id === point.id
+          const qColor     = QUALITY_COLOURS[point.water_quality]?.fill || "#6B7280"
           return (
             <CircleMarker
               key={point.id}
@@ -123,6 +129,20 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
               weight={isSelected ? 3 : style.weight}
               eventHandlers={{ click: () => onSelectPoint?.(point) }}
             >
+              {/* Hover tooltip — shows name on mouseover */}
+              <Tooltip direction="top" offset={[0, -8]} opacity={0.95}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#1A1208", marginBottom: 2 }}>
+                  {point.name}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: qColor, flexShrink: 0 }} />
+                  <span style={{ fontSize: 11, color: "#7A6355", textTransform: "capitalize" }}>
+                    {point.water_quality || "Unknown quality"}
+                  </span>
+                </div>
+              </Tooltip>
+
+              {/* Click popup — shows full details */}
               <Popup>
                 <div style={{ minWidth: 180 }}>
                   <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: "#1A1208" }}>
@@ -133,8 +153,8 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
                   </div>
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 6 }}>
                     <span style={{
-                      background: QUALITY_COLOURS[point.water_quality]?.fill || "#6B7280",
-                      color: "#fff", fontSize: 10, fontWeight: 700,
+                      background: qColor, color: "#fff",
+                      fontSize: 10, fontWeight: 700,
                       padding: "2px 8px", borderRadius: 4, textTransform: "uppercase",
                     }}>
                       {point.water_quality || "Unknown"}
@@ -191,11 +211,11 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
           Water Quality
         </div>
         {[
-          { label: "Excellent",  colour: "#1D6F42" },
-          { label: "Drinkable",  colour: "#2E86AB" },
-          { label: "Brackish",   colour: "#E07A0F" },
-          { label: "Saline",     colour: "#C1440E" },
-          { label: "Unknown",    colour: "#6B7280" },
+          { label: "Excellent", colour: "#1D6F42" },
+          { label: "Drinkable", colour: "#2E86AB" },
+          { label: "Brackish",  colour: "#E07A0F" },
+          { label: "Saline",    colour: "#C1440E" },
+          { label: "Unknown",   colour: "#6B7280" },
         ].map(item => (
           <div key={item.label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
             <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.colour, flexShrink: 0 }} />
@@ -209,7 +229,7 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
         </div>
       </div>
 
-      {/* Point count */}
+      {/* Count */}
       <div style={{
         position: "absolute", top: 12, right: 12, zIndex: 1000,
         background: "rgba(255,255,255,0.92)", borderRadius: 8,
