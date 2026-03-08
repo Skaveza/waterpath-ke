@@ -22,5 +22,5 @@ def init_firebase():
     return firestore.client()
 
 
-# Shared Firestore client — import this wherever you need DB access
+# Shared Firestore client
 db = init_firebase()
