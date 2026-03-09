@@ -1,323 +1,228 @@
 """
-USSD Handler — WaterPath Kenya
---------------------------------
-Handles USSD sessions via Africa's Talking.
-Works on any phone in Kenya — no smartphone or internet required.
+USSD handler for Africa's Talking.
 
-Session flow:
-  Dial *384*1#
-  → Main menu
-    1. Find nearest water
-    2. Report a problem
-    3. About WaterPath
+Menu flow:
+──────────────────────────────────────────
+  Welcome
+  1. Find water near me
+  2. Report a problem
+  3. About WaterPath
 
-Find nearest water:
-  → Lists 3 nearest functional/unknown boreholes by locality
-  → Shows water quality and status
+  [1] Find water near me
+      → asks for closest town
+      → returns 3 nearest functional boreholes
+         with name, distance, walk time
 
-Report a problem:
-  → Select problem type (6 options)
-  → Enter borehole number (from nearest list)
-  → Confirm → writes to Firestore reports collection
+  [2] Report a problem
+      → 1. Which borehole? (list top 5 by name)
+      → 2. What is the problem? (list problem types)
+      → 3. Confirm → saves report to Firestore
+         returns report ID
 
-Test via Africa's Talking simulator:
-  https://simulator.africastalking.com
+──────────────────────────────────────────
+USSD session text is accumulated — each reply
+is the FULL chain separated by *.
+e.g. after choosing "2" then "3":  "2*3"
+──────────────────────────────────────────
 """
 
-import os
-from flask import Blueprint, request, Response
-from firebase_admin import firestore
+from flask import Blueprint, request
+from config import db
+from models.report import Report, PROBLEM_TYPES, SEVERITY_MAP
+from utils.geo import haversine_km
 
 ussd_bp = Blueprint("ussd", __name__)
 
-# ── Firestore client ──────────────────────────────────────────────────────
-def get_db():
-    return firestore.client()
-
-# ── Haversine distance ────────────────────────────────────────────────────
-import math
-
-def haversine(lat1, lon1, lat2, lon2):
-    R    = 6371
-    dLat = math.radians(lat2 - lat1)
-    dLon = math.radians(lon2 - lon1)
-    a    = math.sin(dLat/2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2)**2
-    return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-
-# ── Default location clusters by Turkana sub-county ──────────────────────
-# Used when caller's GPS is unavailable — maps phone area codes to regions
-AREA_DEFAULTS = {
-    "default": (3.1191, 35.5966),   # Lodwar
-    "054":     (3.1191, 35.5966),   # Lodwar
-    "055":     (4.2200, 34.3500),   # Lokichoggio
-    "056":     (2.3800, 35.6500),   # Lokichar
+# ── Known town coordinates for "find near me" ────────────────────────────
+TOWNS = {
+    "1": ("Lodwar",    3.1191,  35.5966),
+    "2": ("Kakuma",    3.7183,  34.8778),
+    "3": ("Lokichar",  2.3366,  35.6619),
+    "4": ("Kalokol",   3.5116,  35.8408),
+    "5": ("Lokori",    2.1667,  36.0500),
 }
 
-def get_location_for_phone(phone):
-    """Approximate location from phone prefix — fallback to Lodwar."""
-    if phone:
-        for prefix, coords in AREA_DEFAULTS.items():
-            if phone.startswith(f"+254{prefix}") or phone.startswith(f"0{prefix}"):
-                return coords
-    return AREA_DEFAULTS["default"]
 
-# ── Load nearest boreholes ────────────────────────────────────────────────
-def get_nearest_boreholes(lat, lon, limit=5):
-    db     = get_db()
+def _get_nearest(lat, lon, limit=3):
+    """Return up to `limit` functional/issues boreholes nearest to lat/lon."""
     docs   = db.collection("water_points").stream()
-    points = []
-    for doc in docs:
-        d = doc.to_dict()
-        d["id"] = doc.id
-        if d.get("latitude") and d.get("longitude"):
-            d["distance_km"] = round(haversine(lat, lon, d["latitude"], d["longitude"]), 1)
-            points.append(d)
-    points.sort(key=lambda x: x["distance_km"])
-    # Filter out saline boreholes first
-    safe   = [p for p in points if p.get("water_quality") not in ("saline",)]
-    others = [p for p in points if p.get("water_quality") == "saline"]
-    return (safe + others)[:limit]
+    points = [d.to_dict() for d in docs]
+    # Exclude non-functional
+    points = [p for p in points if p.get("operation_status") != "non_functional"]
+    for p in points:
+        p["_dist"] = haversine_km(lat, lon, p["latitude"], p["longitude"])
+        p["_walk"] = int(p["_dist"] / 0.083)  # minutes at 5 km/h
+    points.sort(key=lambda x: x["_dist"])
+    return points[:limit]
 
-# ── Problem types ─────────────────────────────────────────────────────────
-PROBLEM_TYPES = {
-    "1": "Borehole is Dry",
-    "2": "Pump Not Working",
-    "3": "Pipe Broken or Blocked",
-    "4": "Water is Contaminated",
-    "5": "Unsafe Route",
-    "6": "Water Stolen or Diverted",
-}
 
-# ── Submit report to Firestore ────────────────────────────────────────────
-def submit_report(phone, problem_type, borehole):
-    import time
-    db        = get_db()
-    report_id = f"WP-{int(time.time() * 1000):x}".upper()
+def _get_all_boreholes(limit=5):
+    """Return first `limit` boreholes alphabetically for the report picker."""
+    docs = db.collection("water_points").stream()
+    pts  = sorted([d.to_dict() | {"_id": d.id} for d in docs], key=lambda x: x.get("name",""))
+    return pts[:limit]
 
-    high_severity = ["Borehole is Dry", "Water is Contaminated",
-                     "Unsafe Route", "Water Stolen or Diverted"]
 
-    report = {
-        "id":               report_id,
-        "water_point_id":   borehole.get("id"),
-        "water_point_name": borehole.get("name"),
-        "problem_type":     problem_type,
-        "severity":         "high" if problem_type in high_severity else "medium",
-        "status":           "open",
-        "submitted_at":     firestore.SERVER_TIMESTAMP,
-        "channel":          "ussd",
-        "phone_hash":       str(hash(phone))[-6:] if phone else "anon",
-    }
-
-    db.collection("reports").add(report)
-
-    # Update borehole status
-    if borehole.get("id"):
-        status = "non_functional" if problem_type == "Borehole is Dry" else "issues"
-        db.collection("water_points").document(borehole["id"]).update({
-            "operation_status": status,
-            "report_count":     firestore.Increment(1),
-            "last_report_at":   firestore.SERVER_TIMESTAMP,
-        })
-
-    return report_id
-
-# ── USSD session state (in-memory for sandbox, use Redis in production) ───
-sessions = {}
-
-# ── Main USSD handler ─────────────────────────────────────────────────────
 @ussd_bp.route("/ussd", methods=["POST"])
-def ussd_handler():
-    session_id   = request.form.get("sessionId", "")
-    phone        = request.form.get("phoneNumber", "")
-    text         = request.form.get("text", "")
-    service_code = request.form.get("serviceCode", "")
+def ussd():
+    session_id   = request.values.get("sessionId",   "")
+    phone        = request.values.get("phoneNumber",  "")
+    text         = request.values.get("text",         "").strip()
+    service_code = request.values.get("serviceCode",  "")
 
-    # Parse input steps — text is cumulative e.g. "1*2*3"
-    steps = [s.strip() for s in text.split("*")] if text else []
+    parts = [p for p in text.split("*")] if text else []
+    depth = len(parts)  # how deep into the menu we are
 
-    # ── STEP 0 — Main menu ────────────────────────────────────────────────
+    # ── ROOT MENU ─────────────────────────────────────────────────────────
     if text == "":
-        response = (
-            "CON WaterPath Kenya\n"
-            "Maji kwa Wote — Water for All\n\n"
-            "1. Find nearest water\n"
+        return _con(
+            "Welcome to WaterPath\n"
+            "Safe water in Turkana County\n\n"
+            "1. Find water near me\n"
             "2. Report a problem\n"
             "3. About WaterPath"
         )
 
-    # ── STEP 1 — Branch on main menu choice ──────────────────────────────
-    elif text == "1":
-        # Find nearest water — load boreholes
-        lat, lon = get_location_for_phone(phone)
-        boreholes = get_nearest_boreholes(lat, lon, limit=3)
-        sessions[session_id] = {"boreholes": boreholes}
-
-        lines = ["CON Nearest water points:\n"]
-        for i, b in enumerate(boreholes, 1):
-            quality = b.get("water_quality", "unknown").capitalize()
-            dist    = b.get("distance_km", "?")
-            name    = b.get("name", "Unknown")[:20]  # truncate for USSD
-            lines.append(f"{i}. {name}\n   {quality} · {dist}km")
-
-        lines.append("\nSelect for details or 0 to go back")
-        response = "\n".join(lines)
-
-    elif text == "2":
-        # Report a problem — show problem types
-        response = (
-            "CON Select problem type:\n\n"
-            "1. Borehole is Dry\n"
-            "2. Pump Not Working\n"
-            "3. Pipe Broken\n"
-            "4. Water Contaminated\n"
-            "5. Unsafe Route\n"
-            "6. Water Diverted\n\n"
-            "0. Back"
+    # ── ABOUT ─────────────────────────────────────────────────────────────
+    if text == "3":
+        return _end(
+            "WaterPath monitors 60+ boreholes\n"
+            "in Turkana County.\n"
+            "Reports go directly to NGO teams.\n"
+            "Free to use. Anonymous.\n"
+            "waterpath.vercel.app"
         )
 
-    elif text == "3":
-        # About
-        response = (
-            "END WaterPath Kenya\n\n"
-            "Real-time water access platform\n"
-            "for North Eastern Kenya.\n\n"
-            "Reports go directly to Turkana\n"
-            "County Water Office and NGOs.\n\n"
-            "All reports are anonymous."
-        )
+    # ══════════════════════════════════════════════════════════════════════
+    # BRANCH 1 — FIND WATER
+    # ══════════════════════════════════════════════════════════════════════
+    if parts[0] == "1":
 
-    # ── STEP 2 — Find water: borehole detail ──────────────────────────────
-    elif len(steps) == 2 and steps[0] == "1":
-        choice    = steps[1]
-        session   = sessions.get(session_id, {})
-        boreholes = session.get("boreholes", [])
+        # Step 1 — ask for town
+        if depth == 1:
+            menu = "Select your nearest town:\n"
+            for k, (name, _, _) in TOWNS.items():
+                menu += f"{k}. {name}\n"
+            return _con(menu.strip())
 
-        if choice == "0":
-            response = (
-                "CON WaterPath Kenya\n\n"
-                "1. Find nearest water\n"
-                "2. Report a problem\n"
-                "3. About WaterPath"
-            )
-        elif choice.isdigit() and 1 <= int(choice) <= len(boreholes):
-            b       = boreholes[int(choice) - 1]
-            quality = b.get("water_quality", "unknown").capitalize()
-            status  = b.get("operation_status", "unknown").replace("_", " ").capitalize()
-            ec      = b.get("ec")
-            depth   = b.get("well_depth")
-            reports = b.get("report_count", 0)
-            lat     = b.get("latitude", "")
-            lon     = b.get("longitude", "")
+        # Step 2 — show nearest boreholes
+        if depth == 2:
+            town_choice = parts[1]
+            if town_choice not in TOWNS:
+                return _end("Invalid choice. Please dial again.")
 
-            lines = [f"END {b.get('name', 'Borehole')}\n"]
-            lines.append(f"Quality: {quality}")
-            lines.append(f"Status: {status}")
-            if ec:
-                lines.append(f"EC: {ec} uS/cm")
-            if depth:
-                lines.append(f"Depth: {depth}m")
-            if reports > 0:
-                lines.append(f"Reports: {reports}")
-            lines.append(f"\nGPS: {lat}, {lon}")
-            lines.append("Navigate: maps.google.com")
-            response = "\n".join(lines)
-        else:
-            response = "END Invalid selection. Please try again."
+            name, lat, lon = TOWNS[town_choice]
+            nearest = _get_nearest(lat, lon, limit=3)
 
-    # ── STEP 2 — Report: select borehole ──────────────────────────────────
-    elif len(steps) == 2 and steps[0] == "2":
-        problem_num = steps[1]
-        if problem_num == "0":
-            response = (
-                "CON WaterPath Kenya\n\n"
-                "1. Find nearest water\n"
-                "2. Report a problem\n"
-                "3. About WaterPath"
-            )
-        elif problem_num in PROBLEM_TYPES:
-            # Load nearest boreholes for selection
-            lat, lon  = get_location_for_phone(phone)
-            boreholes = get_nearest_boreholes(lat, lon, limit=4)
-            sessions[session_id] = {
-                "boreholes":    boreholes,
-                "problem_type": PROBLEM_TYPES[problem_num],
-            }
+            if not nearest:
+                return _end("No boreholes found near you.\nTry again later.")
 
-            lines = [f"CON {PROBLEM_TYPES[problem_num]}\n\nSelect location:\n"]
-            for i, b in enumerate(boreholes, 1):
-                name = b.get("name", "Unknown")[:22]
-                lines.append(f"{i}. {name}")
-            lines.append("\n0. Back")
-            response = "\n".join(lines)
-        else:
-            response = "END Invalid selection. Please try again."
+            msg = f"Nearest boreholes to {name}:\n\n"
+            for i, p in enumerate(nearest, 1):
+                status = "OK" if p.get("operation_status") == "functional" else "Issues"
+                msg += (
+                    f"{i}. {p['name']}\n"
+                    f"   {p['_dist']:.1f}km · {p['_walk']}min walk · {status}\n\n"
+                )
+            msg += "Dial *384# to report a problem"
+            return _end(msg.strip())
 
-    # ── STEP 3 — Report: confirm ──────────────────────────────────────────
-    elif len(steps) == 3 and steps[0] == "2":
-        borehole_num = steps[2]
-        session      = sessions.get(session_id, {})
-        boreholes    = session.get("boreholes", [])
-        problem_type = session.get("problem_type", "Unknown problem")
+    # ══════════════════════════════════════════════════════════════════════
+    # BRANCH 2 — REPORT A PROBLEM
+    # ══════════════════════════════════════════════════════════════════════
+    if parts[0] == "2":
 
-        if borehole_num == "0":
-            response = (
-                "CON Select problem type:\n\n"
-                "1. Borehole is Dry\n"
-                "2. Pump Not Working\n"
-                "3. Pipe Broken\n"
-                "4. Water Contaminated\n"
-                "5. Unsafe Route\n"
-                "6. Water Diverted\n\n"
-                "0. Back"
-            )
-        elif borehole_num.isdigit() and 1 <= int(borehole_num) <= len(boreholes):
-            borehole = boreholes[int(borehole_num) - 1]
-            sessions[session_id]["selected_borehole"] = borehole
-            name = borehole.get("name", "Unknown")[:20]
-            response = (
-                f"CON Confirm report:\n\n"
-                f"Problem: {problem_type}\n"
-                f"Location: {name}\n\n"
-                f"This report is anonymous.\n\n"
-                f"1. Confirm\n"
+        boreholes = _get_all_boreholes(limit=5)
+
+        # Step 1 — pick borehole
+        if depth == 1:
+            menu = "Which borehole?\n"
+            for i, p in enumerate(boreholes, 1):
+                menu += f"{i}. {p['name']}\n"
+            return _con(menu.strip())
+
+        # Step 2 — pick problem type
+        if depth == 2:
+            bh_choice = parts[1]
+            if not bh_choice.isdigit() or int(bh_choice) < 1 or int(bh_choice) > len(boreholes):
+                return _end("Invalid choice. Please dial again.")
+
+            menu = "What is the problem?\n"
+            for i, pt in enumerate(PROBLEM_TYPES, 1):
+                menu += f"{i}. {pt}\n"
+            return _con(menu.strip())
+
+        # Step 3 — confirm
+        if depth == 3:
+            bh_choice  = parts[1]
+            prob_choice = parts[2]
+
+            if (not bh_choice.isdigit()   or int(bh_choice)   < 1 or int(bh_choice)   > len(boreholes) or
+                not prob_choice.isdigit() or int(prob_choice) < 1 or int(prob_choice) > len(PROBLEM_TYPES)):
+                return _end("Invalid choice. Please dial again.")
+
+            bh       = boreholes[int(bh_choice) - 1]
+            problem  = PROBLEM_TYPES[int(prob_choice) - 1]
+
+            return _con(
+                f"Confirm report:\n"
+                f"Borehole: {bh['name']}\n"
+                f"Problem:  {problem}\n\n"
+                f"1. Submit\n"
                 f"2. Cancel"
             )
-        else:
-            response = "END Invalid selection. Please try again."
 
-    # ── STEP 4 — Report: submit ───────────────────────────────────────────
-    elif len(steps) == 4 and steps[0] == "2":
-        confirm  = steps[3]
-        session  = sessions.get(session_id, {})
-        borehole = session.get("selected_borehole", {})
-        problem  = session.get("problem_type", "Unknown")
+        # Step 4 — submit or cancel
+        if depth == 4:
+            confirm    = parts[3]
+            bh_choice  = parts[1]
+            prob_choice = parts[2]
 
-        if confirm == "1":
+            if confirm == "2":
+                return _end("Report cancelled.")
+
+            if confirm != "1":
+                return _end("Invalid choice. Please dial again.")
+
+            bh      = boreholes[int(bh_choice) - 1]
+            problem = PROBLEM_TYPES[int(prob_choice) - 1]
+
+            # Save to Firestore
+            report = Report(
+                water_point_id   = bh.get("_id", ""),
+                water_point_name = bh["name"],
+                problem_type     = problem,
+                severity         = SEVERITY_MAP.get(problem, "medium"),
+                channel          = "ussd",
+            )
             try:
-                report_id = submit_report(phone, problem, borehole)
-                response  = (
-                    f"END Report submitted.\n\n"
-                    f"ID: {report_id}\n\n"
-                    f"Sent to Turkana County\n"
-                    f"Water Office and NGOs.\n"
-                    f"Response within 4-8hrs.\n\n"
-                    f"Asante. Thank you."
-                )
+                db.collection("reports").document(report.id).set(report.to_dict())
+                # Update borehole status
+                if bh.get("_id"):
+                    db.collection("water_points").document(bh["_id"]).update({
+                        "operation_status": "issues",
+                        "report_count": (bh.get("report_count", 0) + 1),
+                    })
             except Exception as e:
-                response = "END Sorry, report failed.\nPlease try again later."
-        else:
-            response = "END Report cancelled."
+                return _end(f"Error saving report.\nPlease try again.\n({str(e)[:40]})")
 
-        # Clean up session
-        sessions.pop(session_id, None)
+            return _end(
+                f"Report submitted.\n"
+                f"Report ID: {report.id}\n\n"
+                f"Thank you. A repair team\n"
+                f"will be notified.\n"
+                f"WaterPath"
+            )
 
-    else:
-        response = (
-            "CON WaterPath Kenya\n\n"
-            "1. Find nearest water\n"
-            "2. Report a problem\n"
-            "3. About WaterPath"
-        )
+    # ── FALLBACK ──────────────────────────────────────────────────────────
+    return _end("Invalid input.\nDial *384# to start again.")
 
-    return Response(response, content_type="text/plain")
+
+# ── Helpers ───────────────────────────────────────────────────────────────
+def _con(text):
+    """CON = continue session — shows menu and waits for input."""
+    return f"CON {text}", 200, {"Content-Type": "text/plain"}
+
+def _end(text):
+    """END = close session — shows message and hangs up."""
+    return f"END {text}", 200, {"Content-Type": "text/plain"}
