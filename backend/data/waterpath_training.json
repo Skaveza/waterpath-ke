@@ -1,0 +1,4332 @@
+[
+  {
+    "name": "748 Camp",
+    "locality": "Lokichoggio",
+    "latitude": 4.20454,
+    "longitude": 34.36908,
+    "ec": 980.0,
+    "ph": 7.92,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "A.I.C. Lokichogio",
+    "locality": "Matimomo/Lokichogio",
+    "latitude": 4.20883,
+    "longitude": 34.34779,
+    "ec": 850.0,
+    "ph": 8.15,
+    "well_depth": 37.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Across (AIC)",
+    "locality": "Lokichoggio",
+    "latitude": 4.20671,
+    "longitude": 34.3476,
+    "ec": 850.0,
+    "ph": 8.13,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Adapal",
+    "locality": "Nadapal",
+    "latitude": 4.40509,
+    "longitude": 34.29227,
+    "ec": 1010.0,
+    "ph": 8.11,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Adome",
+    "locality": "Lopusiki",
+    "latitude": 3.91157,
+    "longitude": 34.82476,
+    "ec": 2200.0,
+    "ph": 8.57,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Afex",
+    "locality": "Lokichoggio",
+    "latitude": 4.20851,
+    "longitude": 34.36756,
+    "ec": 960.0,
+    "ph": 7.57,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Agis",
+    "locality": "Lopusiki",
+    "latitude": 3.83249,
+    "longitude": 34.81907,
+    "ec": 870.0,
+    "ph": 7.97,
+    "well_depth": 45.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "AIC Kainyang\u00e1lup",
+    "locality": "Lolupe",
+    "latitude": 3.46629,
+    "longitude": 35.19867,
+    "ec": 990.0,
+    "ph": 7.67,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Aic Kalokol",
+    "locality": "Kalokol",
+    "latitude": 3.62919,
+    "longitude": 35.79801,
+    "ec": 1450.0,
+    "ph": 8.24,
+    "well_depth": 50.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Akoros Wind Pump",
+    "locality": "Lokichogio",
+    "latitude": 4.20998,
+    "longitude": 34.37257,
+    "ec": 850.0,
+    "ph": 7.66,
+    "well_depth": 120.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Angakitokoonok",
+    "locality": "",
+    "latitude": 2.59131,
+    "longitude": 35.62057,
+    "ec": 1230.0,
+    "ph": 7.37,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Apetet Centre Water",
+    "locality": "Kakuma",
+    "latitude": 3.86407,
+    "longitude": 34.96803,
+    "ec": 2030.0,
+    "ph": 6.95,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Arita",
+    "locality": "Lokichogio",
+    "latitude": 4.17259,
+    "longitude": 34.42381,
+    "ec": 1850.0,
+    "ph": 6.95,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Bh 12",
+    "locality": "Kakuma",
+    "latitude": 3.77649,
+    "longitude": 34.82937,
+    "ec": 520.0,
+    "ph": 8.4,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Bh2 Chinese Bh",
+    "locality": "Lokichar",
+    "latitude": 2.38073,
+    "longitude": 35.64438,
+    "ec": 590.0,
+    "ph": 8.06,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Borehole 1.",
+    "locality": "Kakuma",
+    "latitude": 3.71652,
+    "longitude": 34.8572,
+    "ec": 560.0,
+    "ph": 8.5,
+    "well_depth": 70.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Borehole 10",
+    "locality": "Kakuma",
+    "latitude": 3.72207,
+    "longitude": 34.85159,
+    "ec": 560.0,
+    "ph": 8.04,
+    "well_depth": 60.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Borehole 3",
+    "locality": "Kakuma",
+    "latitude": 3.74895,
+    "longitude": 34.8449,
+    "ec": 500.0,
+    "ph": 7.57,
+    "well_depth": 30.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Borehole 4A",
+    "locality": "Kakuma",
+    "latitude": 3.75241,
+    "longitude": 34.83817,
+    "ec": 1330.0,
+    "ph": 6.87,
+    "well_depth": 55.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Borehole 4C",
+    "locality": "Kakuma",
+    "latitude": 3.75289,
+    "longitude": 34.8404,
+    "ec": 760.0,
+    "ph": 7.29,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Borehole 4D",
+    "locality": "Kakuma",
+    "latitude": 3.75325,
+    "longitude": 34.83591,
+    "ec": 1480.0,
+    "ph": 7.23,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Borehole 5",
+    "locality": "Kakuma",
+    "latitude": 3.74849,
+    "longitude": 34.83228,
+    "ec": 1550.0,
+    "ph": 8.05,
+    "well_depth": 45.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Borehole 6",
+    "locality": "Kakuma",
+    "latitude": 3.76201,
+    "longitude": 34.83414,
+    "ec": 830.0,
+    "ph": 8.46,
+    "well_depth": 30.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Borehole 8",
+    "locality": "Kakuma",
+    "latitude": 3.77757,
+    "longitude": 34.82917,
+    "ec": 520.0,
+    "ph": 8.26,
+    "well_depth": 58.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Bruce Pike",
+    "locality": "Lokichogio",
+    "latitude": 4.2097,
+    "longitude": 34.35046,
+    "ec": 720.0,
+    "ph": 7.81,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Bruce Pike",
+    "locality": "Lokichogio",
+    "latitude": 4.20976,
+    "longitude": 34.35063,
+    "ec": 660.0,
+    "ph": 8.05,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Camp North",
+    "locality": "Lokichogio",
+    "latitude": 4.20708,
+    "longitude": 34.37336,
+    "ec": 920.0,
+    "ph": 8.08,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Catholic Dioces",
+    "locality": "Nariokotome",
+    "latitude": 4.12928,
+    "longitude": 35.85964,
+    "ec": 570.0,
+    "ph": 8.31,
+    "well_depth": 55.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Catholic Parish",
+    "locality": "Lokitaung",
+    "latitude": 4.26982,
+    "longitude": 35.7529,
+    "ec": 1350.0,
+    "ph": 8.01,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Ceamo Prestige Lodge",
+    "locality": "Lodwar",
+    "latitude": 3.10754,
+    "longitude": 35.62215,
+    "ec": 2970.0,
+    "ph": 7.13,
+    "well_depth": 36.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Chok Chok Oxfam",
+    "locality": "Chok Chok",
+    "latitude": 3.14497,
+    "longitude": 35.73858,
+    "ec": 410.0,
+    "ph": 8.12,
+    "well_depth": 40.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Christ The King Catholic Church",
+    "locality": "Lokichar",
+    "latitude": 2.37916,
+    "longitude": 35.65254,
+    "ec": 1220.0,
+    "ph": 8.09,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Christian Child Fund",
+    "locality": "Lorugum",
+    "latitude": 2.89267,
+    "longitude": 35.25875,
+    "ec": 1610.0,
+    "ph": 8.44,
+    "well_depth": 14.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Comboni Girls Pri",
+    "locality": "Lodwar",
+    "latitude": 3.11654,
+    "longitude": 35.56614,
+    "ec": 1400.0,
+    "ph": 9.66,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "D Of Lodwar",
+    "locality": "Kaeris",
+    "latitude": 3.9808,
+    "longitude": 35.48577,
+    "ec": 2230.0,
+    "ph": 8.33,
+    "well_depth": 40.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "D Of Lodwar",
+    "locality": "Kainuk/Lolokat",
+    "latitude": 1.77749,
+    "longitude": 35.49697,
+    "ec": 910.0,
+    "ph": 8.45,
+    "well_depth": 70.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "D.Of Lodwar/Commun.",
+    "locality": "Letea",
+    "latitude": 3.52222,
+    "longitude": 34.81633,
+    "ec": 4220.0,
+    "ph": 7.41,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Diocese Of El-Obeid",
+    "locality": "Lokichogio",
+    "latitude": 4.20885,
+    "longitude": 34.37346,
+    "ec": 950.0,
+    "ph": 7.92,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Diocese Of Nakuru",
+    "locality": "Lokori 2",
+    "latitude": 1.96354,
+    "longitude": 36.02911,
+    "ec": 280.0,
+    "ph": 8.82,
+    "well_depth": 20.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Echakun",
+    "locality": "Kakuma",
+    "latitude": 3.71991,
+    "longitude": 34.85873,
+    "ec": 2200.0,
+    "ph": 7.57,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Echwaa",
+    "locality": "Loperot",
+    "latitude": 2.35954,
+    "longitude": 35.87205,
+    "ec": 840.0,
+    "ph": 8.4,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Edos",
+    "locality": "",
+    "latitude": 2.82926,
+    "longitude": 35.6522,
+    "ec": 1760.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Ekadeli",
+    "locality": "Kalobeyei",
+    "latitude": 3.89164,
+    "longitude": 34.54725,
+    "ec": 710.0,
+    "ph": 7.92,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Ekichele",
+    "locality": "Kaikor",
+    "latitude": 4.47749,
+    "longitude": 35.44815,
+    "ec": 750.0,
+    "ph": 7.37,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Ekunyuk",
+    "locality": "Loperot",
+    "latitude": 2.32253,
+    "longitude": 35.87753,
+    "ec": 2700.0,
+    "ph": 9.36,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Elelea Water Service Providers",
+    "locality": "Edoot",
+    "latitude": 2.09614,
+    "longitude": 36.15103,
+    "ec": 980.0,
+    "ph": 8.02,
+    "well_depth": 70.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Emunyen BH",
+    "locality": "Loruth",
+    "latitude": 4.45375,
+    "longitude": 35.36015,
+    "ec": 1530.0,
+    "ph": 8.46,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Ewoi",
+    "locality": "Nalemkais",
+    "latitude": 2.37907,
+    "longitude": 35.87846,
+    "ec": 2120.0,
+    "ph": 9.59,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Forest",
+    "locality": "Lokichogio",
+    "latitude": 3.70483,
+    "longitude": 34.85844,
+    "ec": 1010.0,
+    "ph": 7.95,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Glory Outreach Ministries",
+    "locality": "Lodwar",
+    "latitude": 3.09232,
+    "longitude": 35.58195,
+    "ec": 510.0,
+    "ph": 8.73,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Hand Pump L-Zone 2 B- 15",
+    "locality": "Kakuma",
+    "latitude": 3.73428,
+    "longitude": 34.84246,
+    "ec": 670.0,
+    "ph": 9.25,
+    "well_depth": 70.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Hannah Emuriakin",
+    "locality": "Lokichogio",
+    "latitude": 4.20023,
+    "longitude": 34.36855,
+    "ec": 1180.0,
+    "ph": 7.62,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "House Of Hope",
+    "locality": "Lodwar",
+    "latitude": 3.08826,
+    "longitude": 35.61832,
+    "ec": 3210.0,
+    "ph": 8.48,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Idp",
+    "locality": "Lokichar",
+    "latitude": 2.37475,
+    "longitude": 35.63848,
+    "ec": 1000.0,
+    "ph": 8.04,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Idp",
+    "locality": "Lokichar",
+    "latitude": 2.35867,
+    "longitude": 35.63214,
+    "ec": 1300.0,
+    "ph": 8.95,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Idp Handpump",
+    "locality": "Lokichar",
+    "latitude": 2.36316,
+    "longitude": 35.62828,
+    "ec": 1180.0,
+    "ph": 7.77,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Iom Borehole",
+    "locality": "Kakuma",
+    "latitude": 3.77501,
+    "longitude": 34.83031,
+    "ec": 580.0,
+    "ph": 8.31,
+    "well_depth": 70.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "IRC  Kanaodon Com",
+    "locality": "Katilu",
+    "latitude": 2.45119,
+    "longitude": 35.43602,
+    "ec": 1990.0,
+    "ph": 8.37,
+    "well_depth": 100.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "IRC Nakiria Pry",
+    "locality": "Kalokol",
+    "latitude": 3.54847,
+    "longitude": 35.84366,
+    "ec": 4430.0,
+    "ph": 7.81,
+    "well_depth": 25.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "IRC Nakwasinyen",
+    "locality": "Lokori",
+    "latitude": 2.01918,
+    "longitude": 36.07163,
+    "ec": 900.0,
+    "ph": 8.39,
+    "well_depth": 34.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaakalel",
+    "locality": "Loperot",
+    "latitude": 2.46162,
+    "longitude": 36.08386,
+    "ec": 1360.0,
+    "ph": 8.18,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaakelel",
+    "locality": "",
+    "latitude": 2.70952,
+    "longitude": 35.40738,
+    "ec": 1180.0,
+    "ph": 7.74,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaalem",
+    "locality": "Kaalem",
+    "latitude": 4.30588,
+    "longitude": 35.59797,
+    "ec": 2150.0,
+    "ph": 7.82,
+    "well_depth": 80.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kaalem Borehole",
+    "locality": "Yapakuno",
+    "latitude": 4.3005,
+    "longitude": 35.5982,
+    "ec": 1180.0,
+    "ph": 7.68,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaaleng Water Supply",
+    "locality": "Yapakuno",
+    "latitude": 4.36951,
+    "longitude": 35.55157,
+    "ec": 830.0,
+    "ph": 8.42,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kabulokori",
+    "locality": "Kabulokori",
+    "latitude": 2.82008,
+    "longitude": 35.46486,
+    "ec": 360.0,
+    "ph": 7.76,
+    "well_depth": 40.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kachalang'a",
+    "locality": "Lochakula",
+    "latitude": 1.92191,
+    "longitude": 35.86812,
+    "ec": 2280.0,
+    "ph": 8.75,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kachoda",
+    "locality": "Lokitaung",
+    "latitude": 4.32609,
+    "longitude": 35.66867,
+    "ec": 1220.0,
+    "ph": 8.68,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kachoda Borehole",
+    "locality": "Lokitaung",
+    "latitude": 4.32295,
+    "longitude": 35.67153,
+    "ec": 650.0,
+    "ph": 8.2,
+    "well_depth": 100.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kachoda Kaeris",
+    "locality": "Kaeris",
+    "latitude": 3.98452,
+    "longitude": 35.4659,
+    "ec": 1370.0,
+    "ph": 8.67,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kadopgorok",
+    "locality": "Koono",
+    "latitude": 2.80095,
+    "longitude": 35.40571,
+    "ec": 3250.0,
+    "ph": 7.8,
+    "well_depth": 60.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kaekoroeputh",
+    "locality": "Lokitaung",
+    "latitude": 4.15094,
+    "longitude": 35.73333,
+    "ec": 1860.0,
+    "ph": 7.41,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kaeris Borehole Ii",
+    "locality": "Kaeris",
+    "latitude": 3.98508,
+    "longitude": 35.47884,
+    "ec": 960.0,
+    "ph": 7.89,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kag Church Nariamawoi",
+    "locality": "Nariamawoi",
+    "latitude": 3.06811,
+    "longitude": 35.56088,
+    "ec": 1400.0,
+    "ph": 7.74,
+    "well_depth": 51.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaikor",
+    "locality": "Kaikor",
+    "latitude": 4.51678,
+    "longitude": 35.42235,
+    "ec": 1660.0,
+    "ph": 8.01,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kaikor",
+    "locality": "Lokitaung",
+    "latitude": 4.52261,
+    "longitude": 35.42137,
+    "ec": 1230.0,
+    "ph": 8.03,
+    "well_depth": 42.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaikor BH",
+    "locality": "Kaikor",
+    "latitude": 4.52264,
+    "longitude": 35.42256,
+    "ec": 1920.0,
+    "ph": 7.43,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kaikor Catholic",
+    "locality": "Kaikor",
+    "latitude": 4.52306,
+    "longitude": 35.42429,
+    "ec": 920.0,
+    "ph": 7.86,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kainuk Mosque",
+    "locality": "Kainuk",
+    "latitude": 1.77259,
+    "longitude": 35.49902,
+    "ec": 480.0,
+    "ph": 8.5,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kaiokor Catholic Sisters",
+    "locality": "Kaikor",
+    "latitude": 4.52099,
+    "longitude": 35.42535,
+    "ec": 930.0,
+    "ph": 7.72,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaipokok",
+    "locality": "Kaipokok",
+    "latitude": 2.6432,
+    "longitude": 35.64205,
+    "ec": 1490.0,
+    "ph": 7.39,
+    "well_depth": 82.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaitese",
+    "locality": "Nadapal",
+    "latitude": 3.01036,
+    "longitude": 35.43503,
+    "ec": 970.0,
+    "ph": 8.28,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaitese Church",
+    "locality": "",
+    "latitude": 3.00245,
+    "longitude": 35.4333,
+    "ec": 1060.0,
+    "ph": 8.45,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kaitese Primary",
+    "locality": "",
+    "latitude": 3.00595,
+    "longitude": 35.43482,
+    "ec": 960.0,
+    "ph": 8.77,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kajokjok",
+    "locality": "Kaaleng",
+    "latitude": 4.34425,
+    "longitude": 35.5903,
+    "ec": 1700.0,
+    "ph": 7.56,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kakamera Pri Sch",
+    "locality": "Kakemera",
+    "latitude": 3.08856,
+    "longitude": 35.56142,
+    "ec": 590.0,
+    "ph": 8.65,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kakelae Pri Sch",
+    "locality": "Kakelae",
+    "latitude": 4.5256,
+    "longitude": 35.59429,
+    "ec": 1620.0,
+    "ph": 7.6,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kakong",
+    "locality": "Kakong",
+    "latitude": 2.03676,
+    "longitude": 35.53148,
+    "ec": 630.0,
+    "ph": 7.52,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kakuma Catholic Parish",
+    "locality": "Kakuma",
+    "latitude": 3.71098,
+    "longitude": 34.86256,
+    "ec": 4470.0,
+    "ph": 6.98,
+    "well_depth": 70.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kakuma Mission 1 (Natir)",
+    "locality": "Kakuma 1",
+    "latitude": 3.72542,
+    "longitude": 34.85393,
+    "ec": 560.0,
+    "ph": 8.81,
+    "well_depth": 74.6,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kalapata",
+    "locality": "Kalapata",
+    "latitude": 2.57298,
+    "longitude": 36.24014,
+    "ec": 330.0,
+    "ph": 8.3,
+    "well_depth": 25.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kalemchuch",
+    "locality": "Kakuma",
+    "latitude": 3.71128,
+    "longitude": 34.84116,
+    "ec": 1920.0,
+    "ph": 6.93,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kalemchuch",
+    "locality": "Kakuma",
+    "latitude": 3.71212,
+    "longitude": 34.83985,
+    "ec": 2070.0,
+    "ph": 7.73,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kalemngorok",
+    "locality": "Kalemngorok",
+    "latitude": 2.15016,
+    "longitude": 35.49541,
+    "ec": 2880.0,
+    "ph": 7.22,
+    "well_depth": 26.5,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kalemngorok BH",
+    "locality": "Katilu",
+    "latitude": 2.13256,
+    "longitude": 35.50031,
+    "ec": 1090.0,
+    "ph": 7.95,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kalemngorok Catholic Church",
+    "locality": "Kalemngorok",
+    "latitude": 2.12948,
+    "longitude": 35.49701,
+    "ec": 4620.0,
+    "ph": 8.06,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kalemnyang",
+    "locality": "",
+    "latitude": 2.73651,
+    "longitude": 35.37094,
+    "ec": 4790.0,
+    "ph": 8.55,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kalimnyang",
+    "locality": "Kalimnyang",
+    "latitude": 2.74111,
+    "longitude": 35.36667,
+    "ec": 360.0,
+    "ph": 7.61,
+    "well_depth": 47.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kalobeyei Pri Sch",
+    "locality": "Kalobeyei",
+    "latitude": 3.77172,
+    "longitude": 34.62395,
+    "ec": 1480.0,
+    "ph": 7.76,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kalopusia",
+    "locality": "Pelekech",
+    "latitude": 3.85669,
+    "longitude": 34.84041,
+    "ec": 1180.0,
+    "ph": 7.69,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kamarethe",
+    "locality": "Katilu",
+    "latitude": 2.33298,
+    "longitude": 35.6022,
+    "ec": 720.0,
+    "ph": 7.39,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kamotongae (Komudei)",
+    "locality": "Kakuma",
+    "latitude": 3.09714,
+    "longitude": 34.93006,
+    "ec": 1180.0,
+    "ph": 7.56,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kamunyae",
+    "locality": "Kakuma",
+    "latitude": 3.80611,
+    "longitude": 34.83215,
+    "ec": 400.0,
+    "ph": 8.61,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kanakurdio",
+    "locality": "Kaeris",
+    "latitude": 3.76985,
+    "longitude": 35.55422,
+    "ec": 3980.0,
+    "ph": 7.05,
+    "well_depth": 91.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kanakurdio",
+    "locality": "Lokitaung",
+    "latitude": 3.80762,
+    "longitude": 35.44341,
+    "ec": 1150.0,
+    "ph": 7.31,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kanakuridio Borehole",
+    "locality": "Kaeris",
+    "latitude": 3.78986,
+    "longitude": 35.46493,
+    "ec": 1330.0,
+    "ph": 7.81,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kanakurudio Water Project",
+    "locality": "Kaituko",
+    "latitude": 3.77391,
+    "longitude": 35.55318,
+    "ec": 3500.0,
+    "ph": 6.89,
+    "well_depth": 91.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "KANAMKEMER 3 (Catholic)",
+    "locality": "Kanamkemer",
+    "latitude": 3.11368,
+    "longitude": 35.59551,
+    "ec": 440.0,
+    "ph": 8.1,
+    "well_depth": 17.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kanaodon BH",
+    "locality": "Katilu",
+    "latitude": 2.49623,
+    "longitude": 35.40918,
+    "ec": 1010.0,
+    "ph": 7.52,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kangakipur Water Users Ass",
+    "locality": "Ngaukon",
+    "latitude": 4.02688,
+    "longitude": 35.46164,
+    "ec": 1450.0,
+    "ph": 7.52,
+    "well_depth": 100.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kang\u00e1lita",
+    "locality": "Kalg\u00e1lita",
+    "latitude": 2.74353,
+    "longitude": 35.38466,
+    "ec": 670.0,
+    "ph": 7.87,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kangamojoj",
+    "locality": "Kankurdio",
+    "latitude": 3.74535,
+    "longitude": 35.51051,
+    "ec": 1310.0,
+    "ph": 7.81,
+    "well_depth": 18.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kangarukia",
+    "locality": "Lokitaung",
+    "latitude": 4.15424,
+    "longitude": 35.73603,
+    "ec": 1200.0,
+    "ph": 7.54,
+    "well_depth": 54.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kangarukia",
+    "locality": "Lokitaung",
+    "latitude": 4.16018,
+    "longitude": 35.73916,
+    "ec": 1490.0,
+    "ph": 7.86,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kangirisae",
+    "locality": "Kangirisae",
+    "latitude": 2.61607,
+    "longitude": 36.25413,
+    "ec": 300.0,
+    "ph": 8.46,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kangitesiroi",
+    "locality": "Kangitesiroi",
+    "latitude": 3.88817,
+    "longitude": 34.94872,
+    "ec": 1390.0,
+    "ph": 8.0,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kangitit G. Sec Sch",
+    "locality": "Lokori",
+    "latitude": 1.93556,
+    "longitude": 36.02529,
+    "ec": 3520.0,
+    "ph": 7.68,
+    "well_depth": 3.6,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kang\u00edtulae",
+    "locality": "Kaikor",
+    "latitude": 4.68885,
+    "longitude": 35.41537,
+    "ec": 630.0,
+    "ph": 7.81,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kangole",
+    "locality": "Kangole",
+    "latitude": 2.9764,
+    "longitude": 35.1889,
+    "ec": 800.0,
+    "ph": 7.6,
+    "well_depth": 60.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kapedo GSU Camp",
+    "locality": "Kapedo",
+    "latitude": 1.20716,
+    "longitude": 36.10266,
+    "ec": 1100.0,
+    "ph": 8.42,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kapese Bh",
+    "locality": "Lokichar",
+    "latitude": 2.38547,
+    "longitude": 35.66121,
+    "ec": 540.0,
+    "ph": 7.95,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kapese Pri Sch",
+    "locality": "Lokichar",
+    "latitude": 2.37995,
+    "longitude": 35.66486,
+    "ec": 3790.0,
+    "ph": 8.66,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kapochuakongu",
+    "locality": "Songot",
+    "latitude": 4.06993,
+    "longitude": 34.49264,
+    "ec": 670.0,
+    "ph": 7.13,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Karebur",
+    "locality": "Karebur",
+    "latitude": 4.44407,
+    "longitude": 35.72201,
+    "ec": 1100.0,
+    "ph": 7.43,
+    "well_depth": 65.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Karebur",
+    "locality": "Karebur",
+    "latitude": 4.44362,
+    "longitude": 35.72569,
+    "ec": 1140.0,
+    "ph": 7.45,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Karioreng",
+    "locality": "Kaaleng",
+    "latitude": 4.40269,
+    "longitude": 35.58992,
+    "ec": 1310.0,
+    "ph": 7.96,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Karoge",
+    "locality": "Lokichar",
+    "latitude": 2.56531,
+    "longitude": 35.65881,
+    "ec": 1550.0,
+    "ph": 7.89,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Karoge",
+    "locality": "Lochwangamatak",
+    "latitude": 2.54804,
+    "longitude": 35.64043,
+    "ec": 1520.0,
+    "ph": 8.01,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Karuko Borehole",
+    "locality": "Kochodin",
+    "latitude": 2.09404,
+    "longitude": 36.04455,
+    "ec": 1230.0,
+    "ph": 7.74,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kasiroi",
+    "locality": "Lokichar",
+    "latitude": 2.47477,
+    "longitude": 35.6545,
+    "ec": 830.0,
+    "ph": 7.76,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kasuroi",
+    "locality": "Lokichar",
+    "latitude": 2.47714,
+    "longitude": 35.65909,
+    "ec": 1380.0,
+    "ph": 7.82,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kataboi Primary Sch",
+    "locality": "Kataboi",
+    "latitude": 3.76159,
+    "longitude": 35.83355,
+    "ec": 1570.0,
+    "ph": 8.11,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kataboi Water Supply New",
+    "locality": "Kataboi",
+    "latitude": 3.7526,
+    "longitude": 35.78302,
+    "ec": 980.0,
+    "ph": 8.95,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kate Camp Borehole",
+    "locality": "Lokichoggio",
+    "latitude": 4.20571,
+    "longitude": 34.36384,
+    "ec": 1170.0,
+    "ph": 7.92,
+    "well_depth": 242.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Katiko Borehole 1",
+    "locality": "Kataboi",
+    "latitude": 3.79067,
+    "longitude": 35.83731,
+    "ec": 760.0,
+    "ph": 8.6,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Katilia Water Supply",
+    "locality": "Katilia",
+    "latitude": 2.14326,
+    "longitude": 36.13721,
+    "ec": 350.0,
+    "ph": 8.56,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Katilu Catholic Mission Bh",
+    "locality": "Katilu",
+    "latitude": 2.2551,
+    "longitude": 35.42839,
+    "ec": 1310.0,
+    "ph": 8.32,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Katilu Integrated Bh",
+    "locality": "Katilu",
+    "latitude": 2.25181,
+    "longitude": 35.4292,
+    "ec": 3240.0,
+    "ph": 7.9,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Katilu KAG Church",
+    "locality": "Katilu",
+    "latitude": 2.27958,
+    "longitude": 35.4281,
+    "ec": 3080.0,
+    "ph": 7.6,
+    "well_depth": 36.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Katilu Water Supply BH",
+    "locality": "Katilu",
+    "latitude": 2.2712,
+    "longitude": 35.42613,
+    "ec": 1580.0,
+    "ph": 8.26,
+    "well_depth": 36.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kekuri",
+    "locality": "Lochakula",
+    "latitude": 1.96019,
+    "longitude": 35.90864,
+    "ec": 840.0,
+    "ph": 9.24,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kenya Police",
+    "locality": "Kokuro Police Post",
+    "latitude": 4.67513,
+    "longitude": 35.72161,
+    "ec": 560.0,
+    "ph": 8.71,
+    "well_depth": 72.5,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kenyaoil",
+    "locality": "Kangatotha",
+    "latitude": 3.23069,
+    "longitude": 35.91222,
+    "ec": 270.0,
+    "ph": 8.8,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kepurelado",
+    "locality": "",
+    "latitude": 2.80936,
+    "longitude": 35.27847,
+    "ec": 1240.0,
+    "ph": 8.25,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kerio",
+    "locality": "",
+    "latitude": 3.04727,
+    "longitude": 35.93995,
+    "ec": 750.0,
+    "ph": 9.48,
+    "well_depth": 100.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kerio Stadium",
+    "locality": "",
+    "latitude": 3.00399,
+    "longitude": 36.06137,
+    "ec": 750.0,
+    "ph": 9.48,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "KI Drilling Yard",
+    "locality": "Lokichogio",
+    "latitude": 4.20785,
+    "longitude": 34.36791,
+    "ec": 960.0,
+    "ph": 7.57,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kibet (Muruangitak)",
+    "locality": "Songot",
+    "latitude": 4.12121,
+    "longitude": 34.44946,
+    "ec": 1610.0,
+    "ph": 7.8,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kibish Mission",
+    "locality": "Kibish",
+    "latitude": 5.2905,
+    "longitude": 35.8233,
+    "ec": 3120.0,
+    "ph": 7.8,
+    "well_depth": 78.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kieng\u00f3mo 1 Bh",
+    "locality": "Kalapata",
+    "latitude": 2.3616,
+    "longitude": 35.80988,
+    "ec": 3500.0,
+    "ph": 8.35,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kieng\u00f3mo 2 Bh",
+    "locality": "Kalapata",
+    "latitude": 2.35629,
+    "longitude": 35.81264,
+    "ec": 1990.0,
+    "ph": 7.96,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kikiauna",
+    "locality": "Kalobeyei",
+    "latitude": 3.76666,
+    "longitude": 34.62803,
+    "ec": 1230.0,
+    "ph": 7.57,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kimaburi",
+    "locality": "",
+    "latitude": 2.81814,
+    "longitude": 35.62773,
+    "ec": 970.0,
+    "ph": 7.21,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kobosan",
+    "locality": "Riokomor",
+    "latitude": 4.0229,
+    "longitude": 35.0229,
+    "ec": 1540.0,
+    "ph": 7.67,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kokiselei",
+    "locality": "Riokomor",
+    "latitude": 4.04107,
+    "longitude": 35.67094,
+    "ec": 1180.0,
+    "ph": 7.28,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kokurio",
+    "locality": "Loritit",
+    "latitude": 3.35733,
+    "longitude": 34.7218,
+    "ec": 970.0,
+    "ph": 8.09,
+    "well_depth": 78.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kokuro",
+    "locality": "Kokuro",
+    "latitude": 4.66713,
+    "longitude": 35.71706,
+    "ec": 2310.0,
+    "ph": 8.56,
+    "well_depth": 27.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Komudei",
+    "locality": "Kakuma",
+    "latitude": 3.69164,
+    "longitude": 34.93451,
+    "ec": 880.0,
+    "ph": 7.36,
+    "well_depth": 72.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Koono",
+    "locality": "Koono",
+    "latitude": 2.80424,
+    "longitude": 35.40127,
+    "ec": 1000.0,
+    "ph": 7.55,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Kopotia 2",
+    "locality": "Kopotia",
+    "latitude": 4.40127,
+    "longitude": 35.52359,
+    "ec": 640.0,
+    "ph": 7.95,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kopotia Borehole",
+    "locality": "Yapakuno",
+    "latitude": 4.38062,
+    "longitude": 35.49677,
+    "ec": 2600.0,
+    "ph": 7.44,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Koriabok",
+    "locality": "",
+    "latitude": 3.44956,
+    "longitude": 35.20684,
+    "ec": 1170.0,
+    "ph": 7.77,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Korinyang Mixed Pri",
+    "locality": "Lopur",
+    "latitude": 2.23431,
+    "longitude": 35.43903,
+    "ec": 2310.0,
+    "ph": 8.04,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Kosikiria",
+    "locality": "",
+    "latitude": 2.92101,
+    "longitude": 35.9596,
+    "ec": 660.0,
+    "ph": 8.91,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Kosiyae",
+    "locality": "",
+    "latitude": 3.43358,
+    "longitude": 35.6593,
+    "ec": 3999.0,
+    "ph": 7.62,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Kotela",
+    "locality": "Kotela",
+    "latitude": 2.76553,
+    "longitude": 35.36694,
+    "ec": 16060.0,
+    "ph": 7.59,
+    "well_depth": 72.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Koyasa",
+    "locality": "Koyasa",
+    "latitude": 4.9694,
+    "longitude": 35.4865,
+    "ec": 670.0,
+    "ph": 8.32,
+    "well_depth": 67.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Limyosing Good People Sch",
+    "locality": "Napeikar",
+    "latitude": 3.00313,
+    "longitude": 35.51195,
+    "ec": 1560.0,
+    "ph": 8.06,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Link Hotel",
+    "locality": "Lokichoggio Town",
+    "latitude": 4.21014,
+    "longitude": 34.34847,
+    "ec": 690.0,
+    "ph": 7.76,
+    "well_depth": 70.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lobang\u00e1",
+    "locality": "Lopusiki",
+    "latitude": 3.89395,
+    "longitude": 34.81921,
+    "ec": 1460.0,
+    "ph": 8.67,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lobei",
+    "locality": "Lobei",
+    "latitude": 2.81327,
+    "longitude": 35.08562,
+    "ec": 1970.0,
+    "ph": 8.34,
+    "well_depth": 50.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lobei",
+    "locality": "Lobei",
+    "latitude": 2.73222,
+    "longitude": 35.21417,
+    "ec": 730.0,
+    "ph": 8.51,
+    "well_depth": 44.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lobulono",
+    "locality": "",
+    "latitude": 4.83429,
+    "longitude": 35.37325,
+    "ec": 690.0,
+    "ph": 8.28,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lobur",
+    "locality": "Lobur",
+    "latitude": 4.70202,
+    "longitude": 35.67244,
+    "ec": 1420.0,
+    "ph": 7.4,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lobur Borehole",
+    "locality": "Kokuro",
+    "latitude": 4.7195,
+    "longitude": 35.66996,
+    "ec": 2070.0,
+    "ph": 7.52,
+    "well_depth": 113.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lobur Community Bh",
+    "locality": "Lobur",
+    "latitude": 4.72044,
+    "longitude": 35.6795,
+    "ec": 2970.0,
+    "ph": 8.85,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lobur Community Bh",
+    "locality": "Lobur",
+    "latitude": 4.7163,
+    "longitude": 35.6782,
+    "ec": 7200.0,
+    "ph": 8.91,
+    "well_depth": 60.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Lobur Mission",
+    "locality": "Lobur",
+    "latitude": 4.71685,
+    "longitude": 35.66962,
+    "ec": 1180.0,
+    "ph": 7.21,
+    "well_depth": 112.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Local Adminst.",
+    "locality": "Kibish",
+    "latitude": 5.28208,
+    "longitude": 35.8189,
+    "ec": 3200.0,
+    "ph": 8.0,
+    "well_depth": 80.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Locharengan",
+    "locality": "",
+    "latitude": 3.64367,
+    "longitude": 35.65077,
+    "ec": 830.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Locher Ekingol Bh2",
+    "locality": "Kalobeyei",
+    "latitude": 3.81228,
+    "longitude": 34.35369,
+    "ec": 740.0,
+    "ph": 7.44,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Locherarengan",
+    "locality": "",
+    "latitude": 2.7953,
+    "longitude": 35.2532,
+    "ec": 760.0,
+    "ph": 7.81,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Locherekal  Bh1",
+    "locality": "Lokichoggio",
+    "latitude": 4.21216,
+    "longitude": 34.35781,
+    "ec": 1050.0,
+    "ph": 7.81,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Locherekingol BH1",
+    "locality": "Kalobeyei",
+    "latitude": 3.81177,
+    "longitude": 34.35541,
+    "ec": 430.0,
+    "ph": 8.46,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Locheresekon",
+    "locality": "Kalobeyei",
+    "latitude": 3.82195,
+    "longitude": 34.59424,
+    "ec": 1090.0,
+    "ph": 7.73,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lochor Angitetelei",
+    "locality": "Lokichogio",
+    "latitude": 3.52214,
+    "longitude": 34.76654,
+    "ec": 1600.0,
+    "ph": 7.85,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lochore Edome",
+    "locality": "Kakuma",
+    "latitude": 3.77803,
+    "longitude": 34.83427,
+    "ec": 420.0,
+    "ph": 8.78,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lochoredome Borehole",
+    "locality": "Lokitaung",
+    "latitude": 4.26401,
+    "longitude": 35.67037,
+    "ec": 600.0,
+    "ph": 8.09,
+    "well_depth": 100.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lochoreodot",
+    "locality": "",
+    "latitude": 2.80365,
+    "longitude": 35.2428,
+    "ec": 1000.0,
+    "ph": 7.86,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lochwa BH",
+    "locality": "Lochwangamatak",
+    "latitude": 2.61232,
+    "longitude": 35.65285,
+    "ec": 1610.0,
+    "ph": 9.21,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lochwarengan",
+    "locality": "",
+    "latitude": 4.39106,
+    "longitude": 35.72593,
+    "ec": 1920.0,
+    "ph": 7.45,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Loima Girls",
+    "locality": "",
+    "latitude": 2.91032,
+    "longitude": 35.35688,
+    "ec": 1130.0,
+    "ph": 7.94,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Loitakelae",
+    "locality": "Kanakurdio",
+    "latitude": 3.8375,
+    "longitude": 35.50363,
+    "ec": 1660.0,
+    "ph": 8.9,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Loitanit",
+    "locality": "Loitanit",
+    "latitude": 4.76792,
+    "longitude": 35.40723,
+    "ec": 560.0,
+    "ph": 7.42,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokadwaran",
+    "locality": "Kanamkemer",
+    "latitude": 2.98707,
+    "longitude": 35.64896,
+    "ec": 6040.0,
+    "ph": 6.78,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Lokalimon",
+    "locality": "",
+    "latitude": 3.14444,
+    "longitude": 35.67243,
+    "ec": 940.0,
+    "ph": 8.36,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokapel",
+    "locality": "Lokapel",
+    "latitude": 2.36279,
+    "longitude": 35.43068,
+    "ec": 770.0,
+    "ph": 7.61,
+    "well_depth": 60.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokichar BH",
+    "locality": "Lokichar",
+    "latitude": 2.38245,
+    "longitude": 35.65365,
+    "ec": 1070.0,
+    "ph": 8.28,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokichar East (Tullow)",
+    "locality": "Nakukulas",
+    "latitude": 2.30762,
+    "longitude": 35.82215,
+    "ec": 770.0,
+    "ph": 8.13,
+    "well_depth": 60.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokichar Girls BH",
+    "locality": "Lokichar",
+    "latitude": 2.37581,
+    "longitude": 35.65422,
+    "ec": 1930.0,
+    "ph": 8.02,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lokichar Mission",
+    "locality": "Lokichar 2",
+    "latitude": 2.37795,
+    "longitude": 35.65179,
+    "ec": 1570.0,
+    "ph": 8.26,
+    "well_depth": 31.3,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lokichar Mixed BH",
+    "locality": "Lokichar",
+    "latitude": 2.38541,
+    "longitude": 35.65193,
+    "ec": 440.0,
+    "ph": 8.45,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokichar Village",
+    "locality": "Lokichar 1",
+    "latitude": 2.38361,
+    "longitude": 35.654499,
+    "ec": 1090.0,
+    "ph": 8.32,
+    "well_depth": 35.9,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokichogio Power Stations",
+    "locality": "Lokichogio",
+    "latitude": 4.1608,
+    "longitude": 34.38859,
+    "ec": 940.0,
+    "ph": 7.79,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokiding\u00f3s",
+    "locality": "Kanamkemer",
+    "latitude": 3.07212,
+    "longitude": 35.57049,
+    "ec": 1340.0,
+    "ph": 8.11,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokipetotakwaan",
+    "locality": "Kakuma",
+    "latitude": 3.80677,
+    "longitude": 34.97725,
+    "ec": 720.0,
+    "ph": 7.59,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokiriama",
+    "locality": "",
+    "latitude": 2.75674,
+    "longitude": 34.87761,
+    "ec": 2190.0,
+    "ph": 7.64,
+    "well_depth": 76.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lokiriama Water Users Ass",
+    "locality": "Urum",
+    "latitude": 2.94427,
+    "longitude": 34.69925,
+    "ec": 1190.0,
+    "ph": 8.41,
+    "well_depth": 70.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokitaung Borehole",
+    "locality": "Lokitaung",
+    "latitude": 4.27326,
+    "longitude": 35.74567,
+    "ec": 1480.0,
+    "ph": 8.11,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokitaung Mission 2",
+    "locality": "Lokitaung",
+    "latitude": 4.32597,
+    "longitude": 35.71786,
+    "ec": 1720.0,
+    "ph": 9.44,
+    "well_depth": 25.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lokitaung Parish - Natoo",
+    "locality": "Natoo",
+    "latitude": 4.2143,
+    "longitude": 35.76163,
+    "ec": 960.0,
+    "ph": 7.33,
+    "well_depth": 50.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokomarinyang",
+    "locality": "Lokomarinyang",
+    "latitude": 5.01267,
+    "longitude": 35.59568,
+    "ec": 1280.0,
+    "ph": 7.45,
+    "well_depth": 46.04,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokoparaparae",
+    "locality": "Lokoparaparae",
+    "latitude": 3.16221,
+    "longitude": 35.59641,
+    "ec": 350.0,
+    "ph": 8.4,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokori 1",
+    "locality": "",
+    "latitude": 1.9542,
+    "longitude": 36.0444,
+    "ec": 1110.0,
+    "ph": 8.18,
+    "well_depth": 35.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokori AIC Health Centre",
+    "locality": "Lokori",
+    "latitude": 1.94545,
+    "longitude": 36.0314,
+    "ec": 300.0,
+    "ph": 8.53,
+    "well_depth": 27.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokori Water Supply",
+    "locality": "Lokori",
+    "latitude": 1.95984,
+    "longitude": 36.04456,
+    "ec": 1110.0,
+    "ph": 8.18,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokwabok",
+    "locality": "Elelea",
+    "latitude": 2.11365,
+    "longitude": 36.16538,
+    "ec": 670.0,
+    "ph": 7.61,
+    "well_depth": 17.51,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lokwamosang Comm W.P Lopii",
+    "locality": "Lokwamosang",
+    "latitude": 2.00184,
+    "longitude": 35.92987,
+    "ec": 1160.0,
+    "ph": 8.0,
+    "well_depth": 110.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lokwii Tree Nursery BH",
+    "locality": "Lotubae",
+    "latitude": 1.97445,
+    "longitude": 36.08058,
+    "ec": 280.0,
+    "ph": 7.92,
+    "well_depth": 6.3,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lolemu",
+    "locality": "Loreng",
+    "latitude": 3.5654,
+    "longitude": 34.69245,
+    "ec": 1380.0,
+    "ph": 8.03,
+    "well_depth": 76.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lolupe",
+    "locality": "Nakalale",
+    "latitude": 3.52719,
+    "longitude": 35.24359,
+    "ec": 1670.0,
+    "ph": 7.33,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lolupe",
+    "locality": "Nakalale",
+    "latitude": 3.53651,
+    "longitude": 35.24268,
+    "ec": 1230.0,
+    "ph": 7.78,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomareng",
+    "locality": "Kachoda",
+    "latitude": 4.29722,
+    "longitude": 35.66336,
+    "ec": 1110.0,
+    "ph": 8.7,
+    "well_depth": 100.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomeguro",
+    "locality": "Nakalale",
+    "latitude": 3.50307,
+    "longitude": 35.23821,
+    "ec": 740.0,
+    "ph": 7.29,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lomekwi",
+    "locality": "Lomekwi",
+    "latitude": 3.93287,
+    "longitude": 35.83978,
+    "ec": 1080.0,
+    "ph": 8.99,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomeleku",
+    "locality": "Loperot",
+    "latitude": 2.36755,
+    "longitude": 35.96811,
+    "ec": 2270.0,
+    "ph": 7.73,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lomerpus (Jiluk) Bh",
+    "locality": "Kaputir",
+    "latitude": 2.16298,
+    "longitude": 35.41192,
+    "ec": 480.0,
+    "ph": 8.26,
+    "well_depth": 24.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lomeyana Logiala",
+    "locality": "Lokichogio",
+    "latitude": 3.32666,
+    "longitude": 34.68462,
+    "ec": 1270.0,
+    "ph": 7.67,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomidat",
+    "locality": "Lomidat",
+    "latitude": 4.17376,
+    "longitude": 34.41156,
+    "ec": 1490.0,
+    "ph": 8.44,
+    "well_depth": 37.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomil",
+    "locality": "Lomeiyan",
+    "latitude": 3.34102,
+    "longitude": 35.23409,
+    "ec": 730.0,
+    "ph": 8.11,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lominyana Kirionok",
+    "locality": "Lokichogio",
+    "latitude": 4.93385,
+    "longitude": 34.56121,
+    "ec": 1220.0,
+    "ph": 8.13,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomnyenakwan",
+    "locality": "Parkati",
+    "latitude": 2.50091,
+    "longitude": 36.22675,
+    "ec": 1530.0,
+    "ph": 9.14,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lomnyenkirion",
+    "locality": "",
+    "latitude": 2.89269,
+    "longitude": 35.94632,
+    "ec": 1020.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomunyana Kirionok",
+    "locality": "Lokichogio",
+    "latitude": 3.94147,
+    "longitude": 34.56513,
+    "ec": 1270.0,
+    "ph": 7.64,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lomunyana Kirionok Hand Pump",
+    "locality": "Lokichogio",
+    "latitude": 3.93565,
+    "longitude": 34.56375,
+    "ec": 850.0,
+    "ph": 7.73,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lonyoduk Community Borehole",
+    "locality": "Kalobeyei",
+    "latitude": 3.70863,
+    "longitude": 34.6018,
+    "ec": 920.0,
+    "ph": 8.26,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lopur",
+    "locality": "Lopusiki",
+    "latitude": 3.86003,
+    "longitude": 34.81588,
+    "ec": 860.0,
+    "ph": 8.02,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lopur",
+    "locality": "Katilu",
+    "latitude": 2.23778,
+    "longitude": 35.44325,
+    "ec": 2080.0,
+    "ph": 8.68,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lopur",
+    "locality": "Lopur",
+    "latitude": 2.23263,
+    "longitude": 35.42734,
+    "ec": 1360.0,
+    "ph": 8.71,
+    "well_depth": 28.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Loreng",
+    "locality": "Loreng",
+    "latitude": 3.50769,
+    "longitude": 34.59228,
+    "ec": 1990.0,
+    "ph": 8.27,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Loreng Pri Sch",
+    "locality": "Lokichogio",
+    "latitude": 3.61999,
+    "longitude": 34.83289,
+    "ec": 1010.0,
+    "ph": 7.68,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lorengelup",
+    "locality": "Lorengelup",
+    "latitude": 3.04723,
+    "longitude": 35.94006,
+    "ec": 1170.0,
+    "ph": 8.52,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lorengelup",
+    "locality": "Kerio",
+    "latitude": 2.98496,
+    "longitude": 35.84109,
+    "ec": 6850.0,
+    "ph": 8.55,
+    "well_depth": 52.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Lorimet",
+    "locality": "Lokichogio",
+    "latitude": 4.19053,
+    "longitude": 34.4003,
+    "ec": 1040.0,
+    "ph": 8.66,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Loritit Pri Sch",
+    "locality": "Lokichogio",
+    "latitude": 3.46576,
+    "longitude": 34.80541,
+    "ec": 790.0,
+    "ph": 8.07,
+    "well_depth": 30.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Loroo",
+    "locality": "Nameiyana",
+    "latitude": 3.29949,
+    "longitude": 35.29864,
+    "ec": 1080.0,
+    "ph": 8.36,
+    "well_depth": 55.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Lorugumu Parish",
+    "locality": "",
+    "latitude": 2.89785,
+    "longitude": 35.26438,
+    "ec": 660.0,
+    "ph": 8.02,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lorugumu Pri",
+    "locality": "",
+    "latitude": 3.6222,
+    "longitude": 35.5994,
+    "ec": 720.0,
+    "ph": 8.04,
+    "well_depth": 50.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Losike",
+    "locality": "Losike",
+    "latitude": 3.78055,
+    "longitude": 34.49755,
+    "ec": 1750.0,
+    "ph": 7.36,
+    "well_depth": 40.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lotikipi Rvwsb",
+    "locality": "Lotikipi",
+    "latitude": 4.3353,
+    "longitude": 34.69387,
+    "ec": 9060.0,
+    "ph": 7.96,
+    "well_depth": 350.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Lotubae",
+    "locality": "Lotubae",
+    "latitude": 2.03009,
+    "longitude": 36.13758,
+    "ec": 600.0,
+    "ph": 7.79,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Loturerei",
+    "locality": "",
+    "latitude": 2.93379,
+    "longitude": 35.61307,
+    "ec": 2680.0,
+    "ph": 6.94,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lowasco",
+    "locality": "Lodwar Town",
+    "latitude": 3.11271,
+    "longitude": 35.5984,
+    "ec": 240.0,
+    "ph": 8.43,
+    "well_depth": 25.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lowasco 1b",
+    "locality": "Lodwar",
+    "latitude": 3.11298,
+    "longitude": 35.59811,
+    "ec": 250.0,
+    "ph": 8.33,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lowasco Bh2",
+    "locality": "Lodwar",
+    "latitude": 3.11082,
+    "longitude": 35.59275,
+    "ec": 1940.0,
+    "ph": 7.86,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Lowasco Bh3",
+    "locality": "Lodwar",
+    "latitude": 3.11328,
+    "longitude": 35.6005,
+    "ec": 270.0,
+    "ph": 8.76,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lowasco Bh4",
+    "locality": "Lodwar",
+    "latitude": 3.1136,
+    "longitude": 35.5994,
+    "ec": 250.0,
+    "ph": 8.41,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lowasco Bh5",
+    "locality": "Kanamkemer",
+    "latitude": 3.11439,
+    "longitude": 35.59653,
+    "ec": 290.0,
+    "ph": 8.4,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Lowasco Bh6",
+    "locality": "Kanamkemer",
+    "latitude": 3.11088,
+    "longitude": 35.59257,
+    "ec": 560.0,
+    "ph": 8.53,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Loyapat Borehole",
+    "locality": "Kainuk",
+    "latitude": 1.83595,
+    "longitude": 35.4758,
+    "ec": 870.0,
+    "ph": 7.57,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Mala",
+    "locality": "Mala",
+    "latitude": 2.76723,
+    "longitude": 35.39188,
+    "ec": 1360.0,
+    "ph": 7.61,
+    "well_depth": 45.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Manalong\u00f3ria",
+    "locality": "Lokitaung",
+    "latitude": 4.32413,
+    "longitude": 35.71501,
+    "ec": 2460.0,
+    "ph": 9.48,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Manalong'oria BH",
+    "locality": "Lokitaung",
+    "latitude": 4.31231,
+    "longitude": 35.72139,
+    "ec": 1920.0,
+    "ph": 7.45,
+    "well_depth": 95.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Meyan",
+    "locality": "Lobur",
+    "latitude": 4.7562,
+    "longitude": 35.67621,
+    "ec": 920.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Mlango",
+    "locality": "Lokitaung",
+    "latitude": 4.27254,
+    "longitude": 35.81858,
+    "ec": 830.0,
+    "ph": 8.56,
+    "well_depth": 35.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Mlima Tatu",
+    "locality": "Mlima Tatu",
+    "latitude": 4.13919,
+    "longitude": 35.46933,
+    "ec": 980.0,
+    "ph": 7.97,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Mogilla Water Users Ass",
+    "locality": "Lopiding",
+    "latitude": 4.20017,
+    "longitude": 34.38501,
+    "ec": 850.0,
+    "ph": 7.54,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Monti",
+    "locality": "Kakwanya",
+    "latitude": 3.13404,
+    "longitude": 35.66878,
+    "ec": 2800.0,
+    "ph": 8.02,
+    "well_depth": 18.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Morangibuin",
+    "locality": "Pelekech",
+    "latitude": 3.74477,
+    "longitude": 34.92879,
+    "ec": 1080.0,
+    "ph": 8.05,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Moruesa",
+    "locality": "Moruesa",
+    "latitude": 2.93931,
+    "longitude": 35.44043,
+    "ec": 880.0,
+    "ph": 8.85,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Morulem Water Users Ass",
+    "locality": "Morulem",
+    "latitude": 1.97324,
+    "longitude": 36.07027,
+    "ec": 490.0,
+    "ph": 8.61,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Mowd",
+    "locality": "Lokitaung",
+    "latitude": 4.26679,
+    "longitude": 35.75464,
+    "ec": 1740.0,
+    "ph": 7.46,
+    "well_depth": 37.7,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Mowd",
+    "locality": "Lokichar",
+    "latitude": 2.38287,
+    "longitude": 35.65434,
+    "ec": 820.0,
+    "ph": 7.93,
+    "well_depth": 42.7,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Mt. Kenya University",
+    "locality": "Lodwar",
+    "latitude": 3.06894,
+    "longitude": 35.61491,
+    "ec": 3630.0,
+    "ph": 8.69,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Muruangibuin",
+    "locality": "Pelekech",
+    "latitude": 3.73113,
+    "longitude": 34.94455,
+    "ec": 1200.0,
+    "ph": 8.0,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nabei (Kaekosowan)",
+    "locality": "Kalobeyei",
+    "latitude": 3.88928,
+    "longitude": 34.56132,
+    "ec": 830.0,
+    "ph": 7.83,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nabuin",
+    "locality": "Nadapal",
+    "latitude": 3.03686,
+    "longitude": 35.52314,
+    "ec": 850.0,
+    "ph": 8.64,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nabulicha",
+    "locality": "Lomeyan",
+    "latitude": 3.46578,
+    "longitude": 35.38311,
+    "ec": 600.0,
+    "ph": 7.59,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nachacha Windmill",
+    "locality": "Kangatotha",
+    "latitude": 3.1656,
+    "longitude": 35.85463,
+    "ec": 320.0,
+    "ph": 8.17,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nachampa",
+    "locality": "Napelilim",
+    "latitude": 3.45071,
+    "longitude": 35.40337,
+    "ec": 2490.0,
+    "ph": 8.16,
+    "well_depth": 90.4,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nachola",
+    "locality": "Lokichar",
+    "latitude": 2.37097,
+    "longitude": 35.63188,
+    "ec": 1500.0,
+    "ph": 8.39,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nachuchuikait",
+    "locality": "Lokichoggio",
+    "latitude": 4.20522,
+    "longitude": 34.35624,
+    "ec": 930.0,
+    "ph": 7.64,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nadapal",
+    "locality": "Nadapal",
+    "latitude": 3.07165,
+    "longitude": 35.51162,
+    "ec": 450.0,
+    "ph": 8.81,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nadapal Ap Camp",
+    "locality": "Nadapal",
+    "latitude": 4.39356,
+    "longitude": 34.29702,
+    "ec": 1400.0,
+    "ph": 8.16,
+    "well_depth": 132.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nadipoe",
+    "locality": "",
+    "latitude": 2.90182,
+    "longitude": 35.65153,
+    "ec": 6550.0,
+    "ph": 7.19,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nadome",
+    "locality": "Lokichogio",
+    "latitude": 4.20449,
+    "longitude": 34.38126,
+    "ec": 860.0,
+    "ph": 7.93,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nadunga",
+    "locality": "Kaeris",
+    "latitude": 3.96083,
+    "longitude": 35.30629,
+    "ec": 1790.0,
+    "ph": 8.48,
+    "well_depth": 50.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Naipa Dispensary",
+    "locality": "",
+    "latitude": 2.52116,
+    "longitude": 35.37391,
+    "ec": 1370.0,
+    "ph": 6.88,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Naiyanakabaran",
+    "locality": "",
+    "latitude": 4.33048,
+    "longitude": 35.89784,
+    "ec": 10020.0,
+    "ph": 7.86,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nakabuk Borehole",
+    "locality": "Yapakuno",
+    "latitude": 4.14027,
+    "longitude": 35.47059,
+    "ec": 460.0,
+    "ph": 7.74,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakalale",
+    "locality": "Lokitaung",
+    "latitude": 4.43633,
+    "longitude": 35.71857,
+    "ec": 820.0,
+    "ph": 7.27,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakalale BH",
+    "locality": "Lokitaung",
+    "latitude": 4.27331,
+    "longitude": 35.74657,
+    "ec": 1450.0,
+    "ph": 7.45,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakalei Water Supply",
+    "locality": "Nakalei",
+    "latitude": 2.54098,
+    "longitude": 36.22314,
+    "ec": 2130.0,
+    "ph": 8.28,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakapelewoi 2",
+    "locality": "",
+    "latitude": 4.31549,
+    "longitude": 35.43058,
+    "ec": 2680.0,
+    "ph": 8.22,
+    "well_depth": 70.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakapelewoi Borehole",
+    "locality": "Yapakuno",
+    "latitude": 4.31347,
+    "longitude": 35.43147,
+    "ec": 1220.0,
+    "ph": 7.53,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakejuamosing",
+    "locality": "Lochwaangikamatak",
+    "latitude": 2.53595,
+    "longitude": 35.50003,
+    "ec": 800.0,
+    "ph": 7.61,
+    "well_depth": 85.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakichurtak",
+    "locality": "",
+    "latitude": 3.88904,
+    "longitude": 34.50596,
+    "ec": 710.0,
+    "ph": 7.92,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakichurtak (Mureothe)",
+    "locality": "",
+    "latitude": 3.88619,
+    "longitude": 34.50266,
+    "ec": 940.0,
+    "ph": 7.58,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakilekipus",
+    "locality": "Kalobeyei",
+    "latitude": 3.75542,
+    "longitude": 34.66747,
+    "ec": 930.0,
+    "ph": 8.41,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakimonet Borehole",
+    "locality": "Kaikor",
+    "latitude": 4.63355,
+    "longitude": 35.39981,
+    "ec": 790.0,
+    "ph": 7.99,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakionomet",
+    "locality": "Kaikor",
+    "latitude": 4.63056,
+    "longitude": 35.39912,
+    "ec": 790.0,
+    "ph": 7.99,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakiriasia",
+    "locality": "Napelilin",
+    "latitude": 3.40548,
+    "longitude": 35.41318,
+    "ec": 950.0,
+    "ph": 7.4,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakitoekakumon",
+    "locality": "Mlima Tatu",
+    "latitude": 4.21571,
+    "longitude": 35.35824,
+    "ec": 1150.0,
+    "ph": 7.35,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakitokakuman",
+    "locality": "Mlima Tatu",
+    "latitude": 4.20752,
+    "longitude": 35.36417,
+    "ec": 2210.0,
+    "ph": 7.94,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakitokirion",
+    "locality": "Lokichogio",
+    "latitude": 3.53652,
+    "longitude": 34.7798,
+    "ec": 1560.0,
+    "ph": 8.42,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakosima",
+    "locality": "Pelekech",
+    "latitude": 3.66778,
+    "longitude": 35.00326,
+    "ec": 1600.0,
+    "ph": 8.89,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakukulas  BH",
+    "locality": "Kochodin",
+    "latitude": 2.19368,
+    "longitude": 35.81506,
+    "ec": 1820.0,
+    "ph": 7.67,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakukulas (Tullow)",
+    "locality": "Nakukulas",
+    "latitude": 2.20571,
+    "longitude": 35.81542,
+    "ec": 1460.0,
+    "ph": 8.43,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakururum BH1",
+    "locality": "Kalobeyei",
+    "latitude": 3.98978,
+    "longitude": 34.54326,
+    "ec": 2440.0,
+    "ph": 6.79,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakururum Undp",
+    "locality": "Songot",
+    "latitude": 3.9915,
+    "longitude": 34.54032,
+    "ec": 1150.0,
+    "ph": 7.06,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwakitela",
+    "locality": "",
+    "latitude": 2.75571,
+    "longitude": 35.64738,
+    "ec": 1640.0,
+    "ph": 7.76,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nakwakitela Bh Mowd",
+    "locality": "Lokichar",
+    "latitude": 2.38681,
+    "longitude": 35.65431,
+    "ec": 1190.0,
+    "ph": 8.79,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwamekwi",
+    "locality": "Lodwar",
+    "latitude": 3.11444,
+    "longitude": 35.5822,
+    "ec": 1330.0,
+    "ph": 8.09,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwamekwi",
+    "locality": "Lodwar",
+    "latitude": 3.114449,
+    "longitude": 35.57044,
+    "ec": 1450.0,
+    "ph": 9.63,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwamekwi Lowasco",
+    "locality": "Lodwar",
+    "latitude": 3.11064,
+    "longitude": 35.59286,
+    "ec": 270.0,
+    "ph": 8.49,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakwamekwi Parish",
+    "locality": "Lodwar Town",
+    "latitude": 3.1127,
+    "longitude": 35.57125,
+    "ec": 690.0,
+    "ph": 9.38,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakwamoru W/S Borehole",
+    "locality": "Kaputir",
+    "latitude": 2.05872,
+    "longitude": 35.43222,
+    "ec": 1320.0,
+    "ph": 8.27,
+    "well_depth": 65.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwamunyen",
+    "locality": "Kokiselei",
+    "latitude": 4.13121,
+    "longitude": 35.69898,
+    "ec": 1240.0,
+    "ph": 7.69,
+    "well_depth": 81.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nakwamunyen",
+    "locality": "Kalobeyei",
+    "latitude": 3.76627,
+    "longitude": 34.60951,
+    "ec": 760.0,
+    "ph": 7.97,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakwatir",
+    "locality": "",
+    "latitude": 2.99345,
+    "longitude": 35.44602,
+    "ec": 370.0,
+    "ph": 29.8,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nakwei",
+    "locality": "Nakwei",
+    "latitude": 3.31766,
+    "longitude": 35.48893,
+    "ec": 2570.0,
+    "ph": 7.71,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nalapatui C",
+    "locality": "",
+    "latitude": 3.69505,
+    "longitude": 34.47232,
+    "ec": 990.0,
+    "ph": 7.42,
+    "well_depth": 100.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nalemsokon",
+    "locality": "Lokichar",
+    "latitude": 2.38853,
+    "longitude": 35.63977,
+    "ec": 4420.0,
+    "ph": 8.05,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nalita",
+    "locality": "Kaikor",
+    "latitude": 4.53562,
+    "longitude": 35.42831,
+    "ec": 1610.0,
+    "ph": 7.55,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Namalimo(Nariokotome)",
+    "locality": "Ngissinger",
+    "latitude": 4.13026,
+    "longitude": 35.91178,
+    "ec": 1000.0,
+    "ph": 7.84,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Namamabu",
+    "locality": "Lorugumu",
+    "latitude": 2.88904,
+    "longitude": 35.25182,
+    "ec": 1200.0,
+    "ph": 7.98,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Namariat",
+    "locality": "Kapua",
+    "latitude": 3.42914,
+    "longitude": 35.65469,
+    "ec": 11490.0,
+    "ph": 7.69,
+    "well_depth": 40.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nameriyek",
+    "locality": "Riokomor",
+    "latitude": 4.02759,
+    "longitude": 35.72679,
+    "ec": 1740.0,
+    "ph": 8.1,
+    "well_depth": 45.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Namon Community Bh",
+    "locality": "Lokangae",
+    "latitude": 4.00535,
+    "longitude": 34.8699,
+    "ec": 750.0,
+    "ph": 8.47,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Namorotot",
+    "locality": "Lowarengak",
+    "latitude": 4.27049,
+    "longitude": 35.81293,
+    "ec": 670.0,
+    "ph": 7.44,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Namoru",
+    "locality": "Nadapal",
+    "latitude": 3.03714,
+    "longitude": 35.45882,
+    "ec": 890.0,
+    "ph": 7.74,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Namoruputh",
+    "locality": "Loima",
+    "latitude": 2.84756,
+    "longitude": 35.0384,
+    "ec": 350.0,
+    "ph": 8.6,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Namoruputh Primary",
+    "locality": "Namoruputh",
+    "latitude": 2.84872,
+    "longitude": 35.04058,
+    "ec": 2310.0,
+    "ph": 8.61,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Namoruputh Sec Sch",
+    "locality": "Namoruputh",
+    "latitude": 2.85948,
+    "longitude": 35.07653,
+    "ec": 1990.0,
+    "ph": 8.39,
+    "well_depth": 72.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Namoruuth Centre PAG",
+    "locality": "Namoruputh",
+    "latitude": 2.84447,
+    "longitude": 35.03567,
+    "ec": 3170.0,
+    "ph": 8.01,
+    "well_depth": 100.0,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nanam CEPSA",
+    "locality": "Nanam",
+    "latitude": 4.20644,
+    "longitude": 34.56781,
+    "ec": 2160.0,
+    "ph": 8.62,
+    "well_depth": 150.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nanyangaita",
+    "locality": "Katilu",
+    "latitude": 2.22905,
+    "longitude": 35.44237,
+    "ec": 1050.0,
+    "ph": 8.79,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Naotin",
+    "locality": "Naotin Apua",
+    "latitude": 3.05514,
+    "longitude": 35.54984,
+    "ec": 790.0,
+    "ph": 8.23,
+    "well_depth": 40.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Naotin",
+    "locality": "Naotin",
+    "latitude": 3.0451,
+    "longitude": 35.53995,
+    "ec": 920.0,
+    "ph": 830.0,
+    "well_depth": 95.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Naoyapua Koropus",
+    "locality": "Katilu",
+    "latitude": 2.39567,
+    "longitude": 35.43367,
+    "ec": 1240.0,
+    "ph": 7.35,
+    "well_depth": 50.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Naoyatira",
+    "locality": "",
+    "latitude": 3.0681,
+    "longitude": 35.49467,
+    "ec": 110.0,
+    "ph": 8.33,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Napak",
+    "locality": "Napak",
+    "latitude": 4.86363,
+    "longitude": 35.39374,
+    "ec": 920.0,
+    "ph": 8.04,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Napak BH",
+    "locality": "Napak",
+    "latitude": 4.86431,
+    "longitude": 35.39486,
+    "ec": 900.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Napeikar",
+    "locality": "Napeikar",
+    "latitude": 4.74847,
+    "longitude": 35.66596,
+    "ec": 520.0,
+    "ph": 8.53,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Napeikar 2",
+    "locality": "Napeikar",
+    "latitude": 3.00313,
+    "longitude": 35.51195,
+    "ec": 1560.0,
+    "ph": 8.06,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Napeikar Borehole",
+    "locality": "Meyan",
+    "latitude": 4.75127,
+    "longitude": 35.6607,
+    "ec": 920.0,
+    "ph": 7.48,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Napeililim",
+    "locality": "Lomeyan",
+    "latitude": 3.46458,
+    "longitude": 35.37634,
+    "ec": 1000.0,
+    "ph": 7.56,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Napeitom",
+    "locality": "Napeitom",
+    "latitude": 1.67942,
+    "longitude": 36.05014,
+    "ec": 1730.0,
+    "ph": 8.09,
+    "well_depth": 60.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Napeitom Borehole",
+    "locality": "Kapedo",
+    "latitude": 1.68528,
+    "longitude": 36.04912,
+    "ec": 2010.0,
+    "ph": 8.2,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Napetet Lodwar",
+    "locality": "Napetet",
+    "latitude": 3.12904,
+    "longitude": 35.62662,
+    "ec": 480.0,
+    "ph": 8.27,
+    "well_depth": 44.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Napopongoit Lokichoggio",
+    "locality": "Napopongoit",
+    "latitude": 4.19207,
+    "longitude": 34.39451,
+    "ec": 840.0,
+    "ph": 8.12,
+    "well_depth": 54.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Napusmoru",
+    "locality": "Lochwangamatak",
+    "latitude": 2.66703,
+    "longitude": 35.85122,
+    "ec": 4910.0,
+    "ph": 8.31,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Napuu Hand Pump",
+    "locality": "Lodwar",
+    "latitude": 3.10353,
+    "longitude": 35.63765,
+    "ec": 1510.0,
+    "ph": 7.78,
+    "well_depth": 27.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Narikirikodapale",
+    "locality": "Lokichogio",
+    "latitude": 4.20748,
+    "longitude": 34.349919,
+    "ec": 920.0,
+    "ph": 7.96,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Lowarengak",
+    "latitude": 4.05368,
+    "longitude": 35.70264,
+    "ec": 1060.0,
+    "ph": 7.42,
+    "well_depth": 20.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Riokomor",
+    "latitude": 4.04812,
+    "longitude": 35.70791,
+    "ec": 1070.0,
+    "ph": 7.66,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Nariokotome",
+    "latitude": 4.12962,
+    "longitude": 35.85965,
+    "ec": 920.0,
+    "ph": 7.97,
+    "well_depth": 18.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Riokomor",
+    "latitude": 4.10943,
+    "longitude": 35.6879,
+    "ec": 810.0,
+    "ph": 8.91,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Riokomor",
+    "latitude": 4.12271,
+    "longitude": 35.8604,
+    "ec": 2180.0,
+    "ph": 9.44,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nariokotome",
+    "locality": "Riokomor",
+    "latitude": 4.15666,
+    "longitude": 35.84911,
+    "ec": 1170.0,
+    "ph": 9.55,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome Airstrip",
+    "locality": "Nariokotome",
+    "latitude": 4.12638,
+    "longitude": 35.86318,
+    "ec": 2770.0,
+    "ph": 8.89,
+    "well_depth": 55.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nariokotome BH 1",
+    "locality": "Ngissinger",
+    "latitude": 4.13922,
+    "longitude": 35.85815,
+    "ec": 1630.0,
+    "ph": 9.14,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nariokotome Borehole",
+    "locality": "Ngissinger",
+    "latitude": 4.1437,
+    "longitude": 35.92247,
+    "ec": 9450.0,
+    "ph": 7.77,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Nariokotome III",
+    "locality": "Ngissinger",
+    "latitude": 4.14227,
+    "longitude": 35.91369,
+    "ec": 1000.0,
+    "ph": 7.84,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nariokotome Mission",
+    "locality": "Nariokotome",
+    "latitude": 4.12928,
+    "longitude": 35.85964,
+    "ec": 760.0,
+    "ph": 8.6,
+    "well_depth": 38.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nasura",
+    "locality": "Kalokol",
+    "latitude": 3.38199,
+    "longitude": 35.80421,
+    "ec": 1360.0,
+    "ph": 8.17,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Natiir",
+    "locality": "",
+    "latitude": 3.23169,
+    "longitude": 35.91418,
+    "ec": 290.0,
+    "ph": 8.61,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Natiira Borehole",
+    "locality": "Kalobeyei",
+    "latitude": 3.88946,
+    "longitude": 34.56446,
+    "ec": 670.0,
+    "ph": 7.7,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Natoo",
+    "locality": "Lokitaung",
+    "latitude": 4.21403,
+    "longitude": 35.76308,
+    "ec": 800.0,
+    "ph": 7.35,
+    "well_depth": 40.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Natumamong BH2",
+    "locality": "Lokichoggio",
+    "latitude": 4.20788,
+    "longitude": 34.3242,
+    "ec": 1040.0,
+    "ph": 7.53,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Naurendir (Nadung\u00e1)",
+    "locality": "Kaeris",
+    "latitude": 3.95227,
+    "longitude": 35.25603,
+    "ec": 1530.0,
+    "ph": 8.12,
+    "well_depth": 80.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Naurenpuu",
+    "locality": "",
+    "latitude": 3.09149,
+    "longitude": 35.5351,
+    "ec": 770.0,
+    "ph": 8.47,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nauyatira",
+    "locality": "Loperot",
+    "latitude": 2.3347,
+    "longitude": 35.8333,
+    "ec": 840.0,
+    "ph": 7.67,
+    "well_depth": 15.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nawontos Bh",
+    "locality": "Oropoi",
+    "latitude": 3.78708,
+    "longitude": 34.23513,
+    "ec": 830.0,
+    "ph": 7.74,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nawotom",
+    "locality": "Kalobeyei",
+    "latitude": 3.79692,
+    "longitude": 34.56886,
+    "ec": 800.0,
+    "ph": 7.33,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nawoyatira BH",
+    "locality": "Lokichar",
+    "latitude": 2.38196,
+    "longitude": 35.64712,
+    "ec": 570.0,
+    "ph": 8.36,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Nayuu Church",
+    "locality": "",
+    "latitude": 3.10927,
+    "longitude": 35.71037,
+    "ec": 950.0,
+    "ph": 8.52,
+    "well_depth": 65.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nazareth",
+    "locality": "Lodwar",
+    "latitude": 3.07331,
+    "longitude": 35.60196,
+    "ec": 2890.0,
+    "ph": 8.5,
+    "well_depth": 63.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Nc 33",
+    "locality": "Songot Mt",
+    "latitude": 4.02346,
+    "longitude": 34.54183,
+    "ec": 1350.0,
+    "ph": 7.81,
+    "well_depth": 121.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nc11",
+    "locality": "K/Sudan Rd",
+    "latitude": 3.1458,
+    "longitude": 35.5819,
+    "ec": 1220.0,
+    "ph": 7.82,
+    "well_depth": 103.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "New Testament",
+    "locality": "Kakuma",
+    "latitude": 3.72188,
+    "longitude": 34.85865,
+    "ec": 1630.0,
+    "ph": 7.42,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Ngakiriemet",
+    "locality": "",
+    "latitude": 3.12013,
+    "longitude": 35.70116,
+    "ec": 400.0,
+    "ph": 8.01,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Ng\u00e1kumemeye",
+    "locality": "Lokitaung",
+    "latitude": 4.31609,
+    "longitude": 35.31609,
+    "ec": 1080.0,
+    "ph": 8.43,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Norad Cordinator",
+    "locality": "Katilu",
+    "latitude": 2.25786,
+    "longitude": 35.43395,
+    "ec": 2710.0,
+    "ph": 8.01,
+    "well_depth": 40.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Norad Cordinator",
+    "locality": "Katilu",
+    "latitude": 2.27428,
+    "longitude": 35.4246,
+    "ec": 1320.0,
+    "ph": 8.94,
+    "well_depth": 50.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Nwcpc",
+    "locality": "Lodwar",
+    "latitude": 3.03195,
+    "longitude": 35.62676,
+    "ec": 5080.0,
+    "ph": 8.38,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Oropoi",
+    "locality": "Kalobeyei",
+    "latitude": 3.78394,
+    "longitude": 34.44437,
+    "ec": 780.0,
+    "ph": 7.31,
+    "well_depth": 84.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Oropoi Water Project",
+    "locality": "Oropoi",
+    "latitude": 3.81598,
+    "longitude": 34.5637,
+    "ec": 740.0,
+    "ph": 8.24,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Orthodox Church",
+    "locality": "Lokichar",
+    "latitude": 2.34942,
+    "longitude": 35.63884,
+    "ec": 1170.0,
+    "ph": 7.87,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Pokotme Pri Sch (Kakuma) 5",
+    "locality": "Kakuma",
+    "latitude": 3.73146,
+    "longitude": 34.85246,
+    "ec": 1100.0,
+    "ph": 7.4,
+    "well_depth": 40.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Prda",
+    "locality": "Lokichogio",
+    "latitude": 4.20834,
+    "longitude": 34.36985,
+    "ec": 880.0,
+    "ph": 7.67,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Put Amoja Station Longorukou",
+    "locality": "Napelilim",
+    "latitude": 3.45237,
+    "longitude": 35.35939,
+    "ec": 850.0,
+    "ph": 7.65,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Put Camp",
+    "locality": "Nc 113",
+    "latitude": 3.1833,
+    "longitude": 35.5542,
+    "ec": 600.0,
+    "ph": 7.59,
+    "well_depth": 37.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "R.C.E.A Lokichar",
+    "locality": "Lokichar",
+    "latitude": 2.3852,
+    "longitude": 35.64698,
+    "ec": 1570.0,
+    "ph": 8.23,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "RCA Church Kalemngorok",
+    "locality": "Kalemngorok",
+    "latitude": 2.1318,
+    "longitude": 35.50243,
+    "ec": 4620.0,
+    "ph": 8.06,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Red Cross",
+    "locality": "Lokichogio",
+    "latitude": 4.19722,
+    "longitude": 34.38581,
+    "ec": 1040.0,
+    "ph": 8.66,
+    "well_depth": 70.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Red Cross",
+    "locality": "Lokichogio",
+    "latitude": 4.21059,
+    "longitude": 34.35762,
+    "ec": 930.0,
+    "ph": 9.13,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Riokomor",
+    "locality": "Riokomori",
+    "latitude": 4.11079,
+    "longitude": 35.71511,
+    "ec": 1050.0,
+    "ph": 7.51,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Riokomor",
+    "locality": "Riokomor",
+    "latitude": 4.11312,
+    "longitude": 35.71973,
+    "ec": 1510.0,
+    "ph": 7.65,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Salvation Army Nawoitorong",
+    "locality": "Lodwar",
+    "latitude": 3.11216,
+    "longitude": 35.62048,
+    "ec": 3540.0,
+    "ph": 8.04,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "Sasak Echoke",
+    "locality": "",
+    "latitude": 2.76344,
+    "longitude": 35.21967,
+    "ec": 2540.0,
+    "ph": 8.4,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Sasame BH",
+    "locality": "Karebur",
+    "latitude": 4.52005,
+    "longitude": 35.74757,
+    "ec": 2200.0,
+    "ph": 7.12,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Shabaha Lokitaung",
+    "locality": "Lokitaung",
+    "latitude": 4.26199,
+    "longitude": 35.7408,
+    "ec": 1370.0,
+    "ph": 7.53,
+    "well_depth": 60.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Shakinah Glory",
+    "locality": "Nariamawoi",
+    "latitude": 3.07252,
+    "longitude": 35.5623,
+    "ec": 1480.0,
+    "ph": 7.76,
+    "well_depth": 24.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Songot Sec Sch",
+    "locality": "Songot",
+    "latitude": 4.07376,
+    "longitude": 34.48555,
+    "ec": 570.0,
+    "ph": 7.52,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Songot Wind Pump",
+    "locality": "Songot",
+    "latitude": 4.04426,
+    "longitude": 34.52916,
+    "ec": 1610.0,
+    "ph": 7.27,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "St Benedicts Parish",
+    "locality": "",
+    "latitude": 3.76964,
+    "longitude": 34.63058,
+    "ec": 1120.0,
+    "ph": 8.41,
+    "well_depth": 56.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "St John Catholic Church",
+    "locality": "Lokichogio",
+    "latitude": 4.20874,
+    "longitude": 34.35117,
+    "ec": 680.0,
+    "ph": 8.57,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "St Lwanga Nakwamekwi Pri Sch",
+    "locality": "Nakwamekwi",
+    "latitude": 3.11144,
+    "longitude": 35.57897,
+    "ec": 310.0,
+    "ph": 8.29,
+    "well_depth": 21.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "St Martha Nakinomet",
+    "locality": "Kaikor",
+    "latitude": 4.62778,
+    "longitude": 35.39895,
+    "ec": 1610.0,
+    "ph": 7.55,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "St Patrick Lomidat",
+    "locality": "Lokichogio",
+    "latitude": 4.15746,
+    "longitude": 34.43078,
+    "ec": 3370.0,
+    "ph": 7.12,
+    "well_depth": null,
+    "water_quality": "saline"
+  },
+  {
+    "name": "St Patrick Nomadic Girls Positive BH",
+    "locality": "Lokitaung",
+    "latitude": 4.27818,
+    "longitude": 35.74026,
+    "ec": 119.0,
+    "ph": 7.76,
+    "well_depth": 80.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "St Patrick Nomadic Sch",
+    "locality": "Lokitaung",
+    "latitude": 4.27698,
+    "longitude": 35.73535,
+    "ec": 2080.0,
+    "ph": 7.24,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "St Patrick Nomadic Sch",
+    "locality": "Lokitaung",
+    "latitude": 4.27746,
+    "longitude": 35.73577,
+    "ec": 1966.0,
+    "ph": 9.88,
+    "well_depth": 80.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "St Timothy And Titus",
+    "locality": "Kaeris",
+    "latitude": 3.98241,
+    "longitude": 35.47939,
+    "ec": 960.0,
+    "ph": 7.89,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "St. Leo Secondary",
+    "locality": "Pelekech",
+    "latitude": 3.67398,
+    "longitude": 35.00076,
+    "ec": 1600.0,
+    "ph": 8.89,
+    "well_depth": 80.0,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Teremkus",
+    "locality": "Lokichogio",
+    "latitude": 4.10774,
+    "longitude": 34.46579,
+    "ec": 910.0,
+    "ph": 8.9,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Todenyang Catholic",
+    "locality": "Todenyang",
+    "latitude": 4.52987,
+    "longitude": 35.91977,
+    "ec": 810.0,
+    "ph": 8.93,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Trackmark",
+    "locality": "Lokichogio",
+    "latitude": 4.20946,
+    "longitude": 34.36852,
+    "ec": 940.0,
+    "ph": 7.79,
+    "well_depth": 65.0,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Tullow Oli",
+    "locality": "Lokapel",
+    "latitude": 2.3865,
+    "longitude": 35.45711,
+    "ec": 770.0,
+    "ph": 7.61,
+    "well_depth": 78.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Turkana Women Group",
+    "locality": "Lokichogio",
+    "latitude": 4.20318,
+    "longitude": 34.37229,
+    "ec": 1010.0,
+    "ph": 8.19,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Turkwel",
+    "locality": "",
+    "latitude": 2.91301,
+    "longitude": 35.41225,
+    "ec": 430.0,
+    "ph": 8.13,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Turkwel Boys",
+    "locality": "",
+    "latitude": 2.94118,
+    "longitude": 35.39844,
+    "ec": 2410.0,
+    "ph": 7.9,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Turkwel Irrigaion Scheme",
+    "locality": "Lorugum",
+    "latitude": 2.91288,
+    "longitude": 35.41233,
+    "ec": 450.0,
+    "ph": 8.07,
+    "well_depth": 3.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Turkwel Mission BH",
+    "locality": "Lorugum",
+    "latitude": 2.91312,
+    "longitude": 35.4123,
+    "ec": 450.0,
+    "ph": 8.14,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Turkwel Parish Borehole",
+    "locality": "Lorugum",
+    "latitude": 2.90952,
+    "longitude": 35.41126,
+    "ec": 250.0,
+    "ph": 8.53,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Turkwell Irrigation",
+    "locality": "",
+    "latitude": 2.91378,
+    "longitude": 35.41277,
+    "ec": 530.0,
+    "ph": 7.76,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Un-Compound Bh1 Unicef Bh1",
+    "locality": "Lokichoggio",
+    "latitude": 4.2083,
+    "longitude": 34.36379,
+    "ec": 760.0,
+    "ph": 7.94,
+    "well_depth": null,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Unhcr",
+    "locality": "Lokichogio",
+    "latitude": 3.70666,
+    "longitude": 34.85828,
+    "ec": 560.0,
+    "ph": 8.49,
+    "well_depth": 60.0,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Unicef",
+    "locality": "Lokichogio",
+    "latitude": 4.20671,
+    "longitude": 34.36515,
+    "ec": 1100.0,
+    "ph": 7.82,
+    "well_depth": null,
+    "water_quality": "drinkable"
+  },
+  {
+    "name": "Vetirinary",
+    "locality": "Elelea",
+    "latitude": 2.11825,
+    "longitude": 36.15676,
+    "ec": 360.0,
+    "ph": 8.51,
+    "well_depth": 14.19,
+    "water_quality": "excellent"
+  },
+  {
+    "name": "Vikoba Namoruputh",
+    "locality": "Namoruputh",
+    "latitude": 2.84097,
+    "longitude": 35.03403,
+    "ec": 1830.0,
+    "ph": 8.02,
+    "well_depth": null,
+    "water_quality": "brackish"
+  },
+  {
+    "name": "Wet(Lobokat Bh)",
+    "locality": "Nakoyo",
+    "latitude": 3.70705,
+    "longitude": 34.79134,
+    "ec": 1260.0,
+    "ph": 8.09,
+    "well_depth": 103.0,
+    "water_quality": "drinkable"
+  }
+]

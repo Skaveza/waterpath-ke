@@ -1,0 +1,170 @@
+[
+  {
+    "latitude": 4.3839,
+    "longitude": 35.6148,
+    "borehole_count": 16,
+    "avg_ec": 1997.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 184.7,
+    "boreholes": [
+      "Kaalem",
+      "Kaikor",
+      "Kaikor BH",
+      "Kajokjok"
+    ],
+    "nearby_names": [
+      "Nakapelewoi 2",
+      "Kopotia Borehole"
+    ]
+  },
+  {
+    "latitude": 3.1041,
+    "longitude": 35.6116,
+    "borehole_count": 14,
+    "avg_ec": 2722.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 165.4,
+    "boreholes": [
+      "Ceamo Prestige Lodge",
+      "House Of Hope",
+      "Limyosing Good People\nSch",
+      "Lowasco Bh2"
+    ],
+    "nearby_names": [
+      "Nwcpc",
+      "Mt. Kenya University"
+    ]
+  },
+  {
+    "latitude": 2.3575,
+    "longitude": 35.5423,
+    "borehole_count": 14,
+    "avg_ec": 2381.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 165.1,
+    "boreholes": [
+      "IRC  Kanaodon Com",
+      "Kapese Pri Sch",
+      "Karoge",
+      "Karoge"
+    ],
+    "nearby_names": [
+      "Nalemsokon",
+      "Kapese Pri Sch"
+    ]
+  },
+  {
+    "latitude": 2.8306,
+    "longitude": 35.1887,
+    "borehole_count": 10,
+    "avg_ec": 3868.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 126.6,
+    "boreholes": [
+      "Christian Child Fund",
+      "Kalemnyang",
+      "Kotela",
+      "Lobei"
+    ],
+    "nearby_names": [
+      "Kotela",
+      "Kalemnyang"
+    ]
+  },
+  {
+    "latitude": 2.8053,
+    "longitude": 35.6197,
+    "borehole_count": 10,
+    "avg_ec": 2845.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 125.6,
+    "boreholes": [
+      "Edos",
+      "Kadopgorok",
+      "Lochwa BH",
+      "Lokadwaran"
+    ],
+    "nearby_names": [
+      "Nadipoe",
+      "Lokadwaran"
+    ]
+  },
+  {
+    "latitude": 3.6562,
+    "longitude": 34.8284,
+    "borehole_count": 9,
+    "avg_ec": 2358.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 115.1,
+    "boreholes": [
+      "Borehole 5",
+      "D.Of Lodwar/Commun.",
+      "Echakun",
+      "Kakuma Catholic Parish"
+    ],
+    "nearby_names": [
+      "Kakuma Catholic Parish",
+      "D.Of Lodwar/Commun."
+    ]
+  },
+  {
+    "latitude": 3.5714,
+    "longitude": 35.565,
+    "borehole_count": 5,
+    "avg_ec": 5092.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 77.8,
+    "boreholes": [
+      "Kanakurdio",
+      "Kanakurudio Water\nProject",
+      "Kosiyae",
+      "Nachampa"
+    ],
+    "nearby_names": [
+      "Namariat",
+      "Kosiyae"
+    ]
+  },
+  {
+    "latitude": 2.3574,
+    "longitude": 35.8693,
+    "borehole_count": 5,
+    "avg_ec": 2516.0,
+    "pop_served": 8482,
+    "daily_m3": 127.2,
+    "cost_per_m3": 0.82,
+    "breakeven_yrs": 2.2,
+    "score": 75.2,
+    "boreholes": [
+      "Ekunyuk",
+      "Ewoi",
+      "Kieng\u00f3mo 1 Bh",
+      "Kieng\u00f3mo 2 Bh"
+    ],
+    "nearby_names": [
+      "Kieng\u00f3mo 1 Bh",
+      "Ekunyuk"
+    ]
+  }
+]
