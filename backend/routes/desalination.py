@@ -22,8 +22,8 @@ from flask import Blueprint, jsonify
 
 desalination_bp = Blueprint("desalination", __name__)
 
-DATA_PATH = Path(__file__).parent.parent.parent / "data" / "rural_focus_turkana.csv.xls"
-CACHE_PATH = Path(__file__).parent.parent.parent / "data" / "desalination_sites.json"
+DATA_PATH = Path(__file__).parent.parent / "data" / "rural_focus_turkana.csv.xls"
+CACHE_PATH = Path(__file__).parent.parent / "data" / "desalination_sites.json"
 
 # ── Constants ─────────────────────────────────────────────────────────────
 COST_PER_M3    = 0.82    # USD — small-scale solar desalination
