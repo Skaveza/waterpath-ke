@@ -249,7 +249,7 @@ function Dispatch({ reports, waterPoints, onSelect }) {
           {aAff.toLocaleString()}
         </div>
         <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkLight, marginTop: 10, lineHeight: 1.7, maxWidth: 280 }}>
-          Sharing contaminated water pans with livestock and wildlife due to prolonged drought. Source: Nation Africa, 2024.
+          Sharing contaminated water pans with livestock and wildlife due to prolonged drought. Source: Nation Africa, 2025.
         </div>
       </div>
 
