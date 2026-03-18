@@ -215,7 +215,7 @@ function Dispatch({ reports, waterPoints, onSelect }) {
   const aOpen   = useCountUp(stats.open)
   const aDisp   = useCountUp(stats.dispatched)
   const aRes    = useCountUp(stats.resolved)
-  const aAff    = useCountUp((broken + issues) * 420)
+  const aAff    = useCountUp(400000)
   const list    = filter === "all" ? reports : reports.filter(r => r.status === filter)
 
   return (
@@ -249,7 +249,7 @@ function Dispatch({ reports, waterPoints, onSelect }) {
           {aAff.toLocaleString()}
         </div>
         <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkLight, marginTop: 10, lineHeight: 1.7, maxWidth: 280 }}>
-          Estimated from {broken + issues} boreholes with confirmed faults — at 420 people per borehole.
+          Sharing contaminated water pans with livestock and wildlife due to prolonged drought. Source: Nation Africa, 2024.
         </div>
       </div>
 
