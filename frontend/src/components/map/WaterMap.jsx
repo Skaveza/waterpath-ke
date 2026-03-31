@@ -50,9 +50,13 @@ function FlyToPoint({ point }) {
   return null
 }
 
+// Default map centre — Turkana County (used only when no user location)
+const TURKANA_CENTER = [3.1191, 35.5966]
+
 export default function WaterMap({ onSelectPoint, selectedPoint }) {
   const [waterPoints, setWaterPoints] = useState([])
   const [userLocation, setUserLocation] = useState(null)
+  const [locationDenied, setLocationDenied] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -65,14 +69,12 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
   }, [])
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-        ()  => setUserLocation({ lat: 3.1191, lon: 35.5966 })
-      )
-    } else {
-      setUserLocation({ lat: 3.1191, lon: 35.5966 })
-    }
+    if (!navigator.geolocation) { setLocationDenied(true); return }
+    navigator.geolocation.getCurrentPosition(
+      pos => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+      ()  => setLocationDenied(true),  // denied or unavailable — show no marker, don't fake it
+      { timeout: 8000, maximumAge: 60000 }
+    )
   }, [])
 
   if (loading) {
@@ -83,11 +85,17 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
     )
   }
 
+  const mapCenter = userLocation
+    ? [userLocation.lat, userLocation.lon]
+    : TURKANA_CENTER
+
+  const mapZoom = userLocation ? 10 : 9
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       <MapContainer
-        center={[3.1191, 35.5966]}
-        zoom={9}
+        center={mapCenter}
+        zoom={mapZoom}
         style={{ width: "100%", height: "100%" }}
         zoomControl={true}
       >
@@ -99,6 +107,7 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
         <LocationFlyTo userLocation={userLocation} />
         <FlyToPoint point={selectedPoint} />
 
+        {/* Only show marker if real GPS — never fake location */}
         {userLocation && (
           <CircleMarker
             center={[userLocation.lat, userLocation.lon]}
@@ -238,6 +247,18 @@ export default function WaterMap({ onSelectPoint, selectedPoint }) {
       }}>
         {waterPoints.length} boreholes mapped
       </div>
+
+      {/* Location unavailable notice */}
+      {locationDenied && (
+        <div style={{
+          position: "absolute", bottom: 24, right: 12, zIndex: 1000,
+          background: "rgba(255,255,255,0.92)", borderRadius: 8,
+          padding: "8px 12px", border: "1px solid #DDD4C8",
+          fontSize: 11, color: "#9E7A5A", maxWidth: 180, lineHeight: 1.5,
+        }}>
+          📍 Location unavailable — enable GPS for nearest boreholes
+        </div>
+      )}
     </div>
   )
 }
