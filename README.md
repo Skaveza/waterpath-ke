@@ -41,6 +41,24 @@ Built to help women and communities in Turkana, Mandera, Wajir, Garissa, Marsabi
 
 ---
 
+## API Endpoints
+
+### Reports
+POST   /api/reports/              → Submit report  
+GET    /api/reports/              → Fetch reports  
+PATCH  /api/reports/{id}/resolve  → Mark as resolved  
+POST   /api/reports/{id}/dispatch → Assign technician  
+
+### Water Points
+GET    /api/water-points/  
+GET    /api/water-points/{id}  
+PATCH  /api/water-points/{id}/status  
+
+### Auth
+POST   /api/auth/verify  
+
+---
+
 ## Data Source
 
 Borehole data sourced from [**Rural Focus Ltd / Water Resources Authority Kenya**]( https://ihp-wins.unesco.org/dataset/boreholes-kenya-rural-focus)

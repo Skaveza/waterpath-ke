@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask import jsonify
 from config import Config
 from routes.water_points import water_points_bp
 from routes.reports import reports_bp
@@ -23,8 +24,11 @@ def create_app():
 
     @app.route("/api/health")
     def health():
-        return {"status": "ok", "project": "waterpath-ke"}, 200
-
+        return jsonify({"status": "ok", "project": "waterpath-ke"}), 200
+    
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        return {"error": "Internal server error"}, 500
     return app
 
 
@@ -33,5 +37,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(Config.PORT),
-        debug=Config.FLASK_ENV == "development"
+        debug=Config.DEBUG
     )

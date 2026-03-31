@@ -6,8 +6,8 @@ from datetime import datetime, timezone
 
 reports_bp = Blueprint("reports", __name__)
 
-COLLECTION        = "reports"
-WP_COLLECTION     = "water_points"
+COLLECTION = "reports"
+WP_COLLECTION = "water_points"
 
 
 @reports_bp.route("/", methods=["POST"])
@@ -17,6 +17,8 @@ def submit_report():
     Writes to Firestore — NGO dashboard receives via real-time listener.
     """
     body = request.get_json()
+    if not body:
+        return jsonify({"error": "Invalid JSON body"}), 400
 
     required = ["water_point_id", "water_point_name", "problem_type"]
     for field in required:
@@ -24,33 +26,42 @@ def submit_report():
             return jsonify({"error": f"{field} is required"}), 400
 
     problem_type = body["problem_type"]
+
     report = Report(
-        water_point_id   = body["water_point_id"],
-        water_point_name = body["water_point_name"],
-        problem_type     = problem_type,
-        severity         = SEVERITY_MAP.get(problem_type, "medium"),
-        notes            = body.get("notes", ""),
-        urgency          = body.get("urgency", "normal"),
-        channel          = body.get("channel", "web"),
+        water_point_id=body["water_point_id"],
+        water_point_name=body["water_point_name"],
+        problem_type=problem_type,
+        severity=SEVERITY_MAP.get(problem_type, "medium"),
+        notes=body.get("notes", ""),
+        urgency=body.get("urgency", "normal"),
+        channel=body.get("channel", "web"),
     )
 
     # Write report to Firestore
-    db.collection(COLLECTION).document(report.id).set(report.to_dict())
+    try:
+        db.collection(COLLECTION).document(report.id).set(report.to_dict())
+    except Exception:
+        return jsonify({"error": "Failed to submit report"}), 500
 
     # Increment report count on the water point
-    wp_ref = db.collection(WP_COLLECTION).document(report.water_point_id)
-    wp_doc = wp_ref.get()
-    if wp_doc.exists:
-        current = wp_doc.to_dict().get("report_count", 0)
-        wp_ref.update({
-            "report_count":  current + 1,
-            "last_report_at": datetime.now(timezone.utc).isoformat(),
-        })
+    try:
+        wp_ref = db.collection(WP_COLLECTION).document(report.water_point_id)
+        wp_doc = wp_ref.get()
+
+        if wp_doc.exists:
+            current = wp_doc.to_dict().get("report_count", 0)
+            wp_ref.update({
+                "report_count": current + 1,
+                "last_report_at": datetime.now(timezone.utc).isoformat(),
+            })
+    except Exception:
+        # Non-critical failure — don't block report submission
+        pass
 
     return jsonify({
         "report_id": report.id,
-        "severity":  report.severity,
-        "message":   "Report received. Sent to county officials and local NGOs."
+        "severity": report.severity,
+        "message": "Report received. Sent to county officials and local NGOs."
     }), 201
 
 
@@ -62,26 +73,30 @@ def get_reports():
     ?severity=high | medium | low
     ?water_point_id=<id>
     """
-    status      = request.args.get("status")
-    severity    = request.args.get("severity")
-    point_id    = request.args.get("water_point_id")
+    status = request.args.get("status")
+    severity = request.args.get("severity")
+    point_id = request.args.get("water_point_id")
 
-    query = db.collection(COLLECTION)
+    try:
+        query = db.collection(COLLECTION)
 
-    if status:
-        query = query.where("status", "==", status)
-    if severity:
-        query = query.where("severity", "==", severity)
-    if point_id:
-        query = query.where("water_point_id", "==", point_id)
+        if status:
+            query = query.where("status", "==", status)
+        if severity:
+            query = query.where("severity", "==", severity)
+        if point_id:
+            query = query.where("water_point_id", "==", point_id)
 
-    docs    = query.stream()
-    reports = [doc.to_dict() for doc in docs]
+        docs = query.stream()
+        reports = [doc.to_dict() for doc in docs]
 
-    # Sort newest first
-    reports.sort(key=lambda r: r.get("submitted_at", ""), reverse=True)
+        # Sort newest first
+        reports.sort(key=lambda r: r.get("submitted_at", ""), reverse=True)
 
-    return jsonify({"count": len(reports), "reports": reports}), 200
+        return jsonify({"count": len(reports), "reports": reports}), 200
+
+    except Exception:
+        return jsonify({"error": "Failed to fetch reports"}), 500
 
 
 @reports_bp.route("/<report_id>/resolve", methods=["PATCH"])
@@ -90,9 +105,12 @@ def resolve_report(report_id):
     NGO marks a report as resolved.
     Also updates the water point's operation_status.
     """
-    body        = request.get_json()
+    body = request.get_json()
+    if not body:
+        return jsonify({"error": "Invalid JSON body"}), 400
+
     resolved_by = body.get("resolved_by", "NGO Staff")
-    notes       = body.get("internal_notes", "")
+    notes = body.get("internal_notes", "")
 
     ref = db.collection(COLLECTION).document(report_id)
     doc = ref.get()
@@ -100,20 +118,27 @@ def resolve_report(report_id):
     if not doc.exists:
         return jsonify({"error": "Report not found"}), 404
 
-    ref.update({
-        "status":         "resolved",
-        "resolved_at":    datetime.now(timezone.utc).isoformat(),
-        "resolved_by":    resolved_by,
-        "internal_notes": notes,
-    })
-
-    # Update the water point's operation status to functional
-    report_data = doc.to_dict()
-    wp_id = report_data.get("water_point_id")
-    if wp_id:
-        db.collection("water_points").document(wp_id).update({
-            "operation_status": "functional"
+    try:
+        ref.update({
+            "status": "resolved",
+            "resolved_at": datetime.now(timezone.utc).isoformat(),
+            "resolved_by": resolved_by,
+            "internal_notes": notes,
         })
+    except Exception:
+        return jsonify({"error": "Failed to update report"}), 500
+
+    # Update water point status
+    try:
+        report_data = doc.to_dict()
+        wp_id = report_data.get("water_point_id")
+
+        if wp_id:
+            db.collection(WP_COLLECTION).document(wp_id).update({
+                "operation_status": "functional"
+            })
+    except Exception:
+        pass  # non-critical
 
     return jsonify({"resolved": True, "report_id": report_id}), 200
 
@@ -124,8 +149,11 @@ def dispatch_team(report_id):
     Assign a repair technician to a report.
     Sends SMS to technician via Africa's Talking.
     """
-    body       = request.get_json()
-    tech_name  = body.get("technician_name", "")
+    body = request.get_json()
+    if not body:
+        return jsonify({"error": "Invalid JSON body"}), 400
+
+    tech_name = body.get("technician_name", "")
     tech_phone = body.get("technician_phone", "")
 
     if not tech_phone:
@@ -133,30 +161,37 @@ def dispatch_team(report_id):
 
     ref = db.collection(COLLECTION).document(report_id)
     doc = ref.get()
+
     if not doc.exists:
         return jsonify({"error": "Report not found"}), 404
 
     report_data = doc.to_dict()
 
-    # Update report with assignment
-    ref.update({
-        "status":      "in_progress",
-        "assigned_to": tech_name,
-    })
+    # Update report assignment
+    try:
+        ref.update({
+            "status": "in_progress",
+            "assigned_to": tech_name,
+        })
+    except Exception:
+        return jsonify({"error": "Failed to assign technician"}), 500
 
-    # Send SMS to technician
-    sms_body = (
-        f"WaterPath Dispatch\n"
-        f"Location: {report_data['water_point_name']}\n"
-        f"Problem: {report_data['problem_type']}\n"
-        f"Priority: {report_data['severity'].upper()}\n"
-        f"Report ID: {report_id}\n"
-        f"Coords: see WaterPath dashboard"
-    )
-    sms_result = send_dispatch_sms(tech_phone, sms_body)
+    # Send SMS
+    try:
+        sms_body = (
+            f"WaterPath Dispatch\n"
+            f"Location: {report_data.get('water_point_name', 'Unknown')}\n"
+            f"Problem: {report_data.get('problem_type', 'Unknown')}\n"
+            f"Priority: {str(report_data.get('severity', 'medium')).upper()}\n"
+            f"Report ID: {report_id}\n"
+            f"Coords: see WaterPath dashboard"
+        )
+        sms_result = send_dispatch_sms(tech_phone, sms_body)
+    except Exception:
+        sms_result = {"success": False}
 
     return jsonify({
-        "dispatched":  True,
+        "dispatched": True,
         "assigned_to": tech_name,
-        "sms_sent":    sms_result.get("success", False),
+        "sms_sent": sms_result.get("success", False),
     }), 200

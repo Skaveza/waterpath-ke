@@ -12,36 +12,39 @@ def verify_token():
     Called on every protected dashboard request.
     Returns user info and their NGO role.
     """
-    body  = request.get_json()
-    token = body.get("id_token")
+    body = request.get_json()
+    if not body:
+        return jsonify({"error": "Invalid JSON body"}), 400
 
+    token = body.get("id_token")
     if not token:
         return jsonify({"error": "id_token required"}), 400
 
     try:
         decoded = firebase_auth.verify_id_token(token)
-        uid     = decoded["uid"]
-        email   = decoded.get("email", "")
+        uid = decoded["uid"]
+        email = decoded.get("email", "")
 
         # Look up user's role from Firestore
         user_doc = db.collection("ngo_users").document(uid).get()
-        role     = "viewer"  # default
-        org      = ""
+
+        role = "viewer"  # default
+        org = ""
 
         if user_doc.exists:
             user_data = user_doc.to_dict()
             role = user_data.get("role", "viewer")
-            org  = user_data.get("organisation", "")
+            org = user_data.get("organisation", "")
 
         return jsonify({
-            "uid":          uid,
-            "email":        email,
-            "role":         role,
+            "uid": uid,
+            "email": email,
+            "role": role,
             "organisation": org,
-            "verified":     True,
+            "verified": True,
         }), 200
 
     except firebase_auth.InvalidIdTokenError:
         return jsonify({"error": "Invalid token"}), 401
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except Exception:
+        return jsonify({"error": "Authentication failed"}), 500
