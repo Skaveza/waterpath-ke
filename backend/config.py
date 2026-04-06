@@ -8,6 +8,7 @@ load_dotenv()
 
 class Config:
     FLASK_ENV               = os.getenv("FLASK_ENV", "production")
+    DEBUG = FLASK_ENV == "development"
     PORT                    = int(os.getenv("PORT", 5000))
     AFRICASTALKING_API_KEY  = os.getenv("AFRICASTALKING_API_KEY", "")
     AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "sandbox")
