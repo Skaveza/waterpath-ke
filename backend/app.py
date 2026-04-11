@@ -28,7 +28,7 @@ def create_app():
     
     @app.errorhandler(Exception)
     def handle_exception(e):
-        return {"error": "Internal server error"}, 500
+        return {"error": str(e)}, 500
     return app
 
 

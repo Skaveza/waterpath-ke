@@ -11,8 +11,15 @@ const firebaseConfig = {
   appId:             import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const app = initializeApp(firebaseConfig)
+const missingKeys = Object.entries(firebaseConfig)
+  .filter(([, v]) => !v)
+  .map(([k]) => k)
 
+if (missingKeys.length) {
+  console.error("Firebase: missing env vars:", missingKeys)
+}
+
+const app = initializeApp(firebaseConfig)
 export const db   = getFirestore(app)
 export const auth = getAuth(app)
 export default app
