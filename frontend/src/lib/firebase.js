@@ -1,5 +1,6 @@
+// firebase.js
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { initializeFirestore } from "firebase/firestore"
 import { getAuth } from "firebase/auth"
 
 const firebaseConfig = {
@@ -14,12 +15,17 @@ const firebaseConfig = {
 const missingKeys = Object.entries(firebaseConfig)
   .filter(([, v]) => !v)
   .map(([k]) => k)
-
 if (missingKeys.length) {
   console.error("Firebase: missing env vars:", missingKeys)
 }
 
 const app = initializeApp(firebaseConfig)
-export const db   = getFirestore(app)
+
 export const auth = getAuth(app)
+
+export const db = initializeFirestore(app, {
+  experimentalAutoDetectLongPolling: true,  // ← handles Safari specifically
+  useFetchStreams: false,                    // ← disables fetch streams Safari chokes on
+})
+
 export default app
