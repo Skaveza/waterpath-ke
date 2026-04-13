@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
-import { collection, onSnapshot, addDoc, updateDoc, doc } from "firebase/firestore"
+import { collection, addDoc } from "firebase/firestore"
 import { db } from "../../lib/firebase"
 import WaterMap from "../map/WaterMap"
+import { useWaterPoints, useSubmitReport } from "../../hooks/useWaterPath"
+import { getSafetyLevel, getFlowSignal, getSaltSignal, getWalkTime } from "../../utils/waterInterpretation"
 
 // Fonts in index.html:
 // <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,11 +32,9 @@ const C = {
   amberBg:  "#FDF4E0",
   sage:     "#5A7A40",
   sageBg:   "#EAF2E0",
-  slate:    "#3A6070",
-  slateBg:  "#E4EFF4",
 }
 
-// ── Translations ──────────────────────────────────────────────────────────
+// ── Translations ───────────────────────────────────────────────────────────
 const T = {
   en: {
     langName:        "English",
@@ -45,17 +45,12 @@ const T = {
     boreholesLoaded: "boreholes loaded",
     nearestToYou:    "Nearest to you",
     of:              "of",
-    tapForDetails:   "Tap for directions & details",
+    tapForDetails:   "Tap for details & directions",
     reportProblem:   "Report a problem",
     reportSub:       "Help your community · takes 1 minute",
-    drinkable:       "Drinkable",
-    functional:      "Functional",
-    hasIssues:       "Has issues",
-    nonFunctional:   "Not available",
     safeToDrink:     "Safe to drink",
-    useWithCare:     "Use with care",
-    notAvailable:    "Not available",
-    handPump:        "Hand pump",
+    useWithCare:     "Use with caution",
+    notSafe:         "Not safe",
     km:              "km",
     reportTitle:     "Report a problem",
     step1Label:      "Step 1 of 3 — What's wrong?",
@@ -64,17 +59,17 @@ const T = {
     problemType:     "Problem type",
     whatDidYouFind:  "What did you\nfind at the borehole?",
     problems: [
-      { icon: "—", label: "No water coming out", sub: "Pump failure / dry"  },
-      { icon: "—", label: "Water looks dirty",   sub: "Colour or smell"     },
-      { icon: "—", label: "Pump is broken",      sub: "Can't operate it"    },
-      { icon: "—", label: "Animals in the water",sub: "Contamination risk"  },
-      { icon: "—", label: "Access blocked",      sub: "Can't get to it"     },
-      { icon: "—", label: "Other problem",       sub: "Describe it"         },
+      { label: "No water coming out",  sub: "Pump failure / dry"  },
+      { label: "Water looks dirty",    sub: "Colour or smell"     },
+      { label: "Pump is broken",       sub: "Can't operate it"    },
+      { label: "Animals in the water", sub: "Contamination risk"  },
+      { label: "Access blocked",       sub: "Can't get to it"     },
+      { label: "Other problem",        sub: "Describe it"         },
     ],
     nextConfirm:     "Next — Confirm borehole",
     isThisRight:     "Is this the right borehole?",
     nearestToLoc:    "Nearest to your location",
-    wrongBorehole:   "This isn't the right borehole — let me pick",
+    wrongBorehole:   "This isn't the right borehole",
     yesCorrect:      "Yes, this is correct",
     reviewSubmit:    "Review & submit",
     problemReported: "Problem reported",
@@ -90,7 +85,6 @@ const T = {
     locating:        "Finding your location...",
     boreholeLocation:"Borehole location",
     away:            "away",
-    // Nav
     navHome:         "Home",
     navMap:          "Map",
     navReport:       "Report",
@@ -105,17 +99,12 @@ const T = {
     boreholesLoaded: "visima vimepakiwa",
     nearestToYou:    "Karibu nawe zaidi",
     of:              "kati ya",
-    tapForDetails:   "Gusa kwa maelekezo na maelezo",
+    tapForDetails:   "Gusa kwa maelezo na maelekezo",
     reportProblem:   "Ripoti tatizo",
     reportSub:       "Saidia jamii yako · dakika 1",
-    drinkable:       "Inaweza kunywa",
-    functional:      "Inafanya kazi",
-    hasIssues:       "Ina matatizo",
-    nonFunctional:   "Haifanyi kazi",
     safeToDrink:     "Salama kunywa",
     useWithCare:     "Tumia kwa tahadhari",
-    notAvailable:    "Haipatikani",
-    handPump:        "Pampu ya mkono",
+    notSafe:         "Si salama",
     km:              "km",
     reportTitle:     "Ripoti tatizo",
     step1Label:      "Hatua 1 ya 3 — Ni nini tatizo?",
@@ -124,17 +113,17 @@ const T = {
     problemType:     "Aina ya tatizo",
     whatDidYouFind:  "Ulipata nini\nkwenye kisima?",
     problems: [
-      { icon: "—", label: "Hakuna maji yanayotoka", sub: "Pampu imeshindwa / kavu" },
-      { icon: "—", label: "Maji yanaonekana machafu",sub: "Rangi au harufu"        },
-      { icon: "—", label: "Pampu imevunjika",        sub: "Haiwezi kufanya kazi"   },
-      { icon: "—", label: "Wanyama kwenye maji",     sub: "Hatari ya uchafuzi"     },
-      { icon: "—", label: "Njia imezuiwa",           sub: "Haiwezekani kufika"     },
-      { icon: "—", label: "Tatizo lingine",           sub: "Elezea"                },
+      { label: "Hakuna maji yanayotoka",  sub: "Pampu imeshindwa / kavu" },
+      { label: "Maji yanaonekana machafu", sub: "Rangi au harufu"        },
+      { label: "Pampu imevunjika",         sub: "Haiwezi kufanya kazi"   },
+      { label: "Wanyama kwenye maji",      sub: "Hatari ya uchafuzi"     },
+      { label: "Njia imezuiwa",            sub: "Haiwezekani kufika"     },
+      { label: "Tatizo lingine",           sub: "Elezea"                 },
     ],
     nextConfirm:     "Ifuatayo — Thibitisha kisima",
     isThisRight:     "Je, hiki ni kisima sahihi?",
     nearestToLoc:    "Karibu zaidi na mahali pako",
-    wrongBorehole:   "Hiki si kisima sahihi — niruhusu nichague",
+    wrongBorehole:   "Hiki si kisima sahihi",
     yesCorrect:      "Ndiyo, hii ni sahihi",
     reviewSubmit:    "Kagua na wasilisha",
     problemReported: "Tatizo lililoripotiwa",
@@ -155,31 +144,72 @@ const T = {
     navReport:       "Ripoti",
   },
 
-  tu: null, // Turkana — contribution screen
+  tu: null, // Turkana — shows contribution screen
 }
 
-// ── Utility ───────────────────────────────────────────────────────────────
-function distanceKm(lat1, lon1, lat2, lon2) {
-  const R = 6371
-  const dLat = (lat2 - lat1) * Math.PI / 180
-  const dLon = (lon2 - lon1) * Math.PI / 180
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+// ── ML: auto-trigger predictions for boreholes with no prediction_label ────
+// POST /api/water-points/predict-quality with point_id so Flask writes the
+// result back to Firestore. The Firestore listener picks it up automatically.
+async function triggerMissingPredictions(points) {
+  const unpredicted = points.filter(
+    p => !p.prediction_label && p.latitude && p.longitude
+  )
+  for (const p of unpredicted) {
+    try {
+      await fetch("/api/water-points/predict-quality", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          latitude:   p.latitude,
+          longitude:  p.longitude,
+          well_depth: p.well_depth || 0,
+          ph:         p.ph         || 7.5,
+          point_id:   p.id,
+        }),
+      })
+    } catch (_) {
+      // fire-and-forget — never crash the app if ML API is down
+    }
+  }
 }
 
-function generateReportId() {
-  return "WP-" + Math.random().toString(36).substring(2,7).toUpperCase()
+// ── Card-list safety colour from ML prediction (priority) or status ────────
+function safetyFromPoint(point, t) {
+  const s = getSafetyLevel(point)
+  if (s.level === "safe")   return { tag: t.safeToDrink, tagColor: C.sage,  tagBg: C.sageBg,  dot: C.sage,  border: C.sage  }
+  if (s.level === "unsafe") return { tag: t.notSafe,     tagColor: C.rust,  tagBg: C.rustBg,  dot: C.rust,  border: C.rust  }
+  return                           { tag: t.useWithCare,  tagColor: C.amber, tagBg: C.amberBg, dot: C.amber, border: C.amber }
 }
 
-// ── Status helpers ────────────────────────────────────────────────────────
-function statusMeta(status, t) {
-  if (status === "functional")     return { label: t.functional,    tag: t.safeToDrink,  tagColor: C.sage,  tagBg: C.sageBg,  border: C.sage,  dot: C.sage  }
-  if (status === "issues")         return { label: t.hasIssues,     tag: t.useWithCare,  tagColor: C.amber, tagBg: C.amberBg, border: C.amber, dot: C.amber }
-  if (status === "non_functional") return { label: t.nonFunctional, tag: t.notAvailable, tagColor: C.rust,  tagBg: C.rustBg,  border: C.rust,  dot: C.rust  }
-  return                                  { label: t.functional,    tag: t.safeToDrink,  tagColor: C.sage,  tagBg: C.sageBg,  border: C.sage,  dot: C.sage  }
+// ── Nav icons ──────────────────────────────────────────────────────────────
+function HomeIcon({ color }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  )
+}
+function MapIcon({ color }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+      <line x1="8" y1="2" x2="8" y2="18"/>
+      <line x1="16" y1="6" x2="16" y2="22"/>
+    </svg>
+  )
+}
+function ReportIcon({ color }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  )
 }
 
-// ── Language bar ──────────────────────────────────────────────────────────
+// ── Language bar ───────────────────────────────────────────────────────────
 function LangBar({ lang, setLang }) {
   return (
     <div style={{ background: C.surface, padding: "10px 16px", display: "flex", gap: 8, borderBottom: `1px solid ${C.rule}`, flexShrink: 0 }}>
@@ -198,7 +228,7 @@ function LangBar({ lang, setLang }) {
   )
 }
 
-// ── Bottom nav ────────────────────────────────────────────────────────────
+// ── Bottom nav ─────────────────────────────────────────────────────────────
 function BottomNav({ tab, setTab, t }) {
   const tabs = [
     { id: "home",   label: t?.navHome   || "Home",   icon: HomeIcon   },
@@ -207,10 +237,8 @@ function BottomNav({ tab, setTab, t }) {
   ]
   return (
     <div style={{
-      background: C.surface,
-      borderTop: `1px solid ${C.rule}`,
-      display: "flex",
-      flexShrink: 0,
+      background: C.surface, borderTop: `1px solid ${C.rule}`,
+      display: "flex", flexShrink: 0,
       paddingBottom: "env(safe-area-inset-bottom, 0px)",
       boxShadow: "0 -2px 16px rgba(44,26,14,0.07)",
     }}>
@@ -239,35 +267,7 @@ function BottomNav({ tab, setTab, t }) {
   )
 }
 
-// ── Nav icons (inline SVG — no emojis) ───────────────────────────────────
-function HomeIcon({ color }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-      <polyline points="9 22 9 12 15 12 15 22"/>
-    </svg>
-  )
-}
-function MapIcon({ color }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
-      <line x1="8" y1="2" x2="8" y2="18"/>
-      <line x1="16" y1="6" x2="16" y2="22"/>
-    </svg>
-  )
-}
-function ReportIcon({ color }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-      <line x1="12" y1="9" x2="12" y2="13"/>
-      <line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-  )
-}
-
-// ── TURKANA CONTRIBUTION SCREEN ───────────────────────────────────────────
+// ── TURKANA CONTRIBUTION SCREEN ────────────────────────────────────────────
 function TurkanaScreen() {
   const [submitted, setSubmitted] = useState(false)
   const [email, setEmail]         = useState("")
@@ -285,7 +285,6 @@ function TurkanaScreen() {
 
   return (
     <div style={{ flex: 1, overflowY: "auto" }}>
-      {/* Hero */}
       <div style={{ position: "relative", height: 220, overflow: "hidden" }}>
         <img src="/turkana-hero.jpg" alt="Turkana community"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%", display: "block" }} />
@@ -300,20 +299,17 @@ function TurkanaScreen() {
         </div>
       </div>
 
-      {/* Explanation */}
       <div style={{ background: C.surface, padding: "24px 22px", borderBottom: `1px solid ${C.rule}` }}>
         <div style={{ fontFamily: F.body, fontSize: 15, fontWeight: 700, color: C.ink, marginBottom: 10, lineHeight: 1.3 }}>
           We're building Turkana language support with the community.
         </div>
         <div style={{ fontFamily: F.body, fontSize: 13, color: C.inkLight, lineHeight: 1.8 }}>
-          WaterPath works best when it speaks your language. We're looking for
-          Turkana speakers to help translate the app into Ng'aTurkana —
-          so that everyone in the community can use it, not just those who
-          speak English or Kiswahili.
+          WaterPath works best when it speaks your language. We're looking for Turkana speakers
+          to help translate the app into Ng'aTurkana — so that everyone in the community can
+          use it, not just those who speak English or Kiswahili.
         </div>
       </div>
 
-      {/* What you'd help with — no emojis, just clean text rows */}
       <div style={{ background: C.lifted, padding: "20px 22px", borderBottom: `1px solid ${C.rule}` }}>
         <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 18 }}>
           What you'd help with
@@ -324,24 +320,17 @@ function TurkanaScreen() {
           { num: "03", text: "Testing the app and giving feedback in your language"          },
         ].map(item => (
           <div key={item.num} style={{ display: "flex", gap: 16, marginBottom: 18, alignItems: "flex-start" }}>
-            <span style={{
-              fontFamily: F.mono, fontSize: 11, fontWeight: 600,
-              color: C.inkFaint, flexShrink: 0, paddingTop: 1,
-            }}>{item.num}</span>
+            <span style={{ fontFamily: F.mono, fontSize: 11, fontWeight: 600, color: C.inkFaint, flexShrink: 0, paddingTop: 1 }}>{item.num}</span>
             <span style={{ fontFamily: F.body, fontSize: 13, color: C.inkMid, lineHeight: 1.7 }}>{item.text}</span>
           </div>
         ))}
       </div>
 
-      {/* Form or success */}
       {submitted ? (
         <div style={{ background: C.sageBg, margin: "20px 16px", borderRadius: 16, padding: "28px 22px", textAlign: "center", border: `1px solid ${C.sage}33` }}>
-          <div style={{ fontFamily: F.display, fontSize: 24, fontWeight: 700, color: C.sage, marginBottom: 10, fontStyle: "italic" }}>
-            Thank you.
-          </div>
+          <div style={{ fontFamily: F.display, fontSize: 24, fontWeight: 700, color: C.sage, marginBottom: 10, fontStyle: "italic" }}>Thank you.</div>
           <div style={{ fontFamily: F.body, fontSize: 13, color: C.inkMid, lineHeight: 1.8 }}>
-            We'll be in touch soon. Your help will make WaterPath work for
-            every Turkana community member.
+            We'll be in touch soon. Your help will make WaterPath work for every Turkana community member.
           </div>
         </div>
       ) : (
@@ -350,27 +339,20 @@ function TurkanaScreen() {
             Sign up to help
           </div>
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 7 }}>
-              Your name (optional)
-            </div>
+            <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 7 }}>Your name (optional)</div>
             <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Akiru"
               style={{ width: "100%", padding: "13px 14px", borderRadius: 10, border: `1.5px solid ${C.rule}`, fontSize: 14, fontFamily: F.body, color: C.ink, background: C.lifted, outline: "none", boxSizing: "border-box" }} />
           </div>
           <div style={{ marginBottom: 20 }}>
-            <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 7 }}>
-              Phone or email *
-            </div>
+            <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 7 }}>Phone or email *</div>
             <input value={email} onChange={e => setEmail(e.target.value)} placeholder="e.g. +254 7xx xxx xxx"
               style={{ width: "100%", padding: "13px 14px", borderRadius: 10, border: `1.5px solid ${email ? C.sage : C.rule}`, fontSize: 14, fontFamily: F.body, color: C.ink, background: C.lifted, outline: "none", boxSizing: "border-box", transition: "border-color 0.15s" }} />
           </div>
           <button onClick={handleSubmit} disabled={!email} style={{
-            width: "100%", padding: "15px 0",
-            background: email ? C.ink : C.sand,
-            border: "none", borderRadius: 12,
-            color: email ? "#FFE082" : C.inkFaint,
-            fontFamily: F.mono, fontSize: 11, fontWeight: 600,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-            cursor: email ? "pointer" : "not-allowed", transition: "all 0.15s",
+            width: "100%", padding: "15px 0", background: email ? C.ink : C.sand,
+            border: "none", borderRadius: 12, color: email ? "#FFE082" : C.inkFaint,
+            fontFamily: F.mono, fontSize: 11, fontWeight: 600, letterSpacing: "0.12em",
+            textTransform: "uppercase", cursor: email ? "pointer" : "not-allowed", transition: "all 0.15s",
           }}>
             I want to help
           </button>
@@ -384,103 +366,197 @@ function TurkanaScreen() {
   )
 }
 
-// ── Borehole detail bottom sheet ──────────────────────────────────────────
+// ── BOREHOLE DETAIL SHEET ──────────────────────────────────────────────────
 function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
-  const t  = T[lang]
-  const sm = statusMeta(point.operation_status, t)
-  const distance = userLocation
-    ? distanceKm(userLocation.lat, userLocation.lng, point.latitude || point.lat, point.longitude || point.lng)
+  const t = T[lang]
+
+  // point.distance_km is pre-computed by useWaterPoints hook.
+  // If the sheet is opened from the map tab (where point may lack it),
+  // we fall back to a quick inline calculation.
+  const distance = point.distance_km ?? (
+    userLocation && point.latitude && point.longitude
+      ? (() => {
+          const R    = 6371
+          const dLat = (point.latitude  - userLocation.lat) * Math.PI / 180
+          const dLon = (point.longitude - (userLocation.lon ?? userLocation.lng)) * Math.PI / 180
+          const a    = Math.sin(dLat/2)**2 +
+                       Math.cos(userLocation.lat*Math.PI/180) *
+                       Math.cos(point.latitude*Math.PI/180)   *
+                       Math.sin(dLon/2)**2
+          return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+        })()
+      : null
+  )
+
+  const safety   = getSafetyLevel(point)
+  const flow     = getFlowSignal(point.yield_ls)
+  const salt     = getSaltSignal(point.ec)
+  const walkTime = getWalkTime(distance)
+  const mlConf   = point.prediction_confidence
+    ? Math.round(point.prediction_confidence * 100)
     : null
 
-  const openDirections = () => {
-    const lat = point.latitude || point.lat
-    const lng = point.longitude || point.lng
-    // If user location known, route from their coords; otherwise just drop a pin
-    const url = userLocation
-      ? `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${lat},${lng}`
-      : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+  const statusSignal = (() => {
+    const s = point.operation_status
+    if (s === "functional")     return { label: "Working",      sub: "Pump is on",     color: C.sage,     bg: C.sageBg  }
+    if (s === "issues")         return { label: "Has problems", sub: "Use with care",  color: C.amber,    bg: C.amberBg }
+    if (s === "non_functional") return { label: "Broken",       sub: "Not working",    color: C.rust,     bg: C.rustBg  }
+    return                             { label: "Unknown",      sub: "Status unclear", color: C.inkLight, bg: C.lifted  }
+  })()
+
+  const flowStyle = flow.label === "Good flow"
+    ? { color: C.sage, bg: C.sageBg }
+    : flow.label === "Very low"
+    ? { color: C.rust, bg: C.rustBg }
+    : { color: C.amber, bg: C.amberBg }
+
+  const saltStyle = salt.label === "Fresh"
+    ? { color: C.sage, bg: C.sageBg }
+    : salt.label === "Very salty"
+    ? { color: C.rust, bg: C.rustBg }
+    : { color: C.amber, bg: C.amberBg }
+
+  const handleDirections = () => {
+    if (!point.latitude || !point.longitude) return
+    const dest = `${point.latitude},${point.longitude}`
+    const url  = userLocation
+      ? `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lon ?? userLocation.lng}/${dest}`
+      : `https://www.google.com/maps/search/?api=1&query=${dest}`
     window.open(url, "_blank")
   }
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 2000, background: "rgba(44,26,14,0.4)", backdropFilter: "blur(4px)", display: "flex", alignItems: "flex-end" }}
-      onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: C.surface, width: "100%", maxHeight: "80vh", overflowY: "auto",
-        borderRadius: "20px 20px 0 0", borderTop: `4px solid ${sm.border}`,
-        padding: "24px 22px 40px",
-        boxShadow: "0 -12px 56px rgba(44,26,14,0.12)",
-      }}>
-        {/* Handle */}
-        <div style={{ width: 36, height: 4, borderRadius: 2, background: C.sand, margin: "0 auto 20px" }} />
-
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-          <div style={{ flex: 1, paddingRight: 12 }}>
-            <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 700, color: C.ink, lineHeight: 1.2, marginBottom: 5 }}>
-              {point.name}
-            </div>
-            <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-              <span style={{ fontFamily: F.mono, fontSize: 8, fontWeight: 600, padding: "3px 9px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.1em", background: sm.tagBg, color: sm.tagColor }}>
-                {sm.tag}
-              </span>
-              <span style={{ fontFamily: F.mono, fontSize: 8, fontWeight: 600, padding: "3px 9px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.1em", background: C.lifted, color: C.inkLight }}>
-                {sm.label}
-              </span>
-            </div>
+    <div
+      style={{ position: "fixed", inset: 0, zIndex: 2000, background: "rgba(44,26,14,0.4)", backdropFilter: "blur(4px)", display: "flex", alignItems: "flex-end" }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: C.surface, width: "100%", maxHeight: "88vh", overflowY: "auto",
+          borderRadius: "20px 20px 0 0",
+          borderTop: `4px solid ${safety.color}`,
+          boxShadow: "0 -12px 56px rgba(44,26,14,0.12)",
+          paddingBottom: 36,
+        }}
+      >
+        {/* Handle + name */}
+        <div style={{ padding: "20px 20px 16px", borderBottom: `1px solid ${C.rule}` }}>
+          <div style={{ width: 32, height: 4, borderRadius: 2, background: C.sand, margin: "0 auto 16px" }} />
+          <div style={{ fontFamily: F.display, fontSize: 18, fontWeight: 700, color: C.ink, marginBottom: 2 }}>{point.name}</div>
+          <div style={{ fontFamily: F.mono, fontSize: 10, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+            {point.locality || "Turkana County"}{distance != null ? ` · ${distance.toFixed(1)} km` : ""}
           </div>
-          {distance !== null && (
-            <div style={{ textAlign: "right", flexShrink: 0 }}>
-              <div style={{ fontFamily: F.display, fontSize: 34, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{distance.toFixed(1)}</div>
-              <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>{t.km} {t.away}</div>
+        </div>
+
+        {/* Big safety indicator: colour + SVG symbol + plain-language text */}
+        <div style={{ padding: "20px 20px 16px", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <div style={{ width: 88, height: 88, borderRadius: "50%", background: safety.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+              <path d="M25 6 C18 14 11 21 11 30 a14 14 0 0 0 28 0 C39 21 32 14 25 6Z" fill={safety.color} opacity="0.85"/>
+              {safety.level === "safe" && (
+                <path d="M18 31 L23 36 L34 23" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              )}
+              {safety.level === "caution" && (
+                <>
+                  <line x1="25" y1="23" x2="25" y2="32" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                  <circle cx="25" cy="36" r="1.8" fill="white"/>
+                </>
+              )}
+              {safety.level === "unsafe" && (
+                <path d="M19 23 L31 37 M31 23 L19 37" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              )}
+            </svg>
+          </div>
+
+          <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 700, color: safety.color, textAlign: "center" }}>
+            {safety.headline}
+          </div>
+          <div style={{ fontFamily: F.body, fontSize: 14, color: C.inkMid, textAlign: "center", maxWidth: 260, lineHeight: 1.65 }}>
+            {safety.body}
+          </div>
+
+          {mlConf && (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: "100%", maxWidth: 200, marginTop: 4 }}>
+              <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, letterSpacing: "0.08em" }}>
+                AI confidence · {mlConf}%
+              </div>
+              <div style={{ height: 4, width: "100%", background: C.sand, borderRadius: 2 }}>
+                <div style={{ height: 4, width: `${mlConf}%`, background: safety.color, borderRadius: 2, transition: "width 0.6s ease" }} />
+              </div>
             </div>
           )}
         </div>
 
-        <div style={{ height: 1, background: C.rule, margin: "18px 0" }} />
-
-        {/* Detail grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
+        {/* Three signal pills */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, padding: "0 16px 16px" }}>
           {[
-            { label: "Locality",       value: point.locality || "Turkana County"                       },
-            { label: "Water quality",  value: point.water_quality || "—"                               },
-            { label: "EC",             value: point.ec ? `${point.ec.toLocaleString()} µS/cm` : "—"   },
-            { label: "pH",             value: point.ph || "—"                                          },
-            { label: "Well depth",     value: point.well_depth ? `${point.well_depth} m` : "—"        },
-            { label: "Yield",          value: point.yield_ls ? `${point.yield_ls} L/s` : "—"          },
-          ].filter(r => r.value !== "—").map(r => (
-            <div key={r.label} style={{ background: C.lifted, borderRadius: 10, padding: "11px 13px" }}>
-              <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 4 }}>{r.label}</div>
-              <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 700, color: C.ink, textTransform: "capitalize" }}>{r.value}</div>
+            { bg: statusSignal.bg, color: statusSignal.color, label: statusSignal.label, sub: statusSignal.sub },
+            { bg: flowStyle.bg,    color: flowStyle.color,    label: flow.label,         sub: flow.sub         },
+            { bg: saltStyle.bg,    color: saltStyle.color,    label: salt.label,         sub: salt.sub         },
+          ].map((s, i) => (
+            <div key={i} style={{ background: s.bg, borderRadius: 12, padding: "14px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+              <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 700, color: s.color, textAlign: "center" }}>{s.label}</div>
+              <div style={{ fontFamily: F.body, fontSize: 11, color: C.inkLight, textAlign: "center", lineHeight: 1.4 }}>{s.sub}</div>
             </div>
           ))}
         </div>
 
+        {/* Community reports */}
         {point.report_count > 0 && (
-          <div style={{ background: C.rustBg, borderRadius: 10, padding: "11px 14px", marginBottom: 18, display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: C.rust, display: "inline-block", flexShrink: 0 }} />
-            <span style={{ fontFamily: F.mono, fontSize: 10, color: C.rust, letterSpacing: "0.06em" }}>
-              {point.report_count} community report{point.report_count > 1 ? "s" : ""} filed
-            </span>
+          <div style={{ margin: "0 16px 16px", background: C.rustBg, border: `0.5px solid ${C.rust}33`, borderRadius: 10, padding: "12px 14px", display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: C.rust, flexShrink: 0, marginTop: 3, display: "inline-block" }} />
+            <div>
+              <div style={{ fontFamily: F.body, fontSize: 13, color: "#7B1F0F", lineHeight: 1.5 }}>
+                {point.report_count} {point.report_count === 1 ? "person" : "people"} reported a problem here recently
+              </div>
+              {point.last_problem_type && (
+                <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkLight, marginTop: 3 }}>
+                  Most recent: {point.last_problem_type.toLowerCase()}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
-        {/* Action buttons */}
-        <div style={{ display: "flex", gap: 10 }}>
-          <button onClick={openDirections} style={{
-            flex: 2, padding: "15px 0", background: C.ink, border: "none",
-            borderRadius: 12, color: "#FFE082",
-            fontFamily: F.mono, fontSize: 10, fontWeight: 600,
-            letterSpacing: "0.12em", textTransform: "uppercase", cursor: "pointer",
-          }}>
+        {/* Walk time */}
+        {walkTime && (
+          <div style={{ margin: "0 16px 20px", background: C.lifted, borderRadius: 10, padding: "12px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="11" r="4" stroke={C.inkMid} strokeWidth="1.8"/>
+              <path d="M14 3 C8 3 3 8 3 13 C3 20 14 25 14 25 C14 25 25 20 25 13 C25 8 20 3 14 3Z" stroke={C.inkMid} strokeWidth="1.8" fill="none"/>
+            </svg>
+            <div>
+              <div style={{ fontFamily: F.display, fontSize: 20, fontWeight: 700, color: C.ink }}>{distance?.toFixed(1)} km</div>
+              <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkLight }}>{walkTime}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, padding: "0 16px" }}>
+          <button
+            onClick={handleDirections}
+            style={{
+              background: C.ink, border: "none", borderRadius: 12, padding: "16px 0",
+              color: "#FFE082", fontFamily: F.mono, fontSize: 11, fontWeight: 600,
+              letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#FFE082" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M2 8 L14 8 M9 3 L14 8 L9 13"/>
+            </svg>
             Get directions
           </button>
-          <button onClick={() => { onClose(); onReport(point) }} style={{
-            flex: 1, padding: "15px 0", background: C.rustBg,
-            border: `1px solid ${C.rust}44`, borderRadius: 12, color: C.rust,
-            fontFamily: F.mono, fontSize: 10, fontWeight: 600,
-            letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer",
-          }}>
+          <button
+            onClick={() => { onClose(); onReport(point) }}
+            style={{
+              background: C.rustBg, border: `0.5px solid ${C.rust}44`, borderRadius: 12, padding: "16px 0",
+              color: C.rust, fontFamily: F.mono, fontSize: 11, fontWeight: 600,
+              letterSpacing: "0.08em", textTransform: "uppercase", cursor: "pointer",
+            }}
+          >
             Report
           </button>
         </div>
@@ -489,19 +565,13 @@ function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
   )
 }
 
-// ── HOME SCREEN ───────────────────────────────────────────────────────────
+// ── HOME SCREEN ────────────────────────────────────────────────────────────
 function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
   const t = T[lang]
   const [selectedPoint, setSelectedPoint] = useState(null)
 
-  const sorted = waterPoints
-    .map(p => ({
-      ...p,
-      distance: userLocation
-        ? distanceKm(userLocation.lat, userLocation.lng, p.latitude || p.lat, p.longitude || p.lng)
-        : null,
-    }))
-    .sort((a, b) => (a.distance ?? 999) - (b.distance ?? 999))
+  // Hook already sorts by distance — take first 3
+  const nearest = waterPoints.slice(0, 3)
 
   return (
     <div style={{ flex: 1, overflowY: "auto" }}>
@@ -533,7 +603,7 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
         </div>
       </div>
 
-      {/* Borehole cards */}
+      {/* Cards */}
       <div style={{ background: C.lifted, paddingTop: 4, paddingBottom: 4 }}>
         <div style={{ padding: "14px 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontFamily: F.mono, fontSize: 9, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.14em" }}>{t.nearestToYou}</span>
@@ -545,33 +615,35 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
             {t.locating}
           </div>
         ) : (
-          sorted.slice(0, 3).map(pt => {
-            const sm = statusMeta(pt.operation_status, t)
+          nearest.map(pt => {
+            const sm = safetyFromPoint(pt, t)
             return (
               <div key={pt.id} style={{ margin: "0 14px 10px" }}>
-                <div style={{
-                  background: C.surface, borderRadius: 16,
-                  border: `1px solid ${C.rule}`,
-                  borderTop: `3px solid ${sm.border}`,
-                  overflow: "hidden",
-                  boxShadow: "0 2px 12px rgba(44,26,14,0.05)",
-                  cursor: "pointer",
-                }}
-                  onClick={() => setSelectedPoint(pt)}>
+                <div
+                  style={{
+                    background: C.surface, borderRadius: 16,
+                    border: `1px solid ${C.rule}`,
+                    borderTop: `3px solid ${sm.border}`,
+                    overflow: "hidden",
+                    boxShadow: "0 2px 12px rgba(44,26,14,0.05)",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSelectedPoint(pt)}
+                >
                   <div style={{ padding: "16px 18px", display: "flex", alignItems: "flex-start", gap: 14 }}>
                     <span style={{ width: 12, height: 12, borderRadius: "50%", background: sm.dot, flexShrink: 0, marginTop: 5, display: "inline-block" }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontFamily: F.display, fontSize: 17, fontWeight: 700, color: C.ink, marginBottom: 3, lineHeight: 1.2 }}>{pt.name}</div>
-                      <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginBottom: 9 }}>{t.drinkable} · {sm.label}</div>
-                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                        <span style={{ fontFamily: F.mono, fontSize: 8, fontWeight: 600, padding: "3px 9px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.1em", background: sm.tagBg, color: sm.tagColor }}>
-                          {sm.tag}
-                        </span>
+                      <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginBottom: 9 }}>
+                        {pt.locality || "Turkana County"}
                       </div>
+                      <span style={{ fontFamily: F.mono, fontSize: 8, fontWeight: 600, padding: "3px 9px", borderRadius: 3, textTransform: "uppercase", letterSpacing: "0.1em", background: sm.tagBg, color: sm.tagColor }}>
+                        {sm.tag}
+                      </span>
                     </div>
-                    {pt.distance !== null && (
+                    {pt.distance_km != null && (
                       <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <div style={{ fontFamily: F.display, fontSize: 28, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{pt.distance.toFixed(1)}</div>
+                        <div style={{ fontFamily: F.display, fontSize: 28, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{pt.distance_km.toFixed(1)}</div>
                         <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>{t.km}</div>
                       </div>
                     )}
@@ -603,55 +675,44 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
         </div>
       </div>
 
-      {/* Borehole detail sheet */}
       {selectedPoint && (
         <BoreholeSheet
           point={selectedPoint}
           userLocation={userLocation}
           lang={lang}
           onClose={() => setSelectedPoint(null)}
-          onReport={(pt) => onGoReport(pt)}
+          onReport={pt => { setSelectedPoint(null); onGoReport(pt) }}
         />
       )}
     </div>
   )
 }
 
-// ── REPORT SCREEN ─────────────────────────────────────────────────────────
+// ── REPORT SCREEN ──────────────────────────────────────────────────────────
 function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
   const t = T[lang]
-  const [step, setStep]           = useState(1)
-  const [problem, setProblem]     = useState(null)
-  const [borehole, setBorehole]   = useState(null)
-  const [submitting, setSubmitting] = useState(false)
+  const { submitReport, submitting } = useSubmitReport()
+
+  const [step, setStep]             = useState(1)
+  const [problem, setProblem]       = useState(null)
+  const [borehole, setBorehole]     = useState(null)
   const [showPicker, setShowPicker] = useState(false)
 
+  // Pre-select nearest borehole (hook already sorts by distance)
   useEffect(() => {
-    if (!waterPoints.length) return
-    const sorted = waterPoints
-      .map(p => ({ ...p, distance: userLocation ? distanceKm(userLocation.lat, userLocation.lng, p.latitude || p.lat, p.longitude || p.lng) : 999 }))
-      .sort((a, b) => a.distance - b.distance)
-    setBorehole(sorted[0])
-  }, [waterPoints, userLocation])
+    if (waterPoints.length) setBorehole(waterPoints[0])
+  }, [waterPoints])
 
-  const submit = async () => {
+  const handleSubmit = async () => {
     if (!problem || !borehole) return
-    setSubmitting(true)
-    const id = generateReportId()
-    try {
-      await addDoc(collection(db, "reports"), {
-        id, water_point_id: borehole.id, water_point_name: borehole.name,
-        problem_type: problem.label, severity: "medium",
-        status: "open", channel: "web",
-        submitted_at: new Date().toISOString(),
-      })
-      await updateDoc(doc(db, "water_points", borehole.id), {
-        operation_status: "issues",
-        report_count: (borehole.report_count || 0) + 1,
-      })
-      setSubmitting(false)
-      onSuccess(id)
-    } catch (e) { console.error(e); setSubmitting(false) }
+    const result = await submitReport({
+      water_point_id:    borehole.id,
+      water_point_name:  borehole.name,
+      problem_type:      problem.label,
+      last_problem_type: problem.label,
+      severity:          "medium",
+    })
+    if (result.success) onSuccess(result.report_id)
   }
 
   const stepLabel = step === 1 ? t.step1Label : step === 2 ? t.step2Label : t.step3Label
@@ -682,7 +743,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
         </span>
       </div>
 
-      {/* ── Step 1 ── */}
+      {/* Step 1 */}
       {step === 1 && (
         <div>
           <div style={{ padding: "16px 20px 14px" }}>
@@ -696,12 +757,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
                 border: `1.5px solid ${problem?.label === p.label ? C.rust : C.rule}`,
                 borderRadius: 14, padding: "16px 14px", cursor: "pointer", transition: "all 0.15s",
               }}>
-                <div style={{
-                  width: 28, height: 28, borderRadius: 6,
-                  background: problem?.label === p.label ? C.rust : C.sand,
-                  marginBottom: 10,
-                  transition: "background 0.15s",
-                }} />
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: problem?.label === p.label ? C.rust : C.sand, marginBottom: 10, transition: "background 0.15s" }} />
                 <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 700, color: C.ink, lineHeight: 1.3, marginBottom: 3 }}>{p.label}</div>
                 <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, letterSpacing: "0.06em" }}>{p.sub}</div>
               </div>
@@ -720,7 +776,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
         </div>
       )}
 
-      {/* ── Step 2 ── */}
+      {/* Step 2 */}
       {step === 2 && (
         <div>
           <div style={{ padding: "16px 20px 14px" }}>
@@ -734,13 +790,12 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
                   <div style={{ padding: "18px" }}>
                     <div style={{ fontFamily: F.mono, fontSize: 8, color: C.sage, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 6 }}>{t.nearestToLoc}</div>
                     <div style={{ fontFamily: F.display, fontSize: 20, fontWeight: 700, color: C.ink, marginBottom: 4 }}>{borehole.name}</div>
-                    <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginBottom: 14 }}>
-                      {borehole.distance?.toFixed(1)} {t.km} {t.away}
-                    </div>
-                    <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-                      <span style={{ fontFamily: F.display, fontSize: 34, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{borehole.distance?.toFixed(1)}</span>
-                      <span style={{ fontFamily: F.mono, fontSize: 10, color: C.inkLight, textTransform: "uppercase" }}>{t.km} {t.away}</span>
-                    </div>
+                    {borehole.distance_km != null && (
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
+                        <span style={{ fontFamily: F.display, fontSize: 32, fontWeight: 900, color: C.ink, lineHeight: 1 }}>{borehole.distance_km.toFixed(1)}</span>
+                        <span style={{ fontFamily: F.mono, fontSize: 10, color: C.inkLight, textTransform: "uppercase" }}>{t.km} {t.away}</span>
+                      </div>
+                    )}
                   </div>
                   <div onClick={() => setShowPicker(true)} style={{ borderTop: `1px solid ${C.rule}`, padding: "12px 18px", textAlign: "center", cursor: "pointer" }}>
                     <span style={{ fontFamily: F.body, fontSize: 12, color: C.rust, textDecoration: "underline" }}>{t.wrongBorehole}</span>
@@ -767,7 +822,9 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
                 }}>
                   <div>
                     <div style={{ fontFamily: F.body, fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 2 }}>{p.name}</div>
-                    <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>{p.locality || "Turkana"}</div>
+                    <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>
+                      {p.locality || "Turkana"}{p.distance_km != null ? ` · ${p.distance_km.toFixed(1)} km` : ""}
+                    </div>
                   </div>
                   <span style={{ color: C.inkFaint, fontSize: 18 }}>›</span>
                 </div>
@@ -778,7 +835,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
         </div>
       )}
 
-      {/* ── Step 3 ── */}
+      {/* Step 3 */}
       {step === 3 && (
         <div>
           <div style={{ padding: "16px 20px 14px" }}>
@@ -789,7 +846,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
             {[
               { label: t.problemReported, value: problem?.label },
               { label: t.borehole,        value: borehole?.name },
-              { label: t.yourLocation,    value: borehole?.distance ? `${borehole.distance.toFixed(1)} ${t.km} ${t.fromBorehole}` : "—" },
+              { label: t.yourLocation,    value: borehole?.distance_km != null ? `${borehole.distance_km.toFixed(1)} ${t.km} ${t.fromBorehole}` : "—" },
             ].map(r => (
               <div key={r.label} style={{ background: C.surface, borderRadius: 12, padding: "14px 16px", marginBottom: 8, border: `1px solid ${C.rule}` }}>
                 <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 4 }}>{r.label}</div>
@@ -797,7 +854,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
               </div>
             ))}
           </div>
-          <div onClick={!submitting ? submit : undefined} style={{
+          <div onClick={!submitting ? handleSubmit : undefined} style={{
             margin: "14px 14px 0", background: C.rust, borderRadius: 14,
             padding: "15px", textAlign: "center",
             cursor: submitting ? "not-allowed" : "pointer",
@@ -817,7 +874,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
   )
 }
 
-// ── SUCCESS SCREEN ────────────────────────────────────────────────────────
+// ── SUCCESS SCREEN ─────────────────────────────────────────────────────────
 function SuccessScreen({ lang, reportId, onBack }) {
   const t = T[lang]
   return (
@@ -847,46 +904,46 @@ function SuccessScreen({ lang, reportId, onBack }) {
 // ══════════════════════════════════════════════════════════════════════════
 export default function CommunityApp() {
   const [lang, setLang]               = useState("en")
-  const [tab, setTab]                 = useState("home")   // home | map | report
-  const [reportScreen, setReportScreen] = useState("form") // form | success
-  const [waterPoints, setWaterPoints] = useState([])
+  const [tab, setTab]                 = useState("home")
+  const [reportScreen, setReportScreen] = useState("form")
   const [userLocation, setUserLocation] = useState(null)
-  const [loading, setLoading]         = useState(true)
   const [successId, setSuccessId]     = useState(null)
   const [mapSelected, setMapSelected] = useState(null)
+  const [mlTriggered, setMlTriggered] = useState(false)
 
-  // Firestore
+  // useWaterPoints expects { lat, lon } (note: .lon not .lng)
+  const { points: waterPoints, loading } = useWaterPoints(userLocation)
+
+  // Geolocation — store as { lat, lon } to match the hook's expectation
   useEffect(() => {
-    return onSnapshot(collection(db, "water_points"), snap => {
-      setWaterPoints(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-      setLoading(false)
-    })
+    if (!navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      pos => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+      ()  => setUserLocation({ lat: 3.119, lon: 35.597 }) // fallback: Lodwar
+    )
   }, [])
 
-  // Geolocation
+  // Trigger ML predictions once after first load for any borehole missing a label.
+  // Flask writes prediction_label back to Firestore; the snapshot listener
+  // picks it up automatically — no manual refresh needed.
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        ()  => setUserLocation({ lat: 3.119, lng: 35.597 }) // fallback: Lodwar
-      )
+    if (!loading && waterPoints.length && !mlTriggered) {
+      setMlTriggered(true)
+      triggerMissingPredictions(waterPoints)
     }
-  }, [])
+  }, [loading, waterPoints, mlTriggered])
 
-  const handleLang = (l) => {
+  const handleLang = l => {
     setLang(l)
-    // Turkana taps go to home tab which shows contribution screen
     if (l === "tu") setTab("home")
   }
 
-  const handleNavTab = (t) => {
-    setTab(t)
-    if (t === "report") setReportScreen("form")
+  const handleNavTab = newTab => {
+    setTab(newTab)
+    if (newTab === "report") setReportScreen("form")
   }
 
-  const t = T[lang] // null for Turkana — handled per screen
-
-  // Hide bottom nav during success screen
+  const t = T[lang]
   const showNav = !(tab === "report" && reportScreen === "success")
 
   return (
@@ -896,16 +953,12 @@ export default function CommunityApp() {
       background: C.page, fontFamily: F.body,
       overflow: "hidden",
     }}>
-      {/* Language bar — always on top */}
       <LangBar lang={lang} setLang={handleLang} />
 
-      {/* Main content */}
       <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
 
-        {/* TURKANA — contribution screen (overrides tab content) */}
         {lang === "tu" && <TurkanaScreen />}
 
-        {/* ENGLISH / KISWAHILI tab content */}
         {lang !== "tu" && (
           <>
             {tab === "home" && (
@@ -921,6 +974,7 @@ export default function CommunityApp() {
             {tab === "map" && (
               <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
                 <WaterMap
+                  userLocation={userLocation}
                   onSelectPoint={pt => setMapSelected(pt)}
                   selectedPoint={mapSelected}
                 />
@@ -957,7 +1011,6 @@ export default function CommunityApp() {
         )}
       </div>
 
-      {/* Bottom nav — hidden on success, shown for Turkana too so they can navigate back */}
       {showNav && (
         <BottomNav tab={lang === "tu" ? "home" : tab} setTab={handleNavTab} t={t} />
       )}

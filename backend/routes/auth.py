@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from config import db
 import firebase_admin.auth as firebase_auth
+import os
 
 auth_bp = Blueprint("auth", __name__)
-
 
 @auth_bp.route("/verify", methods=["POST"])
 def verify_token():

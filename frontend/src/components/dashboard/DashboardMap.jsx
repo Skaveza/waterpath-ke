@@ -1,49 +1,67 @@
-import { useEffect, useState } from "react"
-import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip, useMap } from "react-leaflet"
+import { useState, useEffect } from "react"
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Tooltip,
+  useMap,
+} from "react-leaflet"
 import { collection, onSnapshot, updateDoc, doc } from "firebase/firestore"
 import { db } from "../../lib/firebase"
+import { getSafetyLevel, getFlowSignal, getSaltSignal, getWalkTime } from "../../utils/waterInterpretation"
 
-// ── Status colours — operational view ────────────────────────────────────
-const STATUS_STYLE = {
-  functional:     { fill: "#1D6F42", stroke: "#155233", label: "Functional"     },
-  issues:         { fill: "#E07A0F", stroke: "#b56200", label: "Has Issues"     },
-  non_functional: { fill: "#C1440E", stroke: "#8C2F07", label: "Non-Functional" },
-  unknown:        { fill: "#6B7280", stroke: "#4B5563", label: "Unknown"        },
+// ── Colour maps ────────────────────────────────────────────────────────────
+// Marker colour is driven by ML prediction_label (or water_quality fallback),
+// NOT just operation_status, so the map reflects actual water safety.
+const SAFETY_MARKER = {
+  safe:    { fill: "#1D6F42", stroke: "#155233" },
+  caution: { fill: "#C48A2A", stroke: "#8C5C10" },
+  unsafe:  { fill: "#C1440E", stroke: "#8C2F07" },
+  unknown: { fill: "#6B7280", stroke: "#4B5563" },
 }
 
-const QUALITY_META = {
-  excellent: { color: "#1D6F42", label: "Excellent" },
-  drinkable: { color: "#1A6E94", label: "Drinkable" },
-  brackish:  { color: "#92610A", label: "Brackish"  },
-  saline:    { color: "#C1440E", label: "Saline"    },
-  unknown:   { color: "#6B7280", label: "Unknown"   },
+const STATUS_STYLE = {
+  functional:     { fill: "#1D6F42", stroke: "#155233", label: "Functional"     },
+  issues:         { fill: "#C48A2A", stroke: "#8C5C10", label: "Has issues"     },
+  non_functional: { fill: "#C1440E", stroke: "#8C2F07", label: "Not working"    },
+  unknown:        { fill: "#6B7280", stroke: "#4B5563", label: "Unknown"        },
 }
 
 const C = {
   bg:       "#F7F3EE",
   card:     "#FFFFFF",
   subtle:   "#F0EBE3",
-  terra:    "#C1440E",
   ink:      "#1A1208",
   inkMid:   "#3D2C1E",
   inkLight: "#7A6355",
+  inkFaint: "#B09880",
   rule:     "#DDD4C8",
-  safe:     "#1D6F42",
-  safeBg:   "#E8F5EE",
-  warn:     "#92610A",
-  warnBg:   "#FEF3DC",
-  danger:   "#C1440E",
-  dangerBg: "#FDEEE8",
+  sage:     "#1D6F42",
+  sageBg:   "#E8F5EE",
+  amber:    "#C48A2A",
+  amberBg:  "#FDF4E0",
+  rust:     "#C1440E",
+  rustBg:   "#FDEEE8",
 }
 
+const F = {
+  display: "'Playfair Display', Georgia, serif",
+  mono:    "'IBM Plex Mono', monospace",
+  body:    "'Karla', system-ui, sans-serif",
+}
+
+// ── Marker radius: larger when more reports filed ──────────────────────────
 function getMarkerRadius(point) {
-  // Larger markers for boreholes with more reports — makes hotspots visible
-  const base    = 8
-  const reports = point.report_count || 0
-  return Math.min(base + reports * 2, 20)
+  return Math.min(8 + (point.report_count || 0) * 2, 20)
 }
 
-// ── Fly to selected point ─────────────────────────────────────────────────
+// ── Resolve point colour from ML prediction (priority) or quality ──────────
+function markerColour(point) {
+  const s = getSafetyLevel(point)
+  return SAFETY_MARKER[s.level] || SAFETY_MARKER.unknown
+}
+
+// ── Fly to selected point ──────────────────────────────────────────────────
 function FlyToPoint({ point }) {
   const map = useMap()
   useEffect(() => {
@@ -54,13 +72,20 @@ function FlyToPoint({ point }) {
   return null
 }
 
-// ── Resolve panel — appears when a marker is clicked ─────────────────────
+// ── RESOLVE PANEL (dashboard side panel shown on marker click) ─────────────
 function ResolvePanel({ point, onClose, onResolved }) {
   const [updating, setUpdating] = useState(false)
-  const sm = STATUS_STYLE[point.operation_status] || STATUS_STYLE.unknown
-  const qm = QUALITY_META[point.water_quality]    || QUALITY_META.unknown
 
-  const updateStatus = async (newStatus) => {
+  const safety = getSafetyLevel(point)
+  const flow   = getFlowSignal(point.yield_ls)
+  const salt   = getSaltSignal(point.ec)
+  const mlConf = point.prediction_confidence
+    ? Math.round(point.prediction_confidence * 100)
+    : null
+
+  const sm = STATUS_STYLE[point.operation_status] || STATUS_STYLE.unknown
+
+  const updateStatus = async newStatus => {
     setUpdating(true)
     try {
       await updateDoc(doc(db, "water_points", point.id), {
@@ -69,125 +94,271 @@ function ResolvePanel({ point, onClose, onResolved }) {
       onResolved()
       onClose()
     } catch (err) {
-      console.error(err)
+      console.error("Status update failed:", err)
     }
     setUpdating(false)
   }
 
+  const handleDirections = () => {
+    if (!point.latitude || !point.longitude) return
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${point.latitude},${point.longitude}`,
+      "_blank"
+    )
+  }
+
+  const flowStyle = flow.label === "Good flow"
+    ? { color: C.sage,  bg: C.sageBg  }
+    : flow.label === "Very low"
+    ? { color: C.rust,  bg: C.rustBg  }
+    : { color: C.amber, bg: C.amberBg }
+
+  const saltStyle = salt.label === "Fresh"
+    ? { color: C.sage,  bg: C.sageBg  }
+    : salt.label === "Very salty"
+    ? { color: C.rust,  bg: C.rustBg  }
+    : { color: C.amber, bg: C.amberBg }
+
   return (
     <div style={{
-      position: "absolute", bottom: 16, left: 16, right: 16, zIndex: 1000,
-      background: C.card, borderRadius: 14, padding: "16px 18px",
-      border: `1px solid ${C.rule}`,
-      boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
+      position: "absolute",
+      bottom: 16, left: 16, right: 16,
+      zIndex: 1000,
+      background: C.card,
+      borderRadius: 16,
+      border: `0.5px solid ${C.rule}`,
+      borderTop: `4px solid ${safety.color}`,
+      boxShadow: "0 4px 32px rgba(0,0,0,0.13)",
+      maxHeight: "70vh",
+      overflowY: "auto",
     }}>
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-        <div>
-          <div style={{ fontSize: 10, color: C.inkLight, fontFamily: "monospace", textTransform: "uppercase", letterSpacing: "0.09em", marginBottom: 3 }}>
-            {point.locality || "Turkana County"}
+      <div style={{ padding: "18px 18px 0" }}>
+
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+          <div style={{ flex: 1, paddingRight: 12 }}>
+            <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 3 }}>
+              {point.locality || "Turkana County"}
+            </div>
+            <div style={{ fontFamily: F.display, fontSize: 18, fontWeight: 700, color: C.ink, lineHeight: 1.2 }}>
+              {point.name}
+            </div>
           </div>
-          <div style={{ fontSize: 16, fontWeight: 800, color: C.ink, lineHeight: 1.2 }}>
-            {point.name}
+          <button onClick={onClose} style={{
+            background: C.subtle, border: "none", borderRadius: 8,
+            padding: "6px 12px", fontSize: 11, fontWeight: 700,
+            color: C.inkMid, cursor: "pointer", fontFamily: F.mono,
+            flexShrink: 0,
+          }}>✕</button>
+        </div>
+
+        {/* ML safety banner */}
+        <div style={{ background: safety.bg, border: `0.5px solid ${safety.color}33`, borderRadius: 10, padding: "12px 14px", margin: "14px 0 10px", display: "flex", gap: 10, alignItems: "flex-start" }}>
+          {/* Water drop icon */}
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
+            <path d="M16 4 C12 9 7 13 7 19 a9 9 0 0 0 18 0 C25 13 20 9 16 4Z" fill={safety.color} opacity="0.8"/>
+            {safety.level === "safe" && (
+              <path d="M11 19 L14.5 22.5 L22 15" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            )}
+            {safety.level === "caution" && (
+              <>
+                <line x1="16" y1="14" x2="16" y2="20" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+                <circle cx="16" cy="23" r="1.2" fill="white"/>
+              </>
+            )}
+            {safety.level === "unsafe" && (
+              <path d="M12 15 L20 23 M20 15 L12 23" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+            )}
+          </svg>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontFamily: F.body, fontSize: 14, fontWeight: 700, color: safety.color, marginBottom: 2 }}>{safety.headline}</div>
+            <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkMid, lineHeight: 1.5 }}>{safety.body}</div>
+            {mlConf && (
+              <>
+                <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginTop: 5 }}>AI confidence · {mlConf}%</div>
+                <div style={{ height: 3, background: C.subtle, borderRadius: 2, marginTop: 4 }}>
+                  <div style={{ height: 3, width: `${mlConf}%`, background: safety.color, borderRadius: 2 }} />
+                </div>
+              </>
+            )}
           </div>
         </div>
-        <button onClick={onClose} style={{
-          background: C.subtle, border: "none", borderRadius: 6,
-          padding: "5px 12px", fontSize: 11, fontWeight: 700,
-          color: C.inkMid, cursor: "pointer", fontFamily: "inherit",
-          flexShrink: 0, marginLeft: 10,
-        }}>✕</button>
-      </div>
 
-      {/* Stats row */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
-        <span style={{
-          background: sm.fill + "22", color: sm.fill,
-          fontSize: 10, fontWeight: 700, padding: "3px 9px",
-          borderRadius: 4, textTransform: "uppercase",
-          fontFamily: "monospace", letterSpacing: "0.05em",
-        }}>{sm.label}</span>
-        <span style={{
-          background: qm.color + "22", color: qm.color,
-          fontSize: 10, fontWeight: 700, padding: "3px 9px",
-          borderRadius: 4, textTransform: "uppercase",
-          fontFamily: "monospace", letterSpacing: "0.05em",
-        }}>{qm.label}</span>
-        {point.report_count > 0 && (
+        {/* Operation status badge */}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
           <span style={{
-            background: C.dangerBg, color: C.danger,
-            fontSize: 10, fontWeight: 700, padding: "3px 9px",
-            borderRadius: 4, fontFamily: "monospace",
-          }}>
-            {point.report_count} report{point.report_count > 1 ? "s" : ""}
-          </span>
-        )}
-      </div>
+            background: sm.fill + "22", color: sm.fill,
+            fontFamily: F.mono, fontSize: 9, fontWeight: 700,
+            padding: "3px 10px", borderRadius: 4, textTransform: "uppercase", letterSpacing: "0.1em",
+          }}>{sm.label}</span>
+          {point.report_count > 0 && (
+            <span style={{
+              background: C.rustBg, color: C.rust,
+              fontFamily: F.mono, fontSize: 9, fontWeight: 700,
+              padding: "3px 10px", borderRadius: 4,
+            }}>{point.report_count} report{point.report_count > 1 ? "s" : ""}</span>
+          )}
+          {point.last_problem_type && (
+            <span style={{
+              background: C.subtle, color: C.inkLight,
+              fontFamily: F.mono, fontSize: 9,
+              padding: "3px 10px", borderRadius: 4,
+            }}>Last: {point.last_problem_type.toLowerCase()}</span>
+          )}
+        </div>
 
-      {/* Data row */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
-        {[
-          { l: "EC",    v: point.ec ? `${point.ec} µS/cm` : "—" },
-          { l: "Depth", v: point.well_depth ? `${point.well_depth}m` : "—" },
-          { l: "Yield", v: point.yield_ls ? `${point.yield_ls} L/s` : "—" },
-        ].map(s => (
-          <div key={s.l} style={{ background: C.subtle, borderRadius: 8, padding: "8px 10px", flex: 1 }}>
-            <div style={{ fontSize: 9, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.07em", fontFamily: "monospace", marginBottom: 2 }}>{s.l}</div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: C.ink }}>{s.v}</div>
+        {/* Signal pills */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 }}>
+          <div style={{ background: flowStyle.bg, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontFamily: F.body, fontSize: 12, fontWeight: 700, color: flowStyle.color }}>{flow.label}</div>
+            <div style={{ fontFamily: F.body, fontSize: 11, color: C.inkLight, marginTop: 1 }}>{flow.sub}</div>
           </div>
-        ))}
+          <div style={{ background: saltStyle.bg, borderRadius: 10, padding: "10px 12px" }}>
+            <div style={{ fontFamily: F.body, fontSize: 12, fontWeight: 700, color: saltStyle.color }}>{salt.label}</div>
+            <div style={{ fontFamily: F.body, fontSize: 11, color: C.inkLight, marginTop: 1 }}>{salt.sub}</div>
+          </div>
+        </div>
+
+        {/* Technical data grid — for NGO dashboard users */}
+        {(point.ec || point.ph || point.well_depth || point.yield_ls) && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 }}>
+            {[
+              point.ec        && { label: "EC",         value: `${point.ec.toLocaleString()} µS/cm` },
+              point.ph        && { label: "pH",         value: String(point.ph)                      },
+              point.well_depth && { label: "Depth",     value: `${point.well_depth} m`               },
+              point.yield_ls  && { label: "Yield",      value: `${point.yield_ls} L/s`               },
+            ].filter(Boolean).map(r => (
+              <div key={r.label} style={{ background: C.subtle, borderRadius: 8, padding: "9px 11px" }}>
+                <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 3 }}>{r.label}</div>
+                <div style={{ fontFamily: F.body, fontSize: 13, fontWeight: 700, color: C.ink }}>{r.value}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Directions */}
+        <button onClick={handleDirections} style={{
+          width: "100%", padding: "12px 0", marginBottom: 14,
+          background: C.ink, border: "none", borderRadius: 10,
+          color: "#FFE082", fontFamily: F.mono, fontSize: 10, fontWeight: 600,
+          letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+        }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#FFE082" strokeWidth="1.8" strokeLinecap="round">
+            <path d="M1 7 L13 7 M8 2 L13 7 L8 12"/>
+          </svg>
+          Get directions
+        </button>
       </div>
 
-      {/* Status update buttons */}
-      <div style={{ fontSize: 10, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: "monospace", marginBottom: 8 }}>
-        Update Status
-      </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button
-          onClick={() => updateStatus("functional")}
-          disabled={updating || point.operation_status === "functional"}
-          style={{
-            flex: 1, padding: "10px 0",
-            background: point.operation_status === "functional" ? C.safeBg : C.safe,
-            border: point.operation_status === "functional" ? `1px solid ${C.safe}` : "none",
-            borderRadius: 8, color: point.operation_status === "functional" ? C.safe : "#fff",
-            fontSize: 11, fontWeight: 700, cursor: updating ? "not-allowed" : "pointer",
-            fontFamily: "inherit", opacity: updating ? 0.7 : 1,
-          }}>
-          Functional
-        </button>
-        <button
-          onClick={() => updateStatus("issues")}
-          disabled={updating || point.operation_status === "issues"}
-          style={{
-            flex: 1, padding: "10px 0",
-            background: point.operation_status === "issues" ? C.warnBg : "#F5E6CC",
-            border: point.operation_status === "issues" ? `1px solid ${C.warn}` : "none",
-            borderRadius: 8, color: C.warn,
-            fontSize: 11, fontWeight: 700, cursor: updating ? "not-allowed" : "pointer",
-            fontFamily: "inherit", opacity: updating ? 0.7 : 1,
-          }}>
-          Has Issues
-        </button>
-        <button
-          onClick={() => updateStatus("non_functional")}
-          disabled={updating || point.operation_status === "non_functional"}
-          style={{
-            flex: 1, padding: "10px 0",
-            background: point.operation_status === "non_functional" ? C.dangerBg : "#F5D5CC",
-            border: point.operation_status === "non_functional" ? `1px solid ${C.danger}` : "none",
-            borderRadius: 8, color: C.danger,
-            fontSize: 11, fontWeight: 700, cursor: updating ? "not-allowed" : "pointer",
-            fontFamily: "inherit", opacity: updating ? 0.7 : 1,
-          }}>
-          Non-Functional
-        </button>
+      {/* Status update section */}
+      <div style={{ borderTop: `1px solid ${C.rule}`, padding: "14px 18px 18px" }}>
+        <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>
+          Update status
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+          {[
+            { status: "functional",     label: "Working",    color: C.sage,  bg: C.sageBg  },
+            { status: "issues",         label: "Has issues", color: C.amber, bg: C.amberBg },
+            { status: "non_functional", label: "Broken",     color: C.rust,  bg: C.rustBg  },
+          ].map(({ status, label, color, bg }) => (
+            <button
+              key={status}
+              onClick={() => updateStatus(status)}
+              disabled={updating || point.operation_status === status}
+              style={{
+                padding: "10px 4px", border: "none", borderRadius: 8, cursor: "pointer",
+                background: point.operation_status === status ? bg : C.subtle,
+                color: point.operation_status === status ? color : C.inkLight,
+                fontFamily: F.mono, fontSize: 9, fontWeight: 600,
+                letterSpacing: "0.06em", textTransform: "uppercase",
+                opacity: updating ? 0.6 : 1,
+                transition: "all 0.15s",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
 }
 
-// ── Main dashboard map ────────────────────────────────────────────────────
+// ── FILTER BAR ─────────────────────────────────────────────────────────────
+function FilterBar({ filter, setFilter, counts }) {
+  const options = [
+    { id: "all",            label: "All",        count: counts.all            },
+    { id: "functional",     label: "Working",    count: counts.functional     },
+    { id: "issues",         label: "Issues",     count: counts.issues         },
+    { id: "non_functional", label: "Broken",     count: counts.non_functional },
+  ]
+  return (
+    <div style={{
+      position: "absolute", top: 12, left: 12, right: 12, zIndex: 900,
+      display: "flex", gap: 8, pointerEvents: "none",
+    }}>
+      {options.map(o => (
+        <button
+          key={o.id}
+          onClick={() => setFilter(o.id)}
+          style={{
+            pointerEvents: "all",
+            padding: "7px 12px",
+            borderRadius: 8,
+            border: "none",
+            background: filter === o.id ? "#2C1A0E" : "rgba(255,255,255,0.92)",
+            color: filter === o.id ? "#FFE082" : "#3D2C1E",
+            fontFamily: F.mono, fontSize: 9, fontWeight: 600,
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+            transition: "all 0.15s",
+          }}
+        >
+          {o.label}
+          {o.count != null && (
+            <span style={{ marginLeft: 5, opacity: 0.65 }}>({o.count})</span>
+          )}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ── LEGEND ─────────────────────────────────────────────────────────────────
+function Legend() {
+  return (
+    <div style={{
+      position: "absolute", bottom: 16, right: 16, zIndex: 900,
+      background: "rgba(255,255,255,0.93)",
+      borderRadius: 10, padding: "10px 14px",
+      boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+      border: `0.5px solid ${C.rule}`,
+    }}>
+      <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 8 }}>
+        Water safety
+      </div>
+      {[
+        { color: SAFETY_MARKER.safe.fill,    label: "Safe to drink"    },
+        { color: SAFETY_MARKER.caution.fill, label: "Use with caution" },
+        { color: SAFETY_MARKER.unsafe.fill,  label: "Not safe"         },
+        { color: SAFETY_MARKER.unknown.fill, label: "Unknown"          },
+      ].map(({ color, label }) => (
+        <div key={label} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 5 }}>
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: color, flexShrink: 0 }} />
+          <span style={{ fontFamily: F.body, fontSize: 11, color: C.inkMid }}>{label}</span>
+        </div>
+      ))}
+      <div style={{ height: 1, background: C.rule, margin: "8px 0" }} />
+      <div style={{ fontFamily: F.body, fontSize: 10, color: C.inkFaint, lineHeight: 1.5 }}>
+        Larger circles = more reports
+      </div>
+    </div>
+  )
+}
+
+// ── MAIN DASHBOARD MAP ─────────────────────────────────────────────────────
 export default function DashboardMap() {
   const [waterPoints, setWaterPoints]   = useState([])
   const [selectedPoint, setSelectedPoint] = useState(null)
@@ -206,93 +377,57 @@ export default function DashboardMap() {
     ? waterPoints
     : waterPoints.filter(p => p.operation_status === filter)
 
-  // Stats for filter pills
   const counts = {
     all:            waterPoints.length,
     functional:     waterPoints.filter(p => p.operation_status === "functional").length,
     issues:         waterPoints.filter(p => p.operation_status === "issues").length,
     non_functional: waterPoints.filter(p => p.operation_status === "non_functional").length,
-    unknown:        waterPoints.filter(p => !["functional","issues","non_functional"].includes(p.operation_status)).length,
   }
 
   if (loading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", background: C.bg }}>
-        <p style={{ color: C.inkLight, fontSize: 13 }}>Loading map...</p>
+      <div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", fontFamily: F.mono, fontSize: 12, color: C.inkLight }}>
+        Loading water points...
       </div>
     )
   }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
-
-      {/* Filter pills — overlaid on map */}
-      <div style={{
-        position: "absolute", top: 12, left: 12, zIndex: 1000,
-        display: "flex", gap: 6, flexWrap: "wrap",
-      }}>
-        {[
-          { id: "all",            label: `All (${counts.all})`                          },
-          { id: "issues",         label: `Issues (${counts.issues})`                    },
-          { id: "non_functional", label: `Non-Functional (${counts.non_functional})`    },
-          { id: "functional",     label: `Functional (${counts.functional})`            },
-          { id: "unknown",        label: `Unknown (${counts.unknown})`                  },
-        ].map(f => (
-          <button key={f.id} onClick={() => setFilter(f.id)} style={{
-            padding: "5px 12px", borderRadius: 20,
-            background: filter === f.id ? C.ink : "rgba(255,255,255,0.92)",
-            color: filter === f.id ? "#fff" : C.inkMid,
-            border: `1px solid ${filter === f.id ? C.ink : C.rule}`,
-            fontSize: 11, fontWeight: 700, cursor: "pointer",
-            fontFamily: "monospace", letterSpacing: "0.04em",
-            backdropFilter: "blur(4px)",
-            transition: "all 0.15s",
-          }}>{f.label}</button>
-        ))}
-      </div>
-
       <MapContainer
         center={[3.1191, 35.5966]}
         zoom={8}
         style={{ width: "100%", height: "100%" }}
-        zoomControl={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         <FlyToPoint point={selectedPoint} />
 
         {filtered.map(point => {
-          const sm         = STATUS_STYLE[point.operation_status] || STATUS_STYLE.unknown
-          const radius     = getMarkerRadius(point)
+          if (!point.latitude || !point.longitude) return null
+          const mc = markerColour(point)
           const isSelected = selectedPoint?.id === point.id
 
           return (
             <CircleMarker
               key={point.id}
               center={[point.latitude, point.longitude]}
-              radius={isSelected ? radius + 4 : radius}
-              fillColor={sm.fill}
-              color={isSelected ? C.ink : sm.stroke}
+              radius={isSelected ? getMarkerRadius(point) + 3 : getMarkerRadius(point)}
+              fillColor={mc.fill}
+              color={isSelected ? "#2C1A0E" : mc.stroke}
+              weight={isSelected ? 2.5 : 1}
               fillOpacity={0.85}
-              weight={isSelected ? 3 : 2}
               eventHandlers={{ click: () => setSelectedPoint(point) }}
             >
-              {/* Hover tooltip */}
-              <Tooltip direction="top" offset={[0, -8]} opacity={0.95}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: C.ink, marginBottom: 2 }}>
-                  {point.name}
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                  <div style={{ width: 7, height: 7, borderRadius: "50%", background: sm.fill, flexShrink: 0 }} />
-                  <span style={{ fontSize: 11, color: C.inkLight }}>{sm.label}</span>
-                  {point.report_count > 0 && (
-                    <span style={{ fontSize: 11, color: C.danger, fontWeight: 700 }}>
-                      · {point.report_count} report{point.report_count > 1 ? "s" : ""}
-                    </span>
-                  )}
+              <Tooltip direction="top" offset={[0, -6]}>
+                <div style={{ fontFamily: F.body, fontSize: 12 }}>
+                  <strong>{point.name}</strong>
+                  <br />
+                  {getSafetyLevel(point).headline}
+                  {point.distance_km != null && ` · ${point.distance_km} km`}
                 </div>
               </Tooltip>
             </CircleMarker>
@@ -300,31 +435,9 @@ export default function DashboardMap() {
         })}
       </MapContainer>
 
-      {/* Legend */}
-      <div style={{
-        position: "absolute", bottom: selectedPoint ? 180 : 16, right: 12, zIndex: 1000,
-        background: "rgba(255,255,255,0.92)", backdropFilter: "blur(4px)",
-        borderRadius: 10, padding: "10px 14px",
-        border: `1px solid ${C.rule}`,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-        transition: "bottom 0.3s",
-      }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
-          Operational Status
-        </div>
-        {Object.entries(STATUS_STYLE).map(([key, s]) => (
-          <div key={key} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.fill, flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: C.inkMid }}>{s.label}</span>
-          </div>
-        ))}
-        <div style={{ height: 1, background: C.rule, margin: "8px 0" }} />
-        <div style={{ fontSize: 10, color: C.inkLight, lineHeight: 1.5 }}>
-          Larger markers = more reports
-        </div>
-      </div>
+      <FilterBar filter={filter} setFilter={setFilter} counts={counts} />
+      <Legend />
 
-      {/* Resolve panel — appears on marker click */}
       {selectedPoint && (
         <ResolvePanel
           point={selectedPoint}
