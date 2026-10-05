@@ -125,7 +125,7 @@ waterpath-ke/
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/YOUR_USERNAME/waterpath-ke.git
+git clone https://github.com/Skaveza/waterpath-ke.git
 cd waterpath-ke
 ```
 
