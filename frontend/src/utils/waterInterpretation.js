@@ -1,9 +1,7 @@
 // utils/waterInterpretation.js
 
 export function getSafetyLevel(point) {
-  // ML prediction takes priority if available
-  const q = (point.prediction_label || point.predicted_quality || point.water_quality || "").toLowerCase()
-
+  const q = (point.water_quality || "").toLowerCase()
   if (q === "excellent" || q === "drinkable") {
     return {
       level:    "safe",
@@ -11,7 +9,7 @@ export function getSafetyLevel(point) {
       bg:       "#E8F5EE",
       border:   "#1D6F4244",
       headline: "Safe to drink",
-      body:     "This water is clean. You can drink it every day.",
+      body: "Low salt in the last reading. Salt is the only thing measured here, so this does not rule out other contamination.",
     }
   }
   if (q === "brackish") {

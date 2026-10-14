@@ -40,7 +40,7 @@ export default function DesalinationPanel() {
   const [view, setView]           = useState("list") // list | map
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/desalination/sites")
+    fetch("/api/desalination/sites")
       .then(r => r.json())
       .then(data => {
         setSites(data.sites || [])

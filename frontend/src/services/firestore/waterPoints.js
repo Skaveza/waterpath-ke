@@ -34,19 +34,6 @@ export async function updateWaterPointStatus(pointId, status) {
 }
 
 /**
- * Save ML prediction result into Firestore
- */
-export async function saveWaterPointPrediction(pointId, prediction) {
-  await updateDoc(doc(db, COLLECTION, pointId), {
-    predicted_quality: prediction.predicted_quality,
-    prediction_label: prediction.label,
-    prediction_confidence: prediction.confidence,
-    prediction_probabilities: prediction.probabilities,
-    last_ml_update: new Date().toISOString(),
-  })
-}
-
-/**
  * Optional: create water point (if needed later)
  */
 export async function createWaterPoint(pointId, data) {

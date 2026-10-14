@@ -11,8 +11,8 @@ import { db } from "../../lib/firebase"
 import { getSafetyLevel, getFlowSignal, getSaltSignal, getWalkTime } from "../../utils/waterInterpretation"
 
 // ── Colour maps ────────────────────────────────────────────────────────────
-// Marker colour is driven by ML prediction_label (or water_quality fallback),
-// NOT just operation_status, so the map reflects actual water safety.
+// Marker colour comes from the measured water_quality (see getSafetyLevel),
+// NOT just operation_status, so the map reflects measured water safety.
 const SAFETY_MARKER = {
   safe:    { fill: "#1D6F42", stroke: "#155233" },
   caution: { fill: "#C48A2A", stroke: "#8C5C10" },
@@ -79,10 +79,6 @@ function ResolvePanel({ point, onClose, onResolved }) {
   const safety = getSafetyLevel(point)
   const flow   = getFlowSignal(point.yield_ls)
   const salt   = getSaltSignal(point.ec)
-  const mlConf = point.prediction_confidence
-    ? Math.round(point.prediction_confidence * 100)
-    : null
-
   const sm = STATUS_STYLE[point.operation_status] || STATUS_STYLE.unknown
 
   const updateStatus = async newStatus => {
@@ -173,14 +169,6 @@ function ResolvePanel({ point, onClose, onResolved }) {
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: F.body, fontSize: 14, fontWeight: 700, color: safety.color, marginBottom: 2 }}>{safety.headline}</div>
             <div style={{ fontFamily: F.body, fontSize: 12, color: C.inkMid, lineHeight: 1.5 }}>{safety.body}</div>
-            {mlConf && (
-              <>
-                <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginTop: 5 }}>AI confidence · {mlConf}%</div>
-                <div style={{ height: 3, background: C.subtle, borderRadius: 2, marginTop: 4 }}>
-                  <div style={{ height: 3, width: `${mlConf}%`, background: safety.color, borderRadius: 2 }} />
-                </div>
-              </>
-            )}
           </div>
         </div>
 

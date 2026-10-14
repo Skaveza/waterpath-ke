@@ -34,7 +34,7 @@ const C = {
   sageBg:   "#EAF2E0",
 }
 
-// ── Translations ───────────────────────────────────────────────────────────
+// ── Translations ──
 const T = {
   en: {
     langName:        "English",
@@ -147,33 +147,7 @@ const T = {
   tu: null, // Turkana — shows contribution screen
 }
 
-// ── ML: auto-trigger predictions for boreholes with no prediction_label ────
-// POST /api/water-points/predict-quality with point_id so Flask writes the
-// result back to Firestore. The Firestore listener picks it up automatically.
-async function triggerMissingPredictions(points) {
-  const unpredicted = points.filter(
-    p => !p.prediction_label && p.latitude && p.longitude
-  )
-  for (const p of unpredicted) {
-    try {
-      await fetch("/api/water-points/predict-quality", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          latitude:   p.latitude,
-          longitude:  p.longitude,
-          well_depth: p.well_depth || 0,
-          ph:         p.ph         || 7.5,
-          point_id:   p.id,
-        }),
-      })
-    } catch (_) {
-      // fire-and-forget — never crash the app if ML API is down
-    }
-  }
-}
-
-// ── Card-list safety colour from ML prediction (priority) or status ────────
+// ── Card-list safety colour from measured water quality ────────────────────
 function safetyFromPoint(point, t) {
   const s = getSafetyLevel(point)
   if (s.level === "safe")   return { tag: t.safeToDrink, tagColor: C.sage,  tagBg: C.sageBg,  dot: C.sage,  border: C.sage  }
@@ -392,9 +366,6 @@ function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
   const flow     = getFlowSignal(point.yield_ls)
   const salt     = getSaltSignal(point.ec)
   const walkTime = getWalkTime(distance)
-  const mlConf   = point.prediction_confidence
-    ? Math.round(point.prediction_confidence * 100)
-    : null
 
   const statusSignal = (() => {
     const s = point.operation_status
@@ -476,16 +447,6 @@ function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
             {safety.body}
           </div>
 
-          {mlConf && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, width: "100%", maxWidth: 200, marginTop: 4 }}>
-              <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, letterSpacing: "0.08em" }}>
-                AI confidence · {mlConf}%
-              </div>
-              <div style={{ height: 4, width: "100%", background: C.sand, borderRadius: 2 }}>
-                <div style={{ height: 4, width: `${mlConf}%`, background: safety.color, borderRadius: 2, transition: "width 0.6s ease" }} />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Three signal pills */}
@@ -909,7 +870,6 @@ export default function CommunityApp() {
   const [userLocation, setUserLocation] = useState(null)
   const [successId, setSuccessId]     = useState(null)
   const [mapSelected, setMapSelected] = useState(null)
-  const [mlTriggered, setMlTriggered] = useState(false)
 
   // useWaterPoints expects { lat, lon } (note: .lon not .lng)
   const { points: waterPoints, loading } = useWaterPoints(userLocation)
@@ -922,16 +882,6 @@ export default function CommunityApp() {
       ()  => setUserLocation({ lat: 3.119, lon: 35.597 }) // fallback: Lodwar
     )
   }, [])
-
-  // Trigger ML predictions once after first load for any borehole missing a label.
-  // Flask writes prediction_label back to Firestore; the snapshot listener
-  // picks it up automatically — no manual refresh needed.
-  useEffect(() => {
-    if (!loading && waterPoints.length && !mlTriggered) {
-      setMlTriggered(true)
-      triggerMissingPredictions(waterPoints)
-    }
-  }, [loading, waterPoints, mlTriggered])
 
   const handleLang = l => {
     setLang(l)
