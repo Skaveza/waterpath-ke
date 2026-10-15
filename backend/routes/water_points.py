@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime, timezone
 from config import db
 from utils.geo import haversine_km
-from ml.quality_predictor import predict_quality
 
 water_points_bp = Blueprint("water_points", __name__)
 COLLECTION = "water_points"

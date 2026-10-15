@@ -1,190 +1,108 @@
-# waterpath-ke
+# WaterPath Kenya
 
-**WaterPath Kenya** — A community water access and infrastructure reporting platform for North Eastern Kenya.
+A prototype that helps people in Turkana County, Kenya, find nearby water points, see what is known about their water quality, and report problems. It turns an open borehole dataset into a mobile-friendly app, with a USSD option for people without internet.
 
-Built to help women and communities in Turkana, Mandera, Wajir, Garissa, Marsabit, and Isiolo find safe water points, report broken infrastructure, and hold county officials accountable in real time.
+**Status:** working prototype. It has not been field-tested and has no real users.
 
----
+## What it does
 
-## What It Does
+**Community app**
+- Ranks boreholes by distance from the user's browser location, with search by name or place and filters ("Safe water only", "Hide broken pumps")
+- Shows all boreholes on a map, with a detail sheet: plain-language water guidance, flow, walking time and directions
+- Anonymous 3-step problem reporting
+- English and Kiswahili. The Turkana screen is a sign-up page for volunteer translators; the app is not yet translated.
 
-**Community App (React)**
-- Locate the nearest functional borehole using real GPS data
-- View water quality classifications (drinkable / brackish / saline)
-- Report broken infrastructure anonymously in 3 steps
-- Track report status and resolution
+**NGO dashboard (PIN-gated demo)**
+- Map of water points with status controls
+- Desalination planning panel built from the 134 boreholes with measured conductivity above 1,500 µS/cm
 
-**NGO / County Dashboard (React)**
-- Receive community reports in real time via Firebase
-- Dispatch repair teams via SMS (Africa's Talking)
-- Monitor infrastructure status across all water points
-- Export reports for donor accountability
+**Backend (Flask)**
+- API for water points, reports and desalination sites
+- SMS notification to a technician through Africa's Talking
+- USSD endpoint for Africa's Talking (prototype)
 
-**ML Layer (Python / scikit-learn)**
-- Predict water quality for unmeasured boreholes using spatial interpolation
-- Risk scoring for borehole failure prediction
-- Optimal siting recommendations for desalination units
+## Data
 
----
+Source: [Boreholes Kenya - Rural Focus](https://ihp-wins.unesco.org/dataset/boreholes-kenya-rural-focus), UNESCO IHP-WINS (Rural Focus Ltd / SWAS Water Surveys; data originally from Water Resources Authority records).
 
-## Tech Stack
+- 1,062 Turkana County boreholes in the dataset; 1,061 are loaded in the app (one shared an existing borehole's coordinates)
+- 442 have a conductivity (EC) reading; **620 have none and are shown as "Not tested"**
+- Water-quality classes come from EC: up to 800 µS/cm excellent, up to 1,500 drinkable, up to 3,000 brackish, above that saline
 
-| Layer       | Technology                          |
-|-------------|-------------------------------------|
-| Frontend    | React + Tailwind + Leaflet.js        |
-| Backend     | Python + Flask                      |
-| Database    | Firebase Firestore (real-time)      |
-| Auth        | Firebase Authentication             |
-| SMS / USSD  | Africa's Talking API                |
-| ML          | scikit-learn + pandas               |
-| Hosting     | Vercel (frontend) + Railway (backend)|
+**Limits of this data:** EC measures salinity only. It says nothing about bacteria or other contamination, so "Safe to drink" means "low salt in the last reading". The readings are historical and may be out of date. Treat the app as a guide for where to look and what to ask, not as a safety certificate.
 
----
+## Machine-learning experiment (not used in the app)
 
-## API Endpoints
+I trained a Random Forest on the 433 boreholes with complete data to predict "safe" (EC up to 1,500) against "needs treatment" from latitude, longitude, depth and pH. It did not beat a trivial baseline:
 
-### Reports
-POST   /api/reports/              → Submit report  
-GET    /api/reports/              → Fetch reports  
-PATCH  /api/reports/{id}/resolve  → Mark as resolved  
-POST   /api/reports/{id}/dispatch → Assign technician  
+| Measure | Result |
+|---|---|
+| Always predict "safe" (majority baseline, 304 of 433 are safe) | 70.2% |
+| Random Forest, 5-fold CV | 68.4% |
+| Random Forest, balanced accuracy | 53.4% (50% is chance) |
+| Random Forest, spatial hold-out (whole regions held out) | 61.6% ± 14.1% |
 
-### Water Points
-GET    /api/water-points/  
-GET    /api/water-points/{id}  
-PATCH  /api/water-points/{id}/status  
+Location, depth and pH carry little information about salinity, and 279 of 433 boreholes have no recorded depth. Predictions are therefore not shown anywhere in the app, and unmeasured boreholes are labelled "Not tested". Reproduce the check with `python ml/baseline_check.py` from `backend/`. Possible next steps: more features, a missing-depth indicator, and predicting EC directly.
 
-### Auth
-POST   /api/auth/verify  
+## Tech stack
 
----
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Vite, Tailwind CSS, Leaflet |
+| Backend | Python 3.11, Flask, gunicorn |
+| Database / auth | Firebase (Firestore, Authentication) |
+| SMS / USSD | Africa's Talking |
+| Hosting | Render (web service for the API, static site for the frontend) |
 
-## Data Source
+## Run locally
 
-Borehole data sourced from [**Rural Focus Ltd / Water Resources Authority Kenya**]( https://ihp-wins.unesco.org/dataset/boreholes-kenya-rural-focus)
- — 1,062 boreholes across Turkana County with GPS coordinates, water quality (EC/pH), depth, and yield data.
-
----
-
-## Project Structure
-
-```
-waterpath-ke/
-├── backend/                  # Python Flask API
-│   ├── app.py                # Entry point
-│   ├── config.py             # Firebase + env config
-│   ├── requirements.txt
-│   ├── routes/
-│   │   ├── water_points.py   # Water point CRUD + querying
-│   │   ├── reports.py        # Community report endpoints
-│   │   └── auth.py           # NGO auth endpoints
-│   ├── models/
-│   │   ├── water_point.py    # WaterPoint dataclass
-│   │   └── report.py         # Report dataclass
-│   ├── ml/
-│   │   ├── quality_predictor.py   # EC/salinity prediction model
-│   │   ├── risk_scorer.py         # Borehole failure risk scoring
-│   │   └── train.py               # Model training scripts
-│   ├── utils/
-│   │   ├── sms.py            # Africa's Talking SMS wrapper
-│   │   └── geo.py            # Distance + geospatial helpers
-│   └── scripts/
-│       └── seed_firestore.py # Import borehole CSV → Firestore
-│
-├── frontend/                 # React app
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── map/          # Leaflet map components
-│   │   │   ├── reports/      # Report flow components
-│   │   │   ├── dashboard/    # NGO dashboard components
-│   │   │   └── shared/       # Badges, cards, buttons
-│   │   ├── pages/            # Route-level page components
-│   │   ├── hooks/            # Custom React hooks (useFirestore, useLocation)
-│   │   └── lib/
-│   │       ├── firebase.js   # Firebase initialisation
-│   │       └── api.js        # Flask API client
-│   └── ...
-│
-├── data/
-│   └── waterpath_boreholes.json   # Cleaned borehole seed data (60 records)
-│
-└── docs/
-    ├── ARCHITECTURE.md
-    └── API.md
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Python 3.10+
-- Firebase project (Firestore + Auth enabled)
-- Africa's Talking account (for SMS)
-
-### 1. Clone the repo
-```bash
-git clone https://github.com/Skaveza/waterpath-ke.git
-cd waterpath-ke
-```
-
-### 2. Backend setup
+**Backend**
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env            # Fill in your Firebase + AT credentials
-python scripts/seed_firestore.py  # Import borehole data
+```
+Create `backend/.env` with:
+```
+FLASK_ENV=development
+PORT=5000
+FIREBASE_CREDENTIALS_PATH=./firebase-service-account.json
+AFRICASTALKING_USERNAME=sandbox
+AFRICASTALKING_API_KEY=your_key
+ALLOWED_ORIGINS=http://localhost:5173
+```
+Put your Firebase service-account key at `backend/firebase-service-account.json` (git-ignored), then seed and run:
+```bash
+python scripts/seed_full_dataset.py --dry-run   # check the counts first
+python scripts/seed_full_dataset.py
 python app.py
 ```
+`scripts/seed_firestore.py` loads only the 60-record sample.
 
-### 3. Frontend setup
+**Frontend**
 ```bash
 cd frontend
 npm install
-cp .env.example .env.local      # Fill in Firebase config
-npm run dev
 ```
+Create `frontend/.env.local` with the six `VITE_FIREBASE_*` values from your Firebase project and a `VITE_NGO_PIN` of your choice, then `npm run dev`. The frontend calls `/api/...`, so run the backend on the port set in `vite.config.js`, or add a dev proxy.
 
----
+## Deployment
 
-## Environment Variables
+- **API:** Render web service, root directory `backend`, start command `gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`, health check `/api/health`
+- **Frontend:** Render static site, root directory `frontend`, build command `npm install && npm run build`, publish directory `dist`
+- **Static site rewrite rules, in this order:** `/api/*` to the backend's `/api/*`, then `/*` to `/index.html`
+- Free-tier services sleep after inactivity, so the first request can take about a minute
 
-### Backend `.env`
-```
-FIREBASE_CREDENTIALS_PATH=./firebase-service-account.json
-AFRICASTALKING_API_KEY=your_key
-AFRICASTALKING_USERNAME=your_username
-FLASK_ENV=development
-PORT=5000
-```
+## Known limitations
 
-### Frontend `.env.local`
-```
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_API_BASE_URL=http://localhost:5000
-```
+- The NGO PIN is a client-side demo gate, not real authentication
+- Firestore security rules need tightening before real use
+- Only 60 of the boreholes originally had their status inferred by the seed script; statuses are rough and unverified
+- Data is from a historical survey, and conductivity is the only quality measure
 
----
+## Data credits
 
-## Contributing
-
-This project is built to serve communities in North Eastern Kenya. If you work in WASH, GIS, or community development in the region, contributions and partnerships are welcome.
-
----
-
-## Data Credits
-
-- Borehole data: Rural Focus Ltd / Water Resources Authority Kenya
-- Drought data: National Drought Management Authority (NDMA) Kenya
-- Administrative boundaries: GADM / Kenya Open Data
+Borehole data: Rural Focus Ltd / SWAS Water Surveys via UNESCO IHP-WINS (published as open data; check the dataset page for current terms).
 
 ## License
 

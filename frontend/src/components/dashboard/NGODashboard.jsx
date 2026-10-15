@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { collection, onSnapshot, updateDoc, doc, query, orderBy } from "firebase/firestore"
+import { collection, onSnapshot, doc, query, orderBy, writeBatch } from "firebase/firestore"
 import { db } from "../../lib/firebase"
 import DashboardMap from "./DashboardMap"
 
@@ -132,11 +132,23 @@ function Sheet({ report, onClose }) {
   const sv = SEV[report.severity]  || SEV.medium
 
   const save = async (status) => {
+    if (saving) return
     setSaving(true)
     try {
-      await updateDoc(doc(db, "reports", report.docId), { status, resolved_at: status === "resolved" ? new Date().toISOString() : null, resolution_note: note || null })
-      if (report.water_point_id) await updateDoc(doc(db, "water_points", report.water_point_id), { operation_status: status === "resolved" ? "functional" : "issues" })
-      setSaving(false); onClose()
+      const batch = writeBatch(db)
+      batch.update(doc(db, "reports", report.docId), {
+        status,
+        resolved_at: status === "resolved" ? new Date().toISOString() : null,
+        resolution_note: note || null,
+      })
+      if (report.water_point_id) {
+        batch.update(doc(db, "water_points", report.water_point_id), {
+          operation_status: status === "resolved" ? "functional" : "issues",
+        })
+      }
+      await batch.commit()
+      setSaving(false)
+      onClose()
     } catch (e) { console.error(e); setSaving(false) }
   }
 
@@ -578,7 +590,8 @@ export default function NGODashboard() {
   const [reports, setReports]     = useState([])
   const [wps, setWps]             = useState([])
   const [loading, setLoading]     = useState(true)
-  const [selected, setSelected]   = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
+  const selected = reports.find(r => r.docId === selectedId) || null
   const [tab, setTab]             = useState("dispatch")
 
   useEffect(() => {

@@ -6,7 +6,7 @@ venv/
 .env
 *.pkl
 
-# Firebase — NEVER commit these
+# Firebase
 firebase-service-account.json
 *-service-account.json
 

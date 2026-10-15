@@ -730,7 +730,7 @@ function HomeScreen({ lang, waterPoints, userLocation, locationIsDefault, loadin
 // ── REPORT SCREEN ──────────────────────────────────────────────────────────
 function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
   const t = T[lang]
-  const { submitReport, submitting } = useSubmitReport()
+  const { submitReport, submitting, error } = useSubmitReport()
 
   const [step, setStep]             = useState(1)
   const [problem, setProblem]       = useState(null)
@@ -743,7 +743,7 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
   }, [waterPoints])
 
   const handleSubmit = async () => {
-    if (!problem || !borehole) return
+    if (!problem || !borehole || submitting) return
     const result = await submitReport({
       water_point_id:    borehole.id,
       water_point_name:  borehole.name,
@@ -909,6 +909,11 @@ function ReportScreen({ lang, waterPoints, userLocation, onBack, onSuccess }) {
           <div style={{ height: 24 }} />
         </div>
       )}
+                {error && (
+            <div style={{ margin: "12px 14px 0", padding: "12px 14px", background: C.rustBg, borderRadius: 10, fontFamily: F.body, fontSize: 13, color: C.rust, lineHeight: 1.5 }}>
+              Could not submit your report. Check your connection and try again.
+            </div>
+          )}
     </div>
   )
 }

@@ -110,14 +110,18 @@ export function useSubmitReport() {
       await addDoc(collection(db, "reports"), report)
 
       if (reportData.water_point_id) {
-        await updateDoc(doc(db, "water_points", reportData.water_point_id), {
-          report_count: increment(1),
-          last_report_at: new Date().toISOString(),
-          operation_status:
-            reportData.problem_type === "Borehole is Dry"
-              ? "non_functional"
-              : "issues",
-        })
+        try {
+          await updateDoc(doc(db, "water_points", reportData.water_point_id), {
+            report_count: increment(1),
+            last_report_at: new Date().toISOString(),
+            operation_status:
+              reportData.problem_type === "Borehole is Dry"
+                ? "non_functional"
+                : "issues",
+          })
+        } catch (e) {
+          console.warn("Report saved, but borehole counters were not updated:", e.message)
+        }
       }
 
       setSubmitting(false)
