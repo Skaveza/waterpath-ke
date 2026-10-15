@@ -88,6 +88,16 @@ const T = {
     navHome:         "Home",
     navMap:          "Map",
     navReport:       "Report",
+    searchPlaceholder: "Search by name or place",
+    safeOnly:        "Safe water only",
+    hideBroken:      "Hide broken pumps",
+    showMore:        "Show more",
+    showFewer:       "Show fewer",
+    noMatch:         "No boreholes match. Try clearing a filter.",
+    defaultLocation: "Using Lodwar as your location. Allow location access for accurate distances.",
+    dataNote:        "Readings come from a historical borehole survey and may be out of date.",
+    sourceLabel:     "Source",
+    notTested:       "Not tested",
   },
 
   sw: {
@@ -142,6 +152,16 @@ const T = {
     navHome:         "Nyumbani",
     navMap:          "Ramani",
     navReport:       "Ripoti",
+    searchPlaceholder: "Tafuta kwa jina au mahali",
+    safeOnly:        "Maji salama pekee",
+    hideBroken:      "Ficha pampu zilizoharibika",
+    showMore:        "Onyesha zaidi",
+    showFewer:       "Onyesha chache",
+    noMatch:         "Hakuna kisima kinacholingana. Jaribu kuondoa kichujio.",
+    defaultLocation: "Tunatumia Lodwar kama mahali pako. Ruhusu eneo kwa umbali sahihi.",
+    dataNote:        "Vipimo vinatoka kwenye utafiti wa zamani wa visima na vinaweza kuwa vimepitwa na wakati.",
+    sourceLabel:     "Chanzo",
+    notTested:       "Haijapimwa",
   },
 
   tu: null, // Turkana — shows contribution screen
@@ -152,6 +172,7 @@ function safetyFromPoint(point, t) {
   const s = getSafetyLevel(point)
   if (s.level === "safe")   return { tag: t.safeToDrink, tagColor: C.sage,  tagBg: C.sageBg,  dot: C.sage,  border: C.sage  }
   if (s.level === "unsafe") return { tag: t.notSafe,     tagColor: C.rust,  tagBg: C.rustBg,  dot: C.rust,  border: C.rust  }
+  if (s.level === "unknown") return { tag: t.notTested, tagColor: C.inkLight, tagBg: C.lifted, dot: C.inkFaint, border: C.inkFaint }
   return                           { tag: t.useWithCare,  tagColor: C.amber, tagBg: C.amberBg, dot: C.amber, border: C.amber }
 }
 
@@ -493,6 +514,10 @@ function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
             </div>
           </div>
         )}
+                {/* Data age and source */}
+                <div style={{ margin: "0 16px 16px", fontFamily: F.mono, fontSize: 9, color: C.inkFaint, lineHeight: 1.7, letterSpacing: "0.04em" }}>
+          {t.dataNote}{point.source ? ` ${t.sourceLabel}: ${point.source}.` : ""}
+        </div>
 
         {/* Actions */}
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, padding: "0 16px" }}>
@@ -527,12 +552,25 @@ function BoreholeSheet({ point, userLocation, lang, onClose, onReport }) {
 }
 
 // ── HOME SCREEN ────────────────────────────────────────────────────────────
-function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
+function HomeScreen({ lang, waterPoints, userLocation, locationIsDefault, loading, onGoReport }) {
   const t = T[lang]
   const [selectedPoint, setSelectedPoint] = useState(null)
 
-  // Hook already sorts by distance — take first 3
-  const nearest = waterPoints.slice(0, 3)
+  const [query, setQuery]         = useState("")
+  const [safeOnly, setSafeOnly]   = useState(false)
+  const [hideBroken, setHideBroken] = useState(false)
+  const [showAll, setShowAll]     = useState(false)
+
+  // Hook already sorts by distance, and filter() keeps that order
+  const filtered = waterPoints.filter(p => {
+    if (safeOnly && getSafetyLevel(p).level !== "safe") return false
+    if (hideBroken && p.operation_status === "non_functional") return false
+    const q = query.trim().toLowerCase()
+    if (q && !`${p.name || ""} ${p.locality || ""}`.toLowerCase().includes(q)) return false
+    return true
+  })
+  const limit   = showAll || query.trim() ? 20 : 3
+  const nearest = filtered.slice(0, limit)
 
   return (
     <div style={{ flex: 1, overflowY: "auto" }}>
@@ -552,15 +590,38 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
       </div>
 
       {/* Location bar */}
-      <div style={{ background: C.surface, padding: "12px 20px", display: "flex", alignItems: "center", gap: 10, borderBottom: `1px solid ${C.rule}` }}>
+      <div style={{ background: userLocation && !locationIsDefault ? C.sage : C.amber}}>
         <span style={{ width: 9, height: 9, borderRadius: "50%", background: userLocation ? C.sage : C.amber, display: "inline-block", flexShrink: 0, animation: "pulse 2s infinite" }} />
         <div>
-          <div style={{ fontFamily: F.mono, fontSize: 10, color: C.inkMid }}>
-            {loading ? t.locating : userLocation ? `${t.nearLocation} Lodwar Town` : t.locating}
+        <div style={{ fontFamily: F.mono, fontSize: 10, color: C.inkMid, lineHeight: 1.5 }}>
+            {loading || !userLocation ? t.locating : locationIsDefault ? t.defaultLocation : t.locationSub}
           </div>
           <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint, marginTop: 1 }}>
-            {t.locationSub} · {waterPoints.length} {t.boreholesLoaded}
+            {waterPoints.length} {t.boreholesLoaded}
           </div>
+        </div>
+      </div>
+            {/* Search + filters */}
+            <div style={{ background: C.surface, padding: "12px 16px", borderBottom: `1px solid ${C.rule}` }}>
+        <input
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder={t.searchPlaceholder}
+          style={{ width: "100%", padding: "11px 14px", borderRadius: 10, border: `1.5px solid ${C.rule}`, fontSize: 14, fontFamily: F.body, color: C.ink, background: C.lifted, outline: "none", boxSizing: "border-box", marginBottom: 10 }}
+        />
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {[
+            { on: safeOnly,   toggle: () => setSafeOnly(v => !v),   label: t.safeOnly },
+            { on: hideBroken, toggle: () => setHideBroken(v => !v), label: t.hideBroken },
+          ].map(chip => (
+            <button key={chip.label} onClick={chip.toggle} style={{
+              padding: "7px 12px", borderRadius: 20,
+              border: `1.5px solid ${chip.on ? C.ink : C.rule}`,
+              background: chip.on ? C.ink : C.lifted,
+              color: chip.on ? "#FFE082" : C.inkMid,
+              fontFamily: F.mono, fontSize: 10, letterSpacing: "0.05em", cursor: "pointer",
+            }}>{chip.label}</button>
+          ))}
         </div>
       </div>
 
@@ -568,7 +629,7 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
       <div style={{ background: C.lifted, paddingTop: 4, paddingBottom: 4 }}>
         <div style={{ padding: "14px 20px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontFamily: F.mono, fontSize: 9, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.14em" }}>{t.nearestToYou}</span>
-          <span style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>3 {t.of} {waterPoints.length}</span>
+          <span style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>{nearest.length} {t.of} {filtered.length}</span>
         </div>
 
         {loading ? (
@@ -617,6 +678,23 @@ function HomeScreen({ lang, waterPoints, userLocation, loading, onGoReport }) {
               </div>
             )
           })
+        )}
+
+        {!loading && filtered.length === 0 && (
+          <div style={{ padding: "24px 20px", textAlign: "center", fontFamily: F.body, fontSize: 13, color: C.inkLight, lineHeight: 1.6 }}>
+            {t.noMatch}
+          </div>
+        )}
+
+        {!loading && !query.trim() && filtered.length > 3 && (
+          <div onClick={() => setShowAll(s => !s)} style={{
+            margin: "0 14px 10px", padding: "13px", textAlign: "center",
+            background: C.surface, border: `1px solid ${C.rule}`, borderRadius: 12, cursor: "pointer",
+          }}>
+            <span style={{ fontFamily: F.mono, fontSize: 10, fontWeight: 600, color: C.rust, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+              {showAll ? t.showFewer : t.showMore}
+            </span>
+          </div>
         )}
 
         {/* Report FAB */}
@@ -868,18 +946,23 @@ export default function CommunityApp() {
   const [tab, setTab]                 = useState("home")
   const [reportScreen, setReportScreen] = useState("form")
   const [userLocation, setUserLocation] = useState(null)
+  const [locationIsDefault, setLocationIsDefault] = useState(false)
   const [successId, setSuccessId]     = useState(null)
   const [mapSelected, setMapSelected] = useState(null)
 
   // useWaterPoints expects { lat, lon } (note: .lon not .lng)
   const { points: waterPoints, loading } = useWaterPoints(userLocation)
 
-  // Geolocation — store as { lat, lon } to match the hook's expectation
   useEffect(() => {
-    if (!navigator.geolocation) return
+    const useDefault = () => {
+      setUserLocation({ lat: 3.119, lon: 35.597 }) // fallback: Lodwar
+      setLocationIsDefault(true)
+    }
+    if (!navigator.geolocation) { useDefault(); return }
     navigator.geolocation.getCurrentPosition(
       pos => setUserLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      ()  => setUserLocation({ lat: 3.119, lon: 35.597 }) // fallback: Lodwar
+      useDefault,
+      { timeout: 10000, maximumAge: 300000 }
     )
   }, [])
 
@@ -916,6 +999,7 @@ export default function CommunityApp() {
                 lang={lang}
                 waterPoints={waterPoints}
                 userLocation={userLocation}
+                locationIsDefault={locationIsDefault}
                 loading={loading}
                 onGoReport={() => { setTab("report"); setReportScreen("form") }}
               />

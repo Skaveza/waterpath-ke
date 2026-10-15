@@ -1,6 +1,6 @@
 // firebase.js
 import { initializeApp } from "firebase/app"
-import { initializeFirestore } from "firebase/firestore"
+import { initializeFirestore, persistentLocalCache } from "firebase/firestore"
 import { getAuth } from "firebase/auth"
 
 const firebaseConfig = {
@@ -24,8 +24,9 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 
 export const db = initializeFirestore(app, {
-  experimentalAutoDetectLongPolling: true,  // ← handles Safari specifically
-  useFetchStreams: false,                    // ← disables fetch streams Safari chokes on
+  localCache: persistentLocalCache(),        // keeps data on the device; repeat visits read only what changed
+  experimentalAutoDetectLongPolling: true,   // Safari workaround
+  useFetchStreams: false,                    // Safari workaround
 })
 
 export default app

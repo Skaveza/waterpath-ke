@@ -44,12 +44,12 @@ export function getSafetyLevel(point) {
     }
   }
   return {
-    level:    "caution",
-    color:    "#92610A",
-    bg:       "#FEF3DC",
-    border:   "#92610A44",
-    headline: "Quality unknown",
-    body:     "We don't have recent data. Use your own judgement.",
+    level:    "unknown",
+    color:    "#6B7280",
+    bg:       "#F1F2F4",
+    border:   "#6B728044",
+    headline: "Not tested",
+    body:     "No water test is on record for this borehole. Ask locally, or test before drinking.",
   }
 }
 
