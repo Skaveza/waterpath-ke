@@ -6,20 +6,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Config:
-    FLASK_ENV               = os.getenv("FLASK_ENV", "production")
+    FLASK_ENV = os.getenv("FLASK_ENV", "production")
     DEBUG = FLASK_ENV == "development"
-    PORT                    = int(os.getenv("PORT", 5000))
-    AFRICASTALKING_API_KEY  = os.getenv("AFRICASTALKING_API_KEY", "")
+    PORT = int(os.getenv("PORT", 5000))
+    AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY", "")
     AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME", "sandbox")
-    ALLOWED_ORIGINS         = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173","https://waterpath-ke-1.onrender.com").split(",")
+    ALLOWED_ORIGINS = os.getenv(
+        "ALLOWED_ORIGINS",
+        "http://localhost:5173,https://waterpath-ke-1.onrender.com"
+    ).split(",")
 
 
 def init_firebase():
     """
     Initialise Firebase Admin SDK.
-    On Railway: reads FIREBASE_CREDENTIALS_JSON env var (full JSON string).
-    Locally:    reads firebase-service-account.json file.
+    On Render: reads FIREBASE_CREDENTIALS_JSON env var (full JSON string).
+    Locally:   reads firebase-service-account.json file.
     """
     if firebase_admin._apps:
         return firestore.client()
