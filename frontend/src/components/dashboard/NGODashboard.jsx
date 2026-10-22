@@ -452,41 +452,42 @@ function MapWorld() {
 // River photo as hero. Then plain-language summary. Then expandable site cards.
 // ══════════════════════════════════════════════════════════════════════════
 function Siting() {
-  const [sites, setSites]     = useState([])
-  const [loading, setLoading] = useState(true)
-  const [open, setOpen]       = useState(null)
+  const [sites, setSites]       = useState([])
+  const [scenario, setScenario] = useState(null)
+  const [loading, setLoading]   = useState(true)
+  const [open, setOpen]         = useState(null)
 
   useEffect(() => {
     fetch("/api/desalination/sites")
       .then(r => r.json())
-      .then(d => { setSites(d.sites || []); setLoading(false) })
+      .then(d => { setSites(d.sites || []); setScenario(d.scenario || null); setLoading(false) })
       .catch(() => setLoading(false))
   }, [])
 
+  const radius  = scenario?.radius_km ?? 15
+  const covered = sites.reduce((a, s) => a + (s.borehole_count || 0), 0)
+
   return (
     <div>
-      {/* River photo — full bleed hero */}
       <div style={{ position: "relative", height: 270, overflow: "hidden" }}>
         <img src="/turkana-river.jpg" alt="Community collecting water from a river"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 32%" }} />
-        {/* Cooler gradient — matches the river's grey-green palette */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(100,130,120,0.15) 20%, rgba(30,40,45,0.72) 88%)" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 24px 26px" }}>
           <div style={{ fontFamily: F.display, fontSize: 21, fontWeight: 700, color: "#fff", lineHeight: 1.4, fontStyle: "italic", marginBottom: 8 }}>
             "Without clean infrastructure,<br />this river is their only option."
           </div>
           <div style={{ fontFamily: F.mono, fontSize: 9, color: "rgba(255,255,255,0.55)", letterSpacing: "0.14em", textTransform: "uppercase" }}>
-            ML-identified desalination sites · Turkana County
+            Candidate desalination sites · Illustrative · Turkana County
           </div>
         </div>
       </div>
 
-      {/* 3-number summary — warm slate, light not dark */}
       <div style={{ background: C.slate, padding: "20px 24px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {[
-          { label: "Optimal sites",    v: "8"       },
-          { label: "Total investment", v: "$680k"   },
-          { label: "Avg. breakeven",   v: "2.2 yrs" },
+          { label: "Candidate sites",   v: sites.length ? String(sites.length) : "—" },
+          { label: "Saline boreholes",  v: sites.length ? String(covered) : "—" },
+          { label: "Service radius",    v: `${radius} km` },
         ].map(s => (
           <div key={s.label} style={{ textAlign: "center" }}>
             <div style={{ fontFamily: F.display, fontSize: 28, fontWeight: 900, color: "#fff", lineHeight: 1 }}>{s.v}</div>
@@ -495,19 +496,20 @@ function Siting() {
         ))}
       </div>
 
-      {/* Plain-language explainer */}
       <div style={{ background: C.slateBg, padding: "18px 24px", borderBottom: `1px solid ${C.rule}` }}>
         <div style={{ fontFamily: F.body, fontSize: 13, color: C.slate, lineHeight: 1.8 }}>
-          Our model clusters saline boreholes — too salty to drink — and identifies where a single
-          desalination unit can serve the most people. Each unit costs <strong>$85,000</strong>,
-          treats water at <strong>$0.82/m³</strong>, and pays for itself in <strong>2.2 years</strong> by replacing water trucking.
+          This analysis groups boreholes with measured conductivity above 1,500 µS/cm into candidate sites. Each site covers the saline boreholes within {radius} km of a central point, and sites are at least {2 * radius} km apart so no borehole is counted twice.
         </div>
+        {scenario && (
+          <div style={{ marginTop: 10, fontFamily: F.body, fontSize: 12, color: C.slate, lineHeight: 1.7 }}>
+            <strong>Illustrative scenario (the same for every site):</strong> about {scenario.pop_in_radius.toLocaleString()} people within the radius ({scenario.people_per_km2} per km², an assumed average) using {scenario.litres_per_person_day} litres a day comes to about {scenario.daily_m3} m³ a day. At an assumed ${scenario.unit_cost_usd.toLocaleString()} unit cost and ${scenario.price_per_m3} per m³, payback would be about {scenario.payback_years} years if every resident bought the water. This ignores running costs and real uptake, so treat it as a planning illustration, not a forecast.
+          </div>
+        )}
       </div>
 
-      {/* Site cards */}
       <div style={{ background: C.lifted, padding: "18px 16px 60px" }}>
         <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkLight, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 14, paddingLeft: 8 }}>
-          Ranked by people served
+          Ranked by saline boreholes in range, then salinity
         </div>
         {loading ? (
           <div style={{ textAlign: "center", padding: 48, fontFamily: F.mono, fontSize: 11, color: C.inkFaint }}>Loading sites…</div>
@@ -515,48 +517,39 @@ function Siting() {
           <div style={{ textAlign: "center", padding: 48, fontFamily: F.mono, fontSize: 11, color: C.inkFaint }}>No sites returned from API.</div>
         ) : (
           sites.map((site, i) => {
-            const isOpen   = open === i
-            const served   = (site.people_served || 8482).toLocaleString()
-            const cost     = (site.unit_cost_usd || 85000).toLocaleString()
-            const breakeven = site.breakeven_years || 2.2
-            const count    = site.boreholes_count || site.borehole_count || "?"
-            const ec       = Math.round(site.avg_ec || 2000).toLocaleString()
+            const isOpen = open === i
+            const count  = site.borehole_count ?? 0
+            const ec     = Math.round(site.avg_ec || 0).toLocaleString()
+            const lat    = Number(site.latitude  ?? 0).toFixed(4)
+            const lon    = Number(site.longitude ?? 0).toFixed(4)
 
             return (
               <div key={i} style={{ background: C.surface, borderRadius: 14, marginBottom: 10, overflow: "hidden", border: `1px solid ${C.rule}`, boxShadow: isOpen ? "0 4px 20px rgba(44,26,14,0.07)" : "none" }}>
-                {/* Always-visible header */}
                 <div onClick={() => setOpen(isOpen ? null : i)} style={{ padding: "18px 20px", cursor: "pointer", display: "flex", gap: 14, alignItems: "center" }}>
-                  {/* Number badge */}
                   <div style={{ width: 38, height: 38, borderRadius: "50%", background: C.lifted, border: `2px solid ${C.rule}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.display, fontSize: 17, fontWeight: 700, color: C.inkMid, flexShrink: 0 }}>
                     {i + 1}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontFamily: F.body, fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 4 }}>
-                      {count} saline boreholes — EC avg {ec} µS/cm
+                      Avg salinity {ec} µS/cm
                     </div>
-                    <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>
-                      {Number(site.center_lat || site.lat || 0).toFixed(4)}°N, {Number(site.center_lon || site.lon || 0).toFixed(4)}°E
-                    </div>
+                    <div style={{ fontFamily: F.mono, fontSize: 9, color: C.inkFaint }}>{lat}°N, {lon}°E</div>
                   </div>
-                  {/* People served */}
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 700, color: C.sage, lineHeight: 1 }}>{served}</div>
-                    <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 4 }}>people</div>
+                    <div style={{ fontFamily: F.display, fontSize: 22, fontWeight: 700, color: C.sage, lineHeight: 1 }}>{count}</div>
+                    <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 4 }}>boreholes</div>
                   </div>
                   <div style={{ color: C.inkFaint, fontSize: 18, transform: isOpen ? "rotate(90deg)" : "none", transition: "transform 0.2s", flexShrink: 0 }}>›</div>
                 </div>
 
-                {/* Expanded detail */}
                 {isOpen && (
                   <div style={{ borderTop: `1px solid ${C.rule}`, padding: "18px 20px 20px", background: C.lifted }}>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
                       {[
-                        { l: "Unit cost",       v: `$${cost}`            },
-                        { l: "Breakeven",       v: `${breakeven} years`  },
-                        { l: "Water cost",      v: "$0.82 / m³"          },
-                        { l: "Avg salinity",    v: `${ec} µS/cm`         },
-                        { l: "Service radius",  v: "15 km"               },
-                        { l: "Boreholes",       v: `${count} treated`    },
+                        { l: "Saline boreholes in range", v: String(count) },
+                        { l: "Avg salinity",              v: `${ec} µS/cm` },
+                        { l: "Service radius",            v: `${radius} km` },
+                        { l: "Location",                  v: `${lat}, ${lon}` },
                       ].map(s => (
                         <div key={s.l} style={{ background: C.surface, borderRadius: 8, padding: "10px 12px" }}>
                           <div style={{ fontFamily: F.mono, fontSize: 8, color: C.inkFaint, textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 4 }}>{s.l}</div>
@@ -567,9 +560,7 @@ function Siting() {
                     <div style={{ background: C.sageBg, borderRadius: 8, padding: "13px 15px" }}>
                       <div style={{ fontFamily: F.body, fontSize: 12, color: C.sage, lineHeight: 1.8 }}>
                         <strong>Why here?</strong>&nbsp;
-                        Placing one unit at this location converts {count} otherwise unusable saline boreholes,
-                        delivering safe water to {served} people within 15km.
-                        At $0.82/m³ it undercuts water trucking, recovering the ${cost} cost in {breakeven} years.
+                        This is a dense cluster of saline boreholes that does not overlap a higher-ranked site. A unit here could treat water from the {count} boreholes within {radius} km, for example {(site.boreholes || []).slice(0, 3).join(", ") || "those listed in the data"}.
                       </div>
                     </div>
                   </div>
@@ -582,7 +573,6 @@ function Siting() {
     </div>
   )
 }
-
 // ══════════════════════════════════════════════════════════════════════════
 // ROOT
 // ══════════════════════════════════════════════════════════════════════════
