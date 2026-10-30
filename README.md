@@ -1,5 +1,9 @@
 # WaterPath Kenya
 
+![WaterPath Kenya homepage](docs/home.png)
+
+**Live site:** https://waterpath-ke-1.onrender.com · **Source:** this repository
+
 A prototype that helps people in Turkana County, Kenya, find nearby water points, see what is known about their water quality, and report problems. It turns an open borehole dataset into a mobile-friendly app, with a USSD option for people without internet.
 
 **Status:** working prototype. It has not been field-tested and has no real users.
@@ -20,6 +24,14 @@ A prototype that helps people in Turkana County, Kenya, find nearby water points
 - API for water points, reports and desalination sites
 - SMS notification to a technician through Africa's Talking
 - USSD endpoint for Africa's Talking (prototype)
+
+## Pages
+
+| Address | What it is |
+|---|---|
+| `/` | Product page: what WaterPath does, the data and its limits, the USSD prototype |
+| `/app` | The community app: find water points, see the map, report a problem |
+| `/dashboard` | NGO dashboard (PIN-gated demo) |
 
 ## Data
 
@@ -91,6 +103,7 @@ Create `frontend/.env.local` with the six `VITE_FIREBASE_*` values from your Fir
 - **API:** Render web service, root directory `backend`, start command `gunicorn "app:create_app()" --bind 0.0.0.0:$PORT`, health check `/api/health`
 - **Frontend:** Render static site, root directory `frontend`, build command `npm install && npm run build`, publish directory `dist`
 - **Static site rewrite rules, in this order:** `/api/*` to the backend's `/api/*`, then `/*` to `/index.html`
+- Without the `/*` to `/index.html` rewrite, reloading `/app` or `/dashboard` returns "not found"
 - Free-tier services sleep after inactivity, so the first request can take about a minute
 
 ## Known limitations
