@@ -86,12 +86,11 @@ def ussd():
     # ── ABOUT ─────────────────────────────────────────────────────────────
     if text == "3":
         return _end(
-            "WaterPath monitors 60+ boreholes\n"
-            "in Turkana County.\n"
-            "Reports go directly to NGO teams.\n"
-            "Free to use. Anonymous.\n"
-            "waterpath.vercel.app"
-        )
+    "WaterPath lists 1,000+ boreholes\n"
+    "in Turkana County.\n"
+    "Reports are logged for follow-up.\n"
+    "Free to use. Anonymous."
+)
 
     # ══════════════════════════════════════════════════════════════════════
     # BRANCH 1 — FIND WATER
